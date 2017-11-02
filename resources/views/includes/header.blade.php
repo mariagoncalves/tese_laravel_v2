@@ -37,6 +37,12 @@
                 <li>
                     <a href="/entityTypesManage">Entity Kinds</a>
                 </li>
+                <li>
+                    <a href="/dynamicSearch">Dynamic Search</a>
+                </li>
+                <li>
+                    <a href="/dynamicSearch/savedSearch">Saved Searches</a>
+                </li>
             </ul>
         </li>
 		<li>
