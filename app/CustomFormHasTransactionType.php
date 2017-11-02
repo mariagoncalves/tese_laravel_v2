@@ -14,11 +14,11 @@ class CustomFormHasTransactionType extends Model
     public $timestamps = true;
 
     protected $fillable = [
-    	'custom_form_id',
+        'custom_form_id',
         'transaction_type_id',
         'field_order',
         'mandatory_form',
-		'updated_by',
+        'updated_by',
         'deleted_by'
     ];
 

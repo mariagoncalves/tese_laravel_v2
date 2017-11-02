@@ -236,6 +236,11 @@ Route::get('/modalConfirm', function () {
 
 
 Route::get('/properties/outputTypes', 'PropertiesOfEntitiesController@getOutputTypes');
+Route::get('/PropertyEnt/get_props_ent/{id?}','PropertiesOfEntitiesController@getAll_test');
+
+Route::get('/propertiesOfEntities/get_propsOfEnt/{id?}','PropertiesOfEntitiesController@getAll_test');
+
+Route::get('/properties/getAllEntities','PropertiesOfEntitiesController@getEntities');
 
 
 //----------------------------------Propriedades da Relação----------------------------------------------------
@@ -252,6 +257,9 @@ Route::get('/modalPropsRel', function () {
 });
 
 Route::get('/propertiesOfRelation/get_propsOfRel1/{id?}','PropertiesOfRelationsController@getAll_test');
+
+Route::get('/properties/getAllRelations','PropertiesOfRelationsController@getRelations');
+
 
 //--------------------------Métodos comuns as entidades e as relações---------------------------
 
@@ -271,6 +279,7 @@ Route::get('/dynamicSearch/getOperators', 'DynamicSearchController@getOperators'
 Route::get('/dynamicSearch/getEnumValues/{id?}', 'DynamicSearchController@getEnumValues');
 Route::get('/dynamicSearch/getEntityInstances/{entityId?}/{propId?}', 'DynamicSearchController@getEntityInstances');
 Route::get('/dynamicSearch/getEntRefs/{id?}', 'DynamicSearchController@getEntRefs');
+Route::get('/dynamicSearch/getPropRefs/{id?}', 'DynamicSearchController@getPropRefs');
 Route::get('/dynamicSearch/getPropsOfEnts/{id?}', 'DynamicSearchController@getPropsOfEnts');
 Route::get('/dynamicSearch/getRelsWithEnt/{id?}', 'DynamicSearchController@getRelsWithEnt');
 Route::get('/dynamicSearch/getEntsRelated/{idRelType?}/{idEntType}', 'DynamicSearchController@getEntsRelated');
@@ -281,6 +290,14 @@ Route::post('/dynamicSearch/search/{id?}', 'DynamicSearchController@search');
 
 
 Route::post('/dynamicSearch/inactiveActive/{id?}', 'DynamicSearchController@inactiveActive');
+
+
+// Rotas para o saved searches
+Route::get('/dynamicSearch/savedSearch', 'DynamicSearchController@showSavedSearches');
+
+
+Route::post('/dynamicSearch/saveSearch/{id?}', 'DynamicSearchController@saveSearch');
+Route::get('/dynamicSearch/getSavedQueries', 'DynamicSearchController@getSavedQueries');
 
 
 //******************************************Duarte***********************************************//

@@ -17,7 +17,7 @@ class PropertyCanReadResult extends Model
         'reading_property',
         'providing_result',
         'output_type',
-		'updated_by',
+        'updated_by',
         'deleted_by'
     ];
 
