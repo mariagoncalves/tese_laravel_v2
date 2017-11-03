@@ -50,7 +50,8 @@ class PropertiesOfEntitiesController extends Controller {
     public function insertPropsEnt(Request $request) {
         try {
             $data = $request->all();
-            //\Log::debug($data);
+            \Log::debug("Dados do data: ");
+            \Log::debug($data);
 
             $propertyFieldSize = '';
             if(isset($data["property_fieldType"])) {
@@ -65,10 +66,6 @@ class PropertiesOfEntitiesController extends Controller {
             $rulesEntRef = ['integer'];
             $rulePropRef = ['integer'];
             $ruleOutputType = [];
-    
-            //Se está vazio nem coloco nas regras
-            //$ruleEntTypeInfo = [];
-            //$rulePropInfo = [];
 
             //Remover o number por causa das validações
             if (isset($data['reference_entity']) && $data['reference_entity'] != '') {
@@ -113,8 +110,6 @@ class PropertiesOfEntitiesController extends Controller {
                 'property_state'           => ['required'],
                 'reference_entity'         => $rulesEntRef,
                 'fk_property'              => $rulePropRef,
-                //'ent_types_select'         => $ruleEntTypeInfo, //'required_without_all:propselect',
-                //'propselect'               => $rulePropInfo //'required_without_all:ent_types_select'
                 'property_outputType'      => $ruleOutputType,
             ];
 
@@ -191,8 +186,10 @@ class PropertiesOfEntitiesController extends Controller {
             ];
             PropertyName::create($dataProp);
 
-            $output_type = $data['property_outputType'];
-            \Log::debug($output_type);
+            if(isset($data['property_outputType']) && $data['property_outputType'] != "") {
+                $output_type = $data['property_outputType'];
+                \Log::debug($output_type);
+            }
 
             // Adicionar propriedades na nova propriedade
             if(isset($data['propselect']) && $data['propselect']) {
@@ -340,8 +337,10 @@ class PropertiesOfEntitiesController extends Controller {
                     ->where('language_id', 1)
                     ->update($dataName);
 
-        $output_type = $data['property_outputType'];
-        \Log::debug($output_type);
+        if (isset($data['property_outputType']) && $data['property_outputType'] != "") {
+            $output_type = $data['property_outputType'];
+            \Log::debug($output_type);
+        }
 
          PropertyCanReadProperty::where('reading_property', $id)->delete();
          PropertyCanReadEntType::where('reading_property', $id)->delete();
@@ -436,5 +435,74 @@ class PropertiesOfEntitiesController extends Controller {
 
         $outputTypes = Property::getValoresEnum('output_type', 'property_can_read_property');
         return response()->json($outputTypes);
+    }
+
+    public function getEntities() {
+
+        $language_id = '1';
+
+        $allEnts = EntType::with(['language' => function($query) use ($language_id) {
+                                $query->where('language_id', $language_id);
+                            }])
+                            ->get();
+
+        \Log::debug($allEnts);
+
+        return response()->json($allEnts);
+    }
+
+    public function getAll_test(Request $request, $id = null) {
+
+        $data  = $request->all();
+        $count = 5;
+
+        // É de acordo com a váriavel 'count' que será apresentado o número de 'rel_types'.
+        // Caso seja o 'count' 5, então será apresentado 5 'rel_types' na tabela.
+        if (isset($data['count']) && $data['count'] != "") {
+            $count = $data['count'];
+        }
+
+        // As váriaveis 'colSorting' e 'typeSorting' são utilizadas para ordenar os dados.
+        // Por defeito, é ordenado pelo o 'created_at' e por ordem 'desc'.
+        $colSorting  = 'created_at';
+        $typeSorting = 'desc';
+        if (isset($data['colSorting']) && $data['colSorting'] != "" && isset($data['typeSorting']) && $data['typeSorting'] != "") {
+            $colSorting  = $data['colSorting'];
+            $typeSorting = $data['typeSorting'];
+        }
+
+        $dataPropsEnt = EntType::leftJoin('ent_type_name', function($query) {
+                                    $query->on('ent_type.id', '=', 'ent_type_name.ent_type_id')->where('ent_type_name.language_id', 1);
+                                })
+                                ->leftJoin('property', function($query) {
+                                    $query->on('ent_type.id', '=', 'property.ent_type_id');
+                                })
+                                ->leftJoin('property_name', function($query){
+                                    $query->on('property.id', '=', 'property_name.property_id');
+                                })
+                                ->leftJoin('prop_unit_type', function($query) {
+                                    $query->on('property.unit_type_id', '=', 'prop_unit_type.id');
+                                })
+                                ->leftJoin('prop_unit_type_name', function($query) {
+                                    $query->on('prop_unit_type.id', '=', 'prop_unit_type_name.prop_unit_type_id');
+                                })
+
+                                ->select([
+                                    'ent_type.id AS ent_id',
+                                    'ent_type_name.name AS entity_name',
+                                    'property.*',
+                                    'property_name.name AS property_name',
+                                    'property_name.form_field_name AS form_field_name',
+                                    'prop_unit_type.id AS id_unit',
+                                    'prop_unit_type_name.name AS unit_name',
+                                ])
+                                ->searchPropsEnt($id, $data)
+                                ->orderBy($colSorting, $typeSorting)
+                                ->paginate($count)
+                                ->toArray();
+
+        \Log::debug($dataPropsEnt);
+
+        return response()->json($dataPropsEnt);
     }
 }

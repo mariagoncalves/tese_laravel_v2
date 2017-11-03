@@ -1,4 +1,4 @@
-app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $http, growl, API_URL, $translatePartialLoader, $translate, NgTableParams, MyService, $uibModal, $timeout) {
+app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $http, growl, API_URL, $translatePartialLoader, $translate, $filter, NgTableParams, MyService, $uibModal, $timeout) {
 
     $translatePartialLoader.addPart('properties');
 
@@ -12,7 +12,7 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
             $translate.use('en');
     };
 
-	$scope.entities = [];
+    $scope.entities = [];
     $scope.states   = [];
     $scope.valueTypes = [];
     $scope.fieldTypes = [];
@@ -26,7 +26,7 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
     //$scope.select2PropEntity = [];
     $scope.props = [];
 
-    $scope.getEntities = function(pageNumber) {
+    /*$scope.getEntities = function(pageNumber) {
 
         if (pageNumber === undefined) {
             pageNumber = '1';
@@ -48,7 +48,7 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
             $scope.range = pages;
 
         });
-    };
+    };*/
 
     $scope.showDragDropWindowEnt = function(id) {
 
@@ -211,7 +211,6 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
                 break;
         }
 
-
         });
 
     };
@@ -350,7 +349,7 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
             }).then(function(response) {
                 //First function handles success
                 $scope.errors = [];
-                $scope.getEntities();
+                $scope.getPropsOfEntities();
                 $scope.cancel();
 
                 if(modalstate == "add") {
@@ -388,7 +387,7 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
             console.log("lalal 11");
             console.log(response);
             growl.success('This is success message.',{title: 'Success!'});
-            $scope.getEntities();
+            $scope.getPropsOfEntities();
         }, function errorCallback(response) {
             console.log("lalal");
             console.log(response);
@@ -402,6 +401,79 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
             }
         });
     };
+
+    //------------------------------------TESTES------------------------------
+    //Para usar o ng-table
+
+    /*$http.get('/PropertyEnt/get_props_ent?page=1').then(function(response) {
+        $scope.tableParams = new NgTableParams({
+            count: 2,
+            group: "name"
+        }, {
+            paginationMaxBlocks: 13,
+            paginationMinBlocks: 2,
+            dataset: response.data
+
+        });
+
+        console.log(response.data);
+    });*/
+
+    $scope.getPropsOfEntities = function () {
+
+        var initialParams = {
+            sorting: { created_at: "desc" }, // Ordenação por defeito da tabela
+            count: 5, // Número de dados por página na tabela
+        };
+
+        var initialSettings = {
+            counts: [5, 10, 15], // Número possiveis de apresentação dos dados da tabela
+            getData: function (params) {
+                var filterObj = params.filter(),
+                    sortObj   = params.sorting();
+
+                return $scope.getPropsOfEnt(params, filterObj, sortObj);
+            }
+        };
+
+        $scope.tableParams = new NgTableParams(initialParams, initialSettings);
+    }
+
+     $scope.getPropsOfEnt = function (params, filter, sort) {
+
+        var url = '/propertiesOfEntities/get_propsOfEnt?page=' + params.page();
+
+        url += '&count=' + params.count();
+
+        // Parametro de pesquisa quando é pesquisado pelo nome da entidade
+        if (filter.relationFilter != undefined && filter.relationFilter != '') {
+            url += '&relation=' + filter.relationFilter;
+        }
+        // Parametro de pesquisa quando é pesquisado pelo nome da propriedade
+        if (filter.propertyFilter != undefined && filter.propertyFilter != '') {
+            url += '&property=' + filter.propertyFilter;
+        }
+
+        var colSorting  = Object.keys(sort)[0],
+            typeSorting = sort[colSorting];
+        // Parametro para ordenar os dados
+        url += '&colSorting=' + colSorting + "&typeSorting=" + typeSorting;
+
+        return $http.get(url).then(function (response) {
+                params.total(response.data.total);
+                return response.data.data;
+            });
+    }
+
+
+    $scope.getEntities = function(){
+
+        $http.get('/properties/getAllEntities').then(function(response) {
+            $scope.entities = response.data;
+            console.log($scope.entities);
+        });
+    }
+
 
     
 }).directive('pagination', function(){

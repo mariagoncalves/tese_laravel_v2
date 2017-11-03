@@ -162,7 +162,7 @@
                 <label for="property_outputType" class="col-sm-3 control-label">{{trans('properties/messages.THEADER18')}}:</label>
                 <div class="col-sm-9">
                     <label class="radio-inline outputType" ng-repeat="outputType in outputTypes">
-                        <input type="radio" name="property_outputType" value="[[ outputType ]]" ng-checked="((outputType == property.property_can_read_property[0].pivot.output_type) || (outputType == property.reading_ent_types[0].pivot.output_type))" ng-disabled="true">[[ outputType ]]
+                        <input type="radio" id = "property_outputType" name="property_outputType" value="[[ outputType ]]" ng-checked="((outputType == property.property_can_read_property[0].pivot.output_type) || (outputType == property.reading_ent_types[0].pivot.output_type))" ng-disabled="true">[[ outputType ]]
                     </label>
                     <ul ng-repeat="error in errors.property_outputType" style="padding-left: 15px;">
                         <li>[[ error ]]</li>

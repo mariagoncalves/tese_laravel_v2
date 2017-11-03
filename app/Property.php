@@ -45,9 +45,9 @@ class Property extends Model
         return $this->belongsTo('App\Property', 'fk_property_id', 'id');
     }
 
-    public function customForms() {
+    /*public function customForms() {
         return $this->belongsToMany('App\CustomForm', 'custom_form_has_prop');
-    }
+    }*/
 
     public function relType() {
         return $this->belongsTo('App\RelType', 'rel_type_id', 'id');
@@ -80,6 +80,21 @@ class Property extends Model
 
     public function language() {
         return $this->belongsToMany('App\Language', 'property_name', 'property_id', 'language_id')->withPivot('name','form_field_name','created_at','updated_at','deleted_at');
+    }
+
+    public function queries() {
+
+        return $this->belongToMany('App\Query', 'property_can_read_result', 'reading_property', 'providing_result')->withPivot('output_type','created_at','updated_at','deleted_at');
+    }
+
+    public function condicions() {
+
+        return $this->hasMany('App\Condicion', 'property_id', 'id');
+    }
+
+    public function relTypes() {
+
+        return $this->belongsToMany('App\RelType', 'property_can_read_rel_type', 'reading_property', 'providing_rel_type')->withPivot('output_type','created_at','updated_at','deleted_at');
     }
 
     public function updatedBy() {
