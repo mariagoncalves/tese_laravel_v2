@@ -33,12 +33,21 @@ class DynamicSearchController extends Controller
         return response()->json($ents);
     }
 
-    public function getEntitiesDetails($id) {
+    public function getEntitiesDetails(Request $request, $id) {
 
-    	//\Log::debug($id);
-    	//return view('entitiesDetails', compact('id'));
+        $dataRequest = $request->all();
+        \Log::debug("RESULTADOOO");
 
-    	$data = ['id' => $id];
+        if (isset($dataRequest['query']) && $dataRequest['query'] != "") {
+            $data = [
+                'id' => $id,
+                'queryId' => $dataRequest['query'],
+                ];
+        } else {
+            $data = ['id' => $id];
+        }
+
+    	
     	return view('entitiesDetails')->with($data);
     }
 
@@ -65,25 +74,9 @@ class DynamicSearchController extends Controller
 
     public function getOperators() {
 
-        //$operators = Property::getValoresEnum('operator_type', 'operator');
-        //\Log::debug($operators);
-
         $dataOperators = Operator::all();
-        //$dataOperators = Operator::select(['id', 'operator_type'])->get();
-
-        \Log::debug("OPERADORESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-        \Log::debug($dataOperators);
-
-        /*$operatorIds = [];
-        foreach ($dataOperators as $key => $operator) {
-            $operatorIds[] = $operator->id;
-        }
-
-        \Log::debug("IDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD  OPERADORESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-        \Log::debug($operatorIds);*/
 
         return response()->json($dataOperators);
-        //return response()->json($operators);
    }
 
     public function getEnumValues($id) {
@@ -979,4 +972,21 @@ class DynamicSearchController extends Controller
 
         return response()->json($dataQuery);
     }
+
+    public function getPropertiesQuery($idQuery, $tableType) {
+
+        \Log::debug("TOU A CHEGAR AQUI????");
+        \Log::debug("id da query:" .$idQuery. " e " .$tableType);
+
+        $dataCondition = Condition::with('property')
+                        ->where('table_type', $tableType)
+                        ->where('query_id', $idQuery)
+                        ->get();
+
+        \Log::debug("Dados do condition:" .$dataCondition);
+
+        return response()->json($dataCondition);
+
+    }
+    
 }

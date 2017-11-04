@@ -4,6 +4,11 @@
 <!-- <p> Isto é o id recebido: <?= $id ?> </p> -->
 <!--<p> Isto é o id recebido com angular: {{$id}}</p>  -->
 
+@if (isset($queryId))
+	<p> Id recebido : {{$queryId}}</p>
+	<input type="hidden" id="idQuery" value = "{{ $queryId }}" >
+@endif
+
 <div ng-controller="dynamicSearchControllerJs">
 	<form id="dynamic-search">
 		<!-- <p><b>Nome da Query:</b></p>
@@ -27,10 +32,13 @@
 			                <tr ng-repeat="(key1, property) in ents.properties">
 			                    <td>[[ property.id ]]</td>
 			                    <td>[[ property.language[0].pivot.name ]]</td>
-			                    <td><input class = "checkstable1" type="checkbox" name = "checkET[[ key1 ]]" value = "[[ property.id ]]" ng-click = "clickTable1()"> </td>
+			                    <td> 
+			                    	<input type ="hidden" id = "keyET[[ property.id ]]" value = "[[key1]]">
+			                    	<input class = "checkstable1" type="checkbox" name = "checkET[[ key1 ]]" value = "[[ property.id ]]" ng-click = "clickTable1()">
+			                    </td>
 			                    <td>
 			                    	<div ng-switch on="property.value_type">
-								        <div ng-switch-when="text"> <input type="text" name="textET[[ $index ]]"> </div>
+								        <div ng-switch-when="text"> <input type="text" name="textET[[ key1 ]]"> </div>
 								        <div ng-switch-when="bool"> 
 								        	<input type="radio" name="radioET[[ key1 ]]" value="true">True
 											<input type="radio" name="radioET[[ key1 ]]" value="false">False 

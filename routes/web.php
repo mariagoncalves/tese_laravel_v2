@@ -300,6 +300,11 @@ Route::post('/dynamicSearch/saveSearch/{id?}', 'DynamicSearchController@saveSear
 Route::get('/dynamicSearch/getSavedQueries', 'DynamicSearchController@getSavedQueries');
 
 
+//testes
+Route::get('/dynamicSearch/getPropertiesQuery/{idQuery?}/{tableType?}', 'DynamicSearchController@getPropertiesQuery');
+
+
+
 //******************************************Duarte***********************************************//
 //Users
 Route::get('/usersManage', 'UsersController@index');

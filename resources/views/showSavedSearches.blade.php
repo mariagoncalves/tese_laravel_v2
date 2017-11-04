@@ -7,30 +7,32 @@
 		<ul>
 			<li ng-repeat = "query in queries"> [[query.name]] </li>
 		</ul>
-	</div>
+	   
+       <div ng-if="queries.length == 0"> <p> Não existe pesquisas gravadas</p> </div>
 
-	<table border = "1px">
-		<thead>
-            <th>Nome da Query </th>
-            <th>Entidade</th>
-            <th>Propriedade</th>
-            <th>Operador</th>
-            <th>Valor</th>
-        </thead>
-        <tbody>
-        	<tr ng-repeat-start="query in queries" ng-if="false" ng-init="innerIndex = $index"></tr>
+    	<table class="table table-striped" border = "1px" ng-if="queries.length > 0">
+    		<thead>
+                <th>Nome da Query </th>
+                <th>Entidade</th>
+                <th>Propriedade</th>
+                <th>Operador</th>
+                <th>Valor</th>
+            </thead>
+            <tbody>
+            	<tr ng-repeat-start="query in queries" ng-if="false" ng-init="innerIndex = $index"></tr>
 
-        	<td rowspan="[[ query.conditions.length + 1 ]] "> [[ query.name ]] <button type = "button" ng-click = "showQueryResults()" > Pesquisar </button> </td>
-        	<td rowspan="[[ query.conditions.length + 1 ]] "> [[ query.ent_type.language[0].pivot.name ]] </td>
+            	<td rowspan="[[ query.conditions.length + 1 ]] "> [[ query.name ]] <button type = "button" ng-click = "showQueryResults(query.id, query.ent_type.id)" > Pesquisar </button> </td>
+            	<td rowspan="[[ query.conditions.length + 1 ]] "> [[ query.ent_type.language[0].pivot.name ]] </td>
 
-            <tr ng-repeat="condition in  query.conditions" >
-            	<td>[[ condition.property.language[0].pivot.name ]]</td>
-            	<td>[[ condition.operator.operator_type ]]</td>
-            	<td> [[ condition.value == "" ? "Sem valor atribuído" : condition.value ]] </td>
-            	<tr ng-repeat-end ng-if="false"></tr>
-            </tr>
-        </tbody>
-	</table>
+                <tr ng-repeat="condition in  query.conditions" >
+                	<td>[[ condition.property.language[0].pivot.name ]]</td>
+                	<td>[[ condition.operator.operator_type ]]</td>
+                	<td> [[ condition.value == "" ? "Sem valor atribuído" : condition.value ]] </td>
+                	<tr ng-repeat-end ng-if="false"></tr>
+                </tr>
+            </tbody>
+    	</table>
+    </div>
 </div>
 
 @stop

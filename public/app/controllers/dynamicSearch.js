@@ -30,6 +30,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
     $scope.propRefs = [];
     $scope.formData = [];
     $scope.query_name = [];
+    $scope.dataCondition = [];
     
 
 
@@ -48,11 +49,88 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
         console.log(id);
 
         $http.get(API_URL + '/dynamicSearch/entity/' + id)
-                    .then(function(response) {
-                        $scope.ents = response.data;
-                        console.log('Get Entities Data: ');
-                        console.log($scope.ents);
-                    });
+        .then(function(response) {
+            $scope.ents = response.data;
+            $scope.getPropertiesQuery('ET');
+            console.log('Get Entities Data: ');
+            console.log($scope.ents);
+        });
+    }
+
+    $scope.getPropertiesQuery = function (tableType) {
+        var idQuery = $("#idQuery").val();
+
+        if (idQuery != null && idQuery != undefined && idQuery != "") {
+
+            $http.get(API_URL + '/dynamicSearch/getPropertiesQuery/' + idQuery + '/' + tableType).then(function(response) {
+                $scope.dataCondition = response.data;
+                console.log("data Condition");
+                console.log($scope.dataCondition);
+
+                dataCondition = $scope.dataCondition;
+
+                for (var i = 0; i < dataCondition.length; i++) {
+                    
+                    var idProp  = dataCondition[i].property.id,
+                        idTable = "";
+
+                    console.log("O ID DA PROP É : " + idProp);
+
+                    if (tableType == "ET") {
+                        idTable = "table1";
+                    }
+
+                    var keyProp = $("#" + idTable).find("#key" + tableType + "" + idProp).val();
+
+                    //da tabela 1 vou encontrar os checkbox que tem como value o id da prop e selecionar essas props
+                    $("#" + idTable).find("[type=checkbox][name=check" + tableType + keyProp + "]").prop("checked", true);
+
+                    //Conforme o value type preencher os dados
+                    if (dataCondition[i].property.value_type == "text") {
+                        
+                        $("#" + idTable).find("[name=text" + tableType + keyProp + "]").val(dataCondition[i].value);
+                        console.log("é texto");
+
+                    } else if (dataCondition[i].property.value_type == "int") {
+
+                        var idOperator  = dataCondition[i].operator_id;
+                        console.log("sdf sdf sdf sdf sdf sfd: " + idOperator);
+                        console.log($("#" + idTable).find("[name=operators" + tableType + keyProp + "]").find("option[value="+idOperator+"]").length);
+                        //$("#" + idTable).find("[name=operators" + tableType + keyProp + "]").val(idOperator);
+                        $("#" + idTable).find("[name=operators" + tableType + keyProp + "] option[value='"+idOperator+"']").prop("selected", "selected").change();
+                        //$("#" + idTable).find("[name=operators" + tableType + keyProp + "]").val(idOperator);
+
+                        $("#" + idTable).find("[name=int" + tableType + keyProp + "]").val(dataCondition[i].value);
+                        console.log("é int");
+
+                    } else if (dataCondition[i].property.value_type == "double") {
+
+                        $("#" + idTable).find("[name=double" + tableType + keyProp + "]").val(dataCondition[i].value);
+
+                    } else if (dataCondition[i].property.value_type == "enum") {
+
+
+
+                    } else if (dataCondition[i].property.value_type == "boolean") {
+
+
+                        $("#" + idTable).find("[name=radio" + tableType + keyProp + "]").prop("checked", true)
+
+
+                    } else if (dataCondition[i].property.value_type == "file") {
+
+                    }
+
+                };
+
+
+
+
+
+
+
+            });
+        }
     }
 
     $scope.getOperators = function () {
@@ -305,18 +383,21 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
         });
     }
     
-    $scope.showQueryResults = function () {
+    $scope.showQueryResults = function (idQuery, idEntityType) {
 
         console.log("Tou a chegar");
+        console.log("O id da query é: " + idQuery + "e o id da entidade selecionada é: " + idEntityType);
 
         //Para fazer outra vez a pesquisa que já tinha sido feita
 
+        window.location.href = "/dynamicSearch/entityDetails/" + idEntityType + "?query=" + idQuery;
         
     }
 
     $scope.voltar = function() {
         $("#dynamic-search").show();
         $("#dynamic-search-presentation").hide();
+        $("#query_name").val("");
     }
 
      

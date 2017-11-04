@@ -34,4 +34,13 @@
 
 <!-- AngularJS Application Scripts -->
 <script src="<?= asset('app/app.js') ?>"></script>
+
+<!-- Testes -->
+<script type="text/javascript">
+    $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+</script>
 @yield('footerContent')
