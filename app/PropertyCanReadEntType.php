@@ -3,11 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+//use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PropertyCanReadEntType extends Model
 {
-    use SoftDeletes;
+    //use SoftDeletes;
 
     protected $table = 'property_can_read_ent_type';
 

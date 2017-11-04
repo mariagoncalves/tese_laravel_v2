@@ -184,27 +184,38 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
 
                         //Adicionar a select2 as entidades associadas a propriedade
                         var entidades      = $scope.property.reading_ent_types,
-                            lenght         = entidades.length,
+                            lenghtEnt      = entidades.length,
                             selectEntities = [];
 
-                        for (var i = 0; i < lenght; i++) {
-                            if (entidades[i].pivot.deleted_at == null) {
+                            console.log("TAMANHO DAS ENTIDADES");
+                            console.log(lenghtEnt);
+
+                        for (var i = 0; i < lenghtEnt; i++) {
+                            //if (entidades[i].pivot.deleted_at == null) {
                                 selectEntities.push(entidades[i].pivot.providing_ent_type);
-                            }
+                            //}
                         }
 
                         // Adicionar a select2 as propriedades associadas a propriedade
                         var props            = $scope.property.properties_reading,
-                            lenght           = props.length,
+                            lenghtProp       = props.length,
                             selectProperties = [];
 
-                        for (var i = 0; i < lenght; i++) {
-                            if(props[i].pivot.deleted_at == null) {
+                        console.log("TAMANHO DAS PROPS");
+                        console.log(lenghtProp);
+
+                        for (var i = 0; i < lenghtProp; i++) {
+                            //if(props[i].pivot.deleted_at == null) {
                                 selectProperties.push(props[i].pivot.providing_property);
-                            }
+                            //}
                         }
                         $scope.selectsProperty(selectEntities, selectProperties);
 
+                        if (lenghtEnt > 0 || lenghtProp > 0) {
+                            $("[name=property_outputType]").prop("disabled", false);
+                            console.log("Tá a passar aqui");
+                        }
+                        
                     });
                 break;
             default:

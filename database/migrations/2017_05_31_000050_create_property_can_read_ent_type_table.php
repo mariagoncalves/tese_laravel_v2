@@ -19,7 +19,7 @@ class CreatePropertyCanReadEntTypeTable extends Migration
             $table->integer('updated_by')->nullable()->unsigned();
             $table->integer('deleted_by')->nullable()->unsigned();
             $table->timestamps();
-            $table->softDeletes();
+            //$table->softDeletes();
 
             // $table->foreign('property_need')->references('id')->on('property')->onDelete('no action')->onUpdate('no action');
             // $table->foreign('property_info')->references('id')->on('property')->onDelete('no action')->onUpdate('no action');

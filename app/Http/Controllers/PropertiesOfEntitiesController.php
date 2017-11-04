@@ -340,7 +340,7 @@ class PropertiesOfEntitiesController extends Controller {
         if (isset($data['property_outputType']) && $data['property_outputType'] != "") {
             $output_type = $data['property_outputType'];
             \Log::debug($output_type);
-        }
+        } 
 
          PropertyCanReadProperty::where('reading_property', $id)->delete();
          PropertyCanReadEntType::where('reading_property', $id)->delete();

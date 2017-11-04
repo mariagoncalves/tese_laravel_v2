@@ -66,16 +66,16 @@ class Property extends Model
     }
 
     public function readingEntTypes() {
-        return $this->belongsToMany('App\EntType', 'property_can_read_ent_type', 'reading_property', 'providing_ent_type')->withPivot('created_at','updated_at','deleted_at');
+        return $this->belongsToMany('App\EntType', 'property_can_read_ent_type', 'reading_property', 'providing_ent_type')->withPivot('output_type','created_at','updated_at');
     }
 
     //ir buscar as propriedades que dão informação a uma certa propriedade
     public function propertiesReading() {
-        return $this->belongsToMany('App\Property', 'property_can_read_property', 'reading_property', 'providing_property')->withPivot('created_at','updated_at','deleted_at');
+        return $this->belongsToMany('App\Property', 'property_can_read_property', 'reading_property', 'providing_property')->withPivot('output_type', 'created_at','updated_at');
     }
 
     public function propertiesProviding() {
-        return $this->belongsToMany('App\Property', 'property_can_read_property', 'providing_property', 'reading_property')->withPivot('created_at','updated_at','deleted_at');
+        return $this->belongsToMany('App\Property', 'property_can_read_property', 'providing_property', 'reading_property')->withPivot('output_type','created_at','updated_at');
     }
 
     public function language() {
