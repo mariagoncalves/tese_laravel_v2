@@ -476,6 +476,8 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
                     $(this).prop('checked', true);
                 }
             });
+
+            $scope.clickTable1();
         } else if (tableType == 'VT') {
             console.log("É da segunda tabela");
 

@@ -49,9 +49,11 @@
 											<input type="radio" name="radioET[[ key1 ]]" value="false">False
 										</div>
 										<div ng-switch-when="enum">
-											<select name = "selectET[[ key1 ]]" ng-init = "getEnumValues(property.id)">
+											<select name = "selectET[[ key1 ]]">
 												<option></option>
-								        		<option ng-repeat = "propAllowedValue in propAllowedValues[property.id]"> [[ propAllowedValue.language[0].pivot.name ]] </option>
+								        		<option ng-repeat = "propAllowedValue in property.prop_allowed_values" value="[[propAllowedValue.language[0].pivot.name ]]"> 
+								        			[[ propAllowedValue.language[0].pivot.name ]] 
+								        		</option>
 								        	</select>
 										</div>
 										<!-- <div ng-switch-when="ent_ref"> 

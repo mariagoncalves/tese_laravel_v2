@@ -67,6 +67,9 @@ class DynamicSearchController extends Controller
         				->with(['properties' => function($query) use ($language_id) {
                                 $query->where('language_id', $language_id);
                             }])
+                        ->with(['properties.propAllowedValues.language' => function($query) use ($language_id) {
+                                $query->where('language_id', $language_id);
+                            }])
         				->with(['properties.language' => function($query) use ($language_id) {
         						$query->where('language_id', $language_id);
         					}])->find($id);
