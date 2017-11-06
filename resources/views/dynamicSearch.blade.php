@@ -2,7 +2,7 @@
 @section('content')
 
 
-<h3> {{trans("dynamicSearch.Page_Name")}}</h3>
+<h3> {{trans("dynamicSearch/messages.Page_Name")}}</h3>
 <div ng-controller="dynamicSearchControllerJs">
 	<div ng-init="getEntities()">
 		<div ng-if = "entity.length == 0">

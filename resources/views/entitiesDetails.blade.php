@@ -5,18 +5,16 @@
 <!--<p> Isto é o id recebido com angular: {{$id}}</p>  -->
 
 @if (isset($queryId))
-	<p> Id recebido : {{$queryId}}</p>
+	<!-- <p> Id recebido : {{$queryId}}</p> -->
 	<input type="hidden" id="idQuery" value = "{{ $queryId }}" >
 @endif
 
 <div ng-controller="dynamicSearchControllerJs">
 	<form id="dynamic-search">
-		<!-- <p><b>Nome da Query:</b></p>
-		<input type="text" name="query_name"> -->
 		<div ng-init = "getEntitiesData({{$id}})">
 			<div id = "checkET">
 				<h3>{{trans("dynamicSearch/messages.TABLE_TITLE1")}} [[ents.language[0].pivot.name ]] </h3>
-				<table id="table1" class="table table-striped" border = "1px solid">
+				<table id="table1" class="table table-condensed table-bordered table-hover" >
 		            <thead>
 		                <tr>
 		                    <th>{{trans("dynamicSearch/messages.THEADER1")}}</th>
@@ -40,8 +38,8 @@
 			                    	<div ng-switch on="property.value_type">
 								        <div ng-switch-when="text"> <input type="text" name="textET[[ key1 ]]"> </div>
 								        <div ng-switch-when="bool"> 
-								        	<input type="radio" name="radioET[[ key1 ]]" value="true">True
-											<input type="radio" name="radioET[[ key1 ]]" value="false">False 
+											<input type="radio" name="radioET[[ key1 ]]" value="false">False
+											<input type="radio" name="radioET[[ key1 ]]" value="true">True 
 										</div>
 										<div ng-switch-when="enum">
 											<select name = "selectET[[ key1 ]]" ng-init = "getEnumValues(property.id)">
@@ -56,14 +54,14 @@
 								        	</select>
 										</div> -->
 								        <div ng-switch-when="int"> 
-											<select name = "operatorsET[[ key1 ]]" ng-init = "getOperators()">
+											<select name = "operatorsET[[ key1 ]]">
 								        		<option></option>
 								        		<option ng-repeat = "operator in operators" value = "[[operator.id]]"> [[ operator.operator_type ]] </option>
 								        	</select>
 								        	<input type="number" name="intET[[ key1 ]]">
 										</div>
 										<div ng-switch-when="double"> 
-											<select name = "operatorsET[[ key1 ]]" ng-init = "getOperators()">
+											<select name = "operatorsET[[ key1 ]]">
 								        		<option></option>
 								        		<option ng-repeat = "operator in operators" value = "[[operator.id]]"> [[ operator.operator_type ]] </option>
 								        	</select>
@@ -96,7 +94,7 @@
 					<div ng-repeat = "entRef in entRefs">
 						<h4> Tipo de Entidade: [[ entRef.ent_type.language[0].pivot.name ]] </h4>
 
-						<table class="table table-striped" border = "1px solid">
+						<table id="table2" class="table table-condensed table-bordered table-hover">
 				            <thead>
 				                <tr>
 				                    <th>{{trans("dynamicSearch/messages.THEADER1")}}</th>
@@ -112,10 +110,13 @@
 					                <tr ng-repeat="propOfEnt in entRef.properties" >
 					                    <td>[[ propOfEnt.id ]]</td>
 					                    <td>[[ propOfEnt.language[0].pivot.name ]]</td>
-					                    <td><input class = "checkstable2" type="checkbox" name = "checkVT[[ propOfEnt.key ]]" value = "[[ propOfEnt.id ]]" ng-click = "clickTable2()" disabled> </td>
+					                    <td>
+					                    	<input type ="hidden" id = "keyVT[[ propOfEnt.id ]]" value = "[[propOfEnt.key]]">
+					                    	<input class = "checkstable2" type="checkbox" name = "checkVT[[ propOfEnt.key ]]" value = "[[ propOfEnt.id ]]" ng-click = "clickTable2()"> 
+					                    </td>
 					                    <td>
 					                    	<div ng-switch on="propOfEnt.value_type">
-										        <div ng-switch-when="text"> <input type="text" name="textVT[[ propOfEnt.key  ]]" disabled> </div>
+										        <div ng-switch-when="text"> <input type="text" name="textVT[[ propOfEnt.key  ]]"> </div>
 										        <div ng-switch-when="bool"> 
 										        	<input type="radio" name="radioVT[[ propOfEnt.key  ]]" value="true" disabled>True
 													<input type="radio" name="radioVT[[ propOfEnt.key  ]]" value="false" disabled>False 
@@ -127,14 +128,14 @@
 										        	</select>
 												</div>
 										        <div ng-switch-when="int"> 
-													<select name = "operatorsVT[[ propOfEnt.key  ]]" ng-init = "getOperators()" disabled>
+													<select name = "operatorsVT[[ propOfEnt.key  ]]">
 										        		<option></option>
 										        		<option ng-repeat = "operator in operators" value = "[[operator.id]]"> [[ operator.operator_type ]] </option>
 										        	</select>
 										        	<input type="number" name="intVT[[ propOfEnt.key  ]]" disabled>
 												</div>
 												<div ng-switch-when="double"> 
-													<select name = "operatorsVT[[ propOfEnt.key  ]]" ng-init = "getOperators()" disabled>
+													<select name = "operatorsVT[[ propOfEnt.key  ]]" disabled>
 										        		<option></option>
 										        		<option ng-repeat = "operator in operators" value = "[[operator.id]]"> [[ operator.operator_type ]] </option>
 										        	</select>
@@ -165,7 +166,7 @@
 				</div>
 
 				<div ng-if = "relsWithEnt.length != 0">
-					<table class="table" border = "1px solid" id="table3">
+					<table class="table table-condensed table-bordered table-hover" id="table3">
 	                    <thead>
 	                        <th>Tipo Relação</th>
 	                        <th>Propriedade da Relação</th>
@@ -183,10 +184,13 @@
 
 			                <tr ng-repeat="(key3, prop) in relWithEnt.properties" >
 			                    <td>[[ prop.language[0].pivot.name ]]</td>
-			                    <td> <input type="checkbox" name="checkRL[[ prop.key ]]" value="[[ prop.id ]]" ng-click = "clickTable3()" disabled> </td>
+			                    <td> 
+			                    	<input type ="hidden" id = "keyRL[[ prop.id ]]" value = "[[prop.key]]">
+			                    	<input type="checkbox" name="checkRL[[ prop.key ]]" value="[[ prop.id ]]" ng-click = "clickTable3()" disabled> 
+			                    </td>
 			                    <td>
 			                    	<div ng-switch on="prop.value_type">
-								        <div ng-switch-when="text"> <input type="text" name="textRL[[ prop.key ]]" disabled> </div>
+								        <div ng-switch-when="text"> <input type="text" name="textRL[[ prop.key ]]"> </div>
 								        <div ng-switch-when="bool"> 
 								        	<input type="radio" name="radioRL[[ prop.key ]]" value="true" disabled>True
 											<input type="radio" name="radioRL[[ prop.key ]]" value="false" disabled>False 
@@ -204,14 +208,14 @@
 								        	</select>
 										</div>
 								        <div ng-switch-when="int"> 
-											<select name = "operatorsRL" ng-init = "getOperators()" disabled>
+											<select name = "operatorsRL" disabled>
 								        		<option></option>
 								        		<option ng-repeat = "operator in operators" value = "[[operator.id]]"> [[ operator.operator_type ]] </option>
 								        	</select>
 								        	<input type="number" name="intRL[[ prop.key ]]" disabled>
 										</div>
 										<div ng-switch-when="double"> 
-											<select name = "operatorsRL[[ prop.key ]]" ng-init = "getOperators()" disabled>
+											<select name = "operatorsRL[[ prop.key ]]"  disabled>
 								        		<option></option>
 								        		<option ng-repeat = "operator in operators" value = "[[operator.id]]"> [[ operator.operator_type ]] </option>
 								        	</select>
@@ -240,11 +244,11 @@
 				<div ng-if="relsWithEnt.length == 0" colspan="4"> Não existe entidades que se relacionem com [[ents.language[0].pivot.name ]] </div>
 
 				<div ng-if="relsWithEnt.length > 0"> 
-					<table id="table4" class="table" border = "1px solid">
+					<table id="table4" class="table table-condensed table-bordered table-hover">
 	                    <thead>
 	                        <th>{{trans("dynamicSearch/messages.THEADER7")}}</th>
 	                        <th>{{trans("dynamicSearch/messages.THEADER2")}}</th>
-	                        <th><input type = "checkbox" name = "" id = ""> {{trans("dynamicSearch/messages.THEADER3")}}</th>
+	                        <th><!-- <input type = "checkbox" name = "" id = ""> --> {{trans("dynamicSearch/messages.THEADER3")}}</th>
 	                        <th>{{trans("dynamicSearch/messages.THEADER4")}}</th>
 	                    </thead>
 	                    <tbody>
@@ -253,12 +257,12 @@
 
 			                <td ng-if="entRelated.properties.length != 0 && entRelated.ent_type1_id == ents.id" rowspan="[[ entRelated.properties.length + 1 ]] ">
 			                    [[ entRelated.ent2.language[0].pivot.name ]]
-			                    <input type = "checkbox" name = "selectAllTable3" id = "selectAllTable3" ng-click = "checkUncheckAll('ER')">
+			                   <!-- <input type = "checkbox" name = "selectAllTable3" id = "selectAllTable3" ng-click = "checkUncheckAll('ER')"> -->
 			                </td>
 
 			                <td ng-if="entRelated.properties.length != 0 && entRelated.ent_type2_id == ents.id" rowspan="[[ entRelated.properties.length + 1 ]] ">
 			                    [[ entRelated.ent1.language[0].pivot.name ]]
-			                    <input type = "checkbox" name = "selectAllTable3" id = "selectAllTable3" ng-click = "checkUncheckAll('ER')">
+			                    <!-- <input type = "checkbox" name = "selectAllTable3" id = "selectAllTable3" ng-click = "checkUncheckAll('ER')"> -->
 			                </td>
 
 			                <td ng-if="entRelated.properties.length == 0 && position == 0" colspan="4"> Não tem props </td>
@@ -267,11 +271,14 @@
 			               		<input type="hidden" name="idEntTypeER[[ property.key ]]" value = "[[ entRelated.ent_type1_id ]]" ng-if="entRelated.properties.length != 0 && entRelated.ent_type2_id == ents.id">
 			               		<input type="hidden" name="idEntTypeER[[ property.key ]]" value = "[[ entRelated.ent_type2_id ]]" ng-if="entRelated.properties.length != 0 && entRelated.ent_type1_id == ents.id">
 			                    <td>[[ property.language[0].pivot.name ]]</td>
-			                    <td> <input type="checkbox" name="checkER[[ property.key ]]" value="[[ property.id ]]" disabled> </td>
+			                    <td> 
+			                    	<input type ="hidden" id = "keyER[[ property.id ]]" value = "[[property.key]]">
+			                    	<input type="checkbox" name="checkER[[ property.key ]]" value="[[ property.id ]]"> 
+			                    </td>
 			                    <td>	
 			                    	<div ng-switch on="property.value_type">
 								        <div ng-switch-when="text">
-								        	<input type="text" name="textER[[ property.key ]]" disabled> 
+								        	<input type="text" name="textER[[ property.key ]]"> 
 								        </div>
 								        <div ng-switch-when="bool"> 
 								        	<input type="radio" name="radioER[[ property.key ]]" value="true" disabled>True
@@ -290,14 +297,14 @@
 								        	</select>
 										</div>
 								        <div ng-switch-when="int"> 
-											<select name = "operatorsER[[ property.key ]]" ng-init = "getOperators()" disabled>
+											<select name = "operatorsER[[ property.key ]]" disabled>
 								        		<option></option>
 								        		<option ng-repeat = "operator in operators" value = "[[operator.id]]"> [[ operator.operator_type ]] </option>
 								        	</select>
 								        	<input type="number" name="intER[[ property.key ]]" disabled>
 										</div>
 										<div ng-switch-when="double"> 
-											<select name = "operatorsER[[ property.key ]]" ng-init = "getOperators()" disabled>
+											<select name = "operatorsER[[ property.key ]]" disabled>
 								        		<option></option>
 								        		<option ng-repeat = "operator in operators" value = "[[operator.id]]"> [[ operator.operator_type ]] </option>
 								        	</select>
@@ -326,7 +333,7 @@
 	<div id="dynamic-search-presentation" style="display: none;">
 		<p><b>Nome da Query:</b></p>
 		<input type="text" name="query_name" id = "query_name">
-		<button type = "button" ng-click = "saveSearch(ents.id) " > Save </button>
+		<button class = "btn btn-sm btn-primary" type = "button" ng-click = "saveSearch(ents.id) "> Save </button>
 		<h3>Pesquisa</h3>
 		<div id="false-de-pesquisa" style="padding: 15px 0px;">
 			<dl>
@@ -341,7 +348,7 @@
 			<div ng-if="resultDynamincSearch.result.length == 0" >
 				<label>Não existem resultados que respeitem a pesquisa efetuada.</label></br></br>
 			</div>
-			<table class="table" border = "1px solid" ng-if="resultDynamincSearch.result.length != 0">
+			<table class="table table-condensed table-bordered table-hover" ng-if="resultDynamincSearch.result.length != 0">
 	            <thead>
 	            	<th ng-repeat="value in resultDynamincSearch.result[0]">[[value.property.language[0].pivot.name]]</th>
 	            </thead>

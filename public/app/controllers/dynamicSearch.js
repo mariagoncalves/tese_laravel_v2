@@ -78,6 +78,12 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
 
                     if (tableType == "ET") {
                         idTable = "table1";
+                    } else if (tableType == "VT") {
+                        idTable = "table2";
+                    } else if (tableType == "RL") {
+                        idTable = "table3";
+                    } else if (tableType == "ER") {
+                        idTable = "table4";
                     }
 
                     var keyProp = $("#" + idTable).find("#key" + tableType + "" + idProp).val();
@@ -87,37 +93,38 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
 
                     //Conforme o value type preencher os dados
                     if (dataCondition[i].property.value_type == "text") {
-                        
                         $("#" + idTable).find("[name=text" + tableType + keyProp + "]").val(dataCondition[i].value);
-                        console.log("é texto");
+                        console.log("TOU A ENTRAR AQUI FUI SELECIONADO");
 
                     } else if (dataCondition[i].property.value_type == "int") {
-
                         var idOperator  = dataCondition[i].operator_id;
-                        console.log("sdf sdf sdf sdf sdf sfd: " + idOperator);
-                        console.log($("#" + idTable).find("[name=operators" + tableType + keyProp + "]").find("option[value="+idOperator+"]").length);
-                        //$("#" + idTable).find("[name=operators" + tableType + keyProp + "]").val(idOperator);
-                        $("#" + idTable).find("[name=operators" + tableType + keyProp + "] option[value='"+idOperator+"']").prop("selected", "selected").change();
-                        //$("#" + idTable).find("[name=operators" + tableType + keyProp + "]").val(idOperator);
+                        $("#" + idTable).find("[name=operators" + tableType + keyProp + "] option[value='"+idOperator+"']").prop("selected", "selected");
 
                         $("#" + idTable).find("[name=int" + tableType + keyProp + "]").val(dataCondition[i].value);
-                        console.log("é int");
 
                     } else if (dataCondition[i].property.value_type == "double") {
+                        var idOperator  = dataCondition[i].operator_id;
+                        $("#" + idTable).find("[name=operators" + tableType + keyProp + "] option[value='"+idOperator+"']").prop("selected", "selected");
 
                         $("#" + idTable).find("[name=double" + tableType + keyProp + "]").val(dataCondition[i].value);
 
                     } else if (dataCondition[i].property.value_type == "enum") {
 
+                        var valueEnum = dataCondition[i].value;
+                        console.log("Valor enum: " + valueEnum);
+
+                        $("#" + idTable).find("[name=select" + tableType + keyProp + "] option[value='"+valueEnum+"']").prop("selected", "selected");
 
 
-                    } else if (dataCondition[i].property.value_type == "boolean") {
+                    } else if (dataCondition[i].property.value_type == "bool") {
 
-
-                        $("#" + idTable).find("[name=radio" + tableType + keyProp + "]").prop("checked", true)
+                        var valueRadio = dataCondition[i].value;
+                        console.log("Valor radio: " + valueRadio);
+                        $("#" + idTable).find("[name=radio" + tableType + keyProp + "]").prop("checked", true);
 
 
                     } else if (dataCondition[i].property.value_type == "file") {
+                        $("#" + idTable).find("[name=file" + tableType + keyProp + "]").val(dataCondition[i].value);
 
                     }
 
@@ -142,6 +149,8 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             console.log($scope.operators);
         });
     }
+
+    $scope.getOperators();
 
     $scope.getEnumValues = function (id) {
 
@@ -183,6 +192,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
 
         $http.get(API_URL + '/dynamicSearch/getPropRefs/' + id).then(function(response) {
             $scope.entRefs = response.data;
+            $scope.getPropertiesQuery('VT');
             console.log("Dados das prop refs");
             console.log($scope.entRefs);
         });
@@ -204,6 +214,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
         if (existeChecked) {
             $("#checkRL").find("[type=checkbox], [type=text], [type=number], [type=radio], select").removeAttr('disabled');
             $("#table4").find("[type=checkbox], [type=text], [type=number], [type=radio], select").removeAttr('disabled');
+            $("#table3").find("[type=checkbox], [type=text], [type=number], [type=radio], select").removeAttr('disabled');
         } else {
             $("#checkRL").find("[type=checkbox]").prop("checked", false);
             $("#checkRL").find("[type=checkbox], [type=text], [type=number], [type=radio], select").attr('disabled', true);
@@ -282,6 +293,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
 
         $http.get(API_URL + '/dynamicSearch/getRelsWithEnt/' + id).then(function(response) {
             $scope.relsWithEnt = response.data;
+            $scope.getPropertiesQuery('RL');
             console.log("Ddos relsWithEnt");
             console.log($scope.relsWithEnt);
         });
@@ -294,6 +306,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
 
         $http.get(API_URL + '/dynamicSearch/getEntsRelated/' + idRelType + '/' + idEntType).then(function(response) {
             $scope.entsRelated = response.data;
+            $scope.getPropertiesQuery('ER');
             console.log("Dados entsRelated TETETE: ");
             console.log($scope.entsRelated);
         });
@@ -434,9 +447,9 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             console.log("RESUL FINAL");
             console.log(response);
             $scope.res = response.data;
+            growl.success('Pesquisa guardada com sucesso',{title: 'Sucesso'});
 
         });
-
     }
 
     $scope.getSavedQueries = function () {
@@ -452,11 +465,6 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
     }
 
      $scope.checkUncheckAll = function (tableType) {
-
-        console.log("TÁ A CHEGAR AQUIIII");
-        //console.log(idEntityType);
-        //console.log("O id da 4 tabela é: ");
-        //console.log(idEntTypeTable4);
 
         if(tableType == 'ET') {
             console.log("É da primeira tabela");
@@ -478,16 +486,6 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
                     $(this).prop('checked', true);
                 }
             });
-        } else if (tableType == 'ER') {
-            console.log("Tou na tabela 4");
-            $(".checkstable3").each(function() {
-                if($(this).is(":checked")) {
-                    $(this).prop('checked', false);
-                } else {
-                    $(this).prop('checked', true);
-                }
-            });
-
         }
     }
 

@@ -975,7 +975,6 @@ class DynamicSearchController extends Controller
 
     public function getPropertiesQuery($idQuery, $tableType) {
 
-        \Log::debug("TOU A CHEGAR AQUI????");
         \Log::debug("id da query:" .$idQuery. " e " .$tableType);
 
         $dataCondition = Condition::with('property')
