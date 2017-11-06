@@ -88,13 +88,12 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
 
                     var keyProp = $("#" + idTable).find("#key" + tableType + "" + idProp).val();
 
-                    //da tabela 1 vou encontrar os checkbox que tem como value o id da prop e selecionar essas props
+                    //da tabela x vou encontrar os checkbox que tem como value o id da prop e selecionar essas props
                     $("#" + idTable).find("[type=checkbox][name=check" + tableType + keyProp + "]").prop("checked", true);
 
                     //Conforme o value type preencher os dados
                     if (dataCondition[i].property.value_type == "text") {
                         $("#" + idTable).find("[name=text" + tableType + keyProp + "]").val(dataCondition[i].value);
-                        console.log("TOU A ENTRAR AQUI FUI SELECIONADO");
 
                     } else if (dataCondition[i].property.value_type == "int") {
                         var idOperator  = dataCondition[i].operator_id;
@@ -115,7 +114,6 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
 
                         $("#" + idTable).find("[name=select" + tableType + keyProp + "] option[value='"+valueEnum+"']").prop("selected", "selected");
 
-
                     } else if (dataCondition[i].property.value_type == "bool") {
 
                         var valueRadio = dataCondition[i].value;
@@ -125,24 +123,13 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
 
                     } else if (dataCondition[i].property.value_type == "file") {
                         $("#" + idTable).find("[name=file" + tableType + keyProp + "]").val(dataCondition[i].value);
-
                     }
-
                 };
-
-
-
-
-
-
-
             });
         }
     }
 
     $scope.getOperators = function () {
-
-        //console.log("tá avor");
 
         $http.get('/dynamicSearch/getOperators').then(function(response) {
             $scope.operators = response.data;
@@ -153,8 +140,6 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
     $scope.getOperators();
 
     $scope.getEnumValues = function (id) {
-
-        //console.log("tá avir fdddfd" + id);
 
         $http.get(API_URL + '/dynamicSearch/getEnumValues/' + id).then(function(response) {
             $scope.propAllowedValues[id] = response.data;
@@ -175,8 +160,6 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
     }
 
     $scope.getEntRefs = function (id) {
-
-        //console.log("teste com id: " + id);
 
         $http.get(API_URL + '/dynamicSearch/getEntRefs/' + id).then(function(response) {
             $scope.entRefs = response.data;
@@ -398,13 +381,15 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
     
     $scope.showQueryResults = function (idQuery, idEntityType) {
 
-        console.log("Tou a chegar");
-        console.log("O id da query é: " + idQuery + "e o id da entidade selecionada é: " + idEntityType);
-
-        //Para fazer outra vez a pesquisa que já tinha sido feita
-
+        //Para fazer outra vez a pesquisa que já tinha sido feita faço um redirect para o form com os dados já selecionados
         window.location.href = "/dynamicSearch/entityDetails/" + idEntityType + "?query=" + idQuery;
-        
+    }
+
+    $scope.showResult = function (idQuery, idEntity) {
+
+        console.log("Tá a chegar e o idQuery é " + idQuery + " e o id Entity é: " + idEntity);
+
+
     }
 
     $scope.voltar = function() {
@@ -454,8 +439,6 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
 
     $scope.getSavedQueries = function () {
 
-        console.log("Tou a chegar ao método");
-
         $http.get(API_URL + '/dynamicSearch/getSavedQueries').then(function(response) {
             $scope.queries = response.data;
             console.log("Nome da query");
@@ -486,6 +469,18 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
                     $(this).prop('checked', true);
                 }
             });
+        }
+    }
+
+    $scope.blockUnblockSaveButton = function () {
+
+        var queryName = $("input[name=query_name]").val();
+        console.log("O nome da query é: " + queryName);
+        
+        if (queryName == "" || queryName == undefined) {
+            $("#save_button").prop("disabled", true);
+        } else {
+             $("#save_button").prop("disabled", false);
         }
     }
 

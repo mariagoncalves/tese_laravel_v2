@@ -21,7 +21,10 @@
             <tbody>
             	<tr ng-repeat-start="query in queries" ng-if="false" ng-init="innerIndex = $index"></tr>
 
-            	<td rowspan="[[ query.conditions.length + 1 ]] "> [[ query.name ]] <br> <button class="btn btn-sm btn-primary" type = "button" ng-click = "showQueryResults(query.id, query.ent_type.id)" > Pesquisar </button> </td>
+            	<td rowspan="[[ query.conditions.length + 1 ]] "> [[ query.name ]] 
+                    <br> <button class="btn btn-sm btn-primary" type = "button" ng-click = "showQueryResults(query.id, query.ent_type.id)" > Abrir/Editar Pesquisa </button>
+                    <button class="btn btn-sm btn-primary" type = "button" ng-click = "showResult(query.id, query.ent_type.id)" > Pesquisar </button>
+                </td>
             	<td rowspan="[[ query.conditions.length + 1 ]] "> [[ query.ent_type.language[0].pivot.name ]] </td>
 
                 <tr ng-repeat="condition in  query.conditions" >

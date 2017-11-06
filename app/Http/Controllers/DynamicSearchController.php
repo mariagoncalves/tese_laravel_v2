@@ -799,13 +799,7 @@ class DynamicSearchController extends Controller
         $valueQuery    = '';
 
         if(isset($data['operators'.$type.$position]) && $data['operators'.$type.$position] != "" ) {
-
-            $operatorSymbol = Operator::where('id', $data['operators'.$type.$position])
-                                        ->select(['operator_type'])
-                                        ->first();
-
-            $operatorQuery = $operatorSymbol->operator_type;
-
+            $operatorQuery = $this->getOperatorSymbol($data['operators'.$type.$position]);
         } else {
             $operatorQuery = '=';
         }
@@ -845,10 +839,10 @@ class DynamicSearchController extends Controller
         $operatorQuery = '=';
         if ($valueType == "int") {
             $valueQuery    = $data['int'.$type.$position];
-            $operatorQuery = $data['operators'.$type.$position];
+            $operatorQuery = $this->getOperatorSymbol($data['operators'.$type.$position]);
         }  else if ($valueType == "double") {
             $valueQuery    = $data['double'.$type.$position];
-            $operatorQuery = $data['operators'.$type.$position];
+            $operatorQuery = $this->getOperatorSymbol($data['operators'.$type.$position]);
         } else  if ($valueType == "text") {
             $valueQuery = $data['text'.$type.$position];
         } else  if ($valueType == "enum") {
@@ -863,6 +857,14 @@ class DynamicSearchController extends Controller
                                     });
         }
     }
+
+    public function getOperatorSymbol($idOperator) {
+        $operatorSymbol = Operator::where('id', $idOperator)
+                                    ->select(['operator_type'])
+                                    ->first();
+
+        return $operatorSymbol->operator_type;
+   }
 
     public function formatArrayData($data, $keySelect) {
         $array = [];

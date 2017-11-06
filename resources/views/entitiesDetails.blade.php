@@ -332,8 +332,8 @@
 	<!-- Tabela com os resultados da pesquisa -->
 	<div id="dynamic-search-presentation" style="display: none;">
 		<p><b>Nome da Query:</b></p>
-		<input type="text" name="query_name" id = "query_name">
-		<button class = "btn btn-sm btn-primary" type = "button" ng-click = "saveSearch(ents.id) "> Save </button>
+		<input type="text" name="query_name" id = "query_name" ng-change = "blockUnblockSaveButton()" ng-model = "query_name">
+		<button id = "save_button" class = "btn btn-sm btn-primary" type = "button" ng-click = "saveSearch(ents.id)" disabled> Save </button>
 		<h3>Pesquisa</h3>
 		<div id="false-de-pesquisa" style="padding: 15px 0px;">
 			<dl>
