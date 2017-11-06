@@ -388,8 +388,6 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
     $scope.showResult = function (idQuery, idEntity) {
 
         console.log("Tá a chegar e o idQuery é " + idQuery + " e o id Entity é: " + idEntity);
-
-
     }
 
     $scope.voltar = function() {

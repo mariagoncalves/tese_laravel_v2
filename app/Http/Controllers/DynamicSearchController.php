@@ -863,7 +863,11 @@ class DynamicSearchController extends Controller
                                     ->select(['operator_type'])
                                     ->first();
 
-        return $operatorSymbol->operator_type;
+        if ($operatorSymbol) {
+            return $operatorSymbol->operator_type;
+        } else {
+            return '=';
+        }
    }
 
     public function formatArrayData($data, $keySelect) {
