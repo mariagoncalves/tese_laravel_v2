@@ -118,13 +118,29 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
 
                         var valueRadio = dataCondition[i].value;
                         console.log("Valor radio: " + valueRadio);
-                        $("#" + idTable).find("[name=radio" + tableType + keyProp + "]").prop("checked", true);
+                        $("#" + idTable).find("[name=radio" + tableType + keyProp + "][value='"+valueRadio+"']").prop("checked", true);
 
 
                     } else if (dataCondition[i].property.value_type == "file") {
                         $("#" + idTable).find("[name=file" + tableType + keyProp + "]").val(dataCondition[i].value);
                     }
-                };
+                }
+
+                var searchExist = $("#idSearch").val();
+
+                if (searchExist != null && searchExist != undefined && searchExist != "" && searchExist == 1) {
+
+                    if (tableType == "ER") {
+                        console.log("TESTEE: " + $("#showResultButton").length);
+                        
+                        setTimeout(function() {
+                            $("#showResultButton").trigger("click");
+                        }, 100);
+                    }
+                }
+
+
+
             });
         }
     }
@@ -385,9 +401,12 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
         window.location.href = "/dynamicSearch/entityDetails/" + idEntityType + "?query=" + idQuery;
     }
 
-    $scope.showResult = function (idQuery, idEntity) {
+    $scope.showResult = function (idQuery, idEntityType) {
 
-        console.log("Tá a chegar e o idQuery é " + idQuery + " e o id Entity é: " + idEntity);
+        console.log("Tá a chegar e o idQuery é " + idQuery + " e o id Entity é: " + idEntityType);
+
+        window.location.href = "/dynamicSearch/entityDetails/" + idEntityType + "?query=" + idQuery + "&pesquisa=1";
+
     }
 
     $scope.voltar = function() {

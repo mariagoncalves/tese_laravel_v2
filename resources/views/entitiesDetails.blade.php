@@ -5,12 +5,19 @@
 <!--<p> Isto é o id recebido com angular: {{$id}}</p>  -->
 
 @if (isset($queryId))
-	<!-- <p> Id recebido : {{$queryId}}</p> -->
+	<p> Id recebido : {{$queryId}}</p>
 	<input type="hidden" id="idQuery" value = "{{ $queryId }}" >
+	@if (isset($pesquisa))
+		<p> Id pesquisa : {{$pesquisa}}</p>
+		<input type="hidden" id="idSearch" value = "{{ $pesquisa }}" >
+
+	@endif
 @endif
 
+
+
 <div ng-controller="dynamicSearchControllerJs">
-	<form id="dynamic-search">
+	<form id="dynamic-search" style = "display: {{ isset($pesquisa) && $pesquisa == 1 ? 'none' : 'block' }} ;">
 		<div ng-init = "getEntitiesData({{$id}})">
 			<div id = "checkET">
 				<h3>{{trans("dynamicSearch/messages.TABLE_TITLE1")}} [[ents.language[0].pivot.name ]] </h3>
@@ -38,8 +45,8 @@
 			                    	<div ng-switch on="property.value_type">
 								        <div ng-switch-when="text"> <input type="text" name="textET[[ key1 ]]"> </div>
 								        <div ng-switch-when="bool"> 
+								        	<input type="radio" name="radioET[[ key1 ]]" value="true">True 
 											<input type="radio" name="radioET[[ key1 ]]" value="false">False
-											<input type="radio" name="radioET[[ key1 ]]" value="true">True 
 										</div>
 										<div ng-switch-when="enum">
 											<select name = "selectET[[ key1 ]]" ng-init = "getEnumValues(property.id)">
@@ -325,7 +332,7 @@
 	                </table>
                 </div>
             </div>
-            <button type="button" class="btn btn-md btn-primary" ng-click="search(ents.id)"> Pesquisar </button>
+            <button id = "showResultButton" type="button" class="btn btn-md btn-primary" ng-click="search(ents.id)"> Pesquisar </button>
 		</div>
 	</form>
 

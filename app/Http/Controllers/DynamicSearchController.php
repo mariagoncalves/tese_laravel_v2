@@ -37,16 +37,20 @@ class DynamicSearchController extends Controller
 
         $dataRequest = $request->all();
         \Log::debug("RESULTADOOO");
+        //\Log::debug($dataRequest['pesquisa']);
+
+        $data = ['id' => $id];
 
         if (isset($dataRequest['query']) && $dataRequest['query'] != "") {
-            $data = [
-                'id' => $id,
-                'queryId' => $dataRequest['query'],
-                ];
-        } else {
-            $data = ['id' => $id];
-        }
 
+            $data['queryId'] = $dataRequest['query'];
+
+            if (isset($dataRequest['pesquisa']) && $dataRequest['pesquisa'] != "") {
+
+                $data['pesquisa'] = $dataRequest['pesquisa'];
+
+            }
+        }
     	
     	return view('entitiesDetails')->with($data);
     }
