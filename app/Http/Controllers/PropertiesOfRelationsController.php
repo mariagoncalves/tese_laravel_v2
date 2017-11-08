@@ -21,29 +21,6 @@ class PropertiesOfRelationsController extends Controller {
         return view('propertiesOfRelations');
     }
 
-    /*public function getAllRel() {
-
-        $language_id = '1';
-
-        $rels = RelType::with(['properties.language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
-                            }])
-                            ->with(['language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
-                            }])
-                            ->with(['properties.units.language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
-                            }])
-                            ->with(['properties' => function($query) {
-                                $query->orderBy('form_field_order', 'asc');
-                            }])->whereHas('language', function ($query) use ($language_id){
-                                return $query->where('language_id', $language_id);
-                            })->paginate(10);
-
-
-        return response()->json($rels);
-    }*/
-
     public function insertPropsRel(Request $request) {
 
         try {
@@ -229,10 +206,10 @@ class PropertiesOfRelationsController extends Controller {
     //Drag and drop methods
     public function getPropsRelations($id) {
 
-        $language_id = '1';
+        $url_text = 'PT';
 
-        $propsRel = RelType::with(['properties.language' => function($query) use ($language_id) {
-                                    $query->where('language_id', $language_id);
+        $propsRel = RelType::with(['properties.language' => function($query) use ($url_text) {
+                                    $query->where('slug', $url_text);
                                 }])
                             ->with(['properties' => function($query) {
                                     $query->orderBy('form_field_order', 'asc');
@@ -258,10 +235,10 @@ class PropertiesOfRelationsController extends Controller {
 
     public function getRelations() {
 
-        $language_id = '1';
+        $url_text = 'PT';
 
-        $allRels = RelType::with(['language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+        $allRels = RelType::with(['language' => function($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
                             ->get();
 
@@ -269,6 +246,19 @@ class PropertiesOfRelationsController extends Controller {
         \Log::debug($allRels);
 
         return response()->json($allRels);
+    }
+
+    public function remove(Request $request, $idPropRelationType) {
+
+        $property = Property::find($idPropRelationType)->delete();
+        if ($property) {
+            $result = PropertyName::where('property_id', $idPropRelationType)->delete();
+            if ($result) {
+                return response()->json();
+            }
+        }
+
+        return response()->json(['error' => 'An error occurred. Try later.'], 500);
     }
 
 
@@ -326,7 +316,4 @@ class PropertiesOfRelationsController extends Controller {
 
         return response()->json($dataPropsRel);
     }
-
-
-
 }

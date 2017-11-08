@@ -260,6 +260,8 @@ Route::get('/propertiesOfRelation/get_propsOfRel1/{id?}','PropertiesOfRelationsC
 
 Route::get('/properties/getAllRelations','PropertiesOfRelationsController@getRelations');
 
+Route::post('/propertiesOfRelation/remove/{id}', 'PropertiesOfRelationsController@remove');
+
 
 //--------------------------Métodos comuns as entidades e as relações---------------------------
 

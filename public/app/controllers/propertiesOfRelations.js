@@ -1,85 +1,13 @@
 app.controller('propertiesOfRelationsManagmentControllerJs', function($scope, $http, growl, API_URL, $translatePartialLoader, $translate, $filter, NgTableParams, MyService, $uibModal, $timeout) {
 
-    $translatePartialLoader.addPart('properties');
-
-    setTimeout(function() { $translate.refresh(); }, 0);
-
-    $scope.dotranslate = function() {
-        var currentLang = $translate.proposedLanguage() || $translate.use();
-        if (currentLang == "en")
-            $translate.use('pt');
-        else
-            $translate.use('en');
-    };
-
     $scope.relations = [];
     $scope.states   = [];
     $scope.valueTypes = [];
     $scope.fieldTypes = [];
     $scope.units = [];
-    //$scope.totalPages = 0;
-    //$scope.currentPage = 1;
-    //$scope.range = [];
     $scope.errors = [];
     $scope.propsRel = [];
     $scope.result = [];
-
-    /*$scope.getRelations = function(pageNumber) {
-
-        if (pageNumber === undefined) {
-            pageNumber = '1';
-        }
-        //Properties
-        $http.get('/properties/get_props_rel?page='+pageNumber).then(function(response) {
-            console.log(response);
-            $scope.relations = response.data.data;
-
-            $scope.totalPages = response.data.last_page;
-            $scope.currentPage = response.data.current_page;
-
-            // Pagination Range
-            var pages = [];
-
-            for (var i = 1; i <= response.data.last_page; i++) {
-                pages.push(i);
-            }
-
-            $scope.range = pages;
-
-        });
-    };*/
-
-    /*$scope.toggleRel = function(modalstate, id) {
-        $('#formPropRel')[0].reset();
-        $scope.property = null;
-        $scope.modalstate = modalstate;
-
-        if(modalstate == "edit") {
-            $('#myModal select:first').prop('disabled', true);
-        } else {
-            $('#myModal select:first').prop('disabled', false);
-        }
-
-        switch (modalstate) {
-            case 'add':
-                $scope.id = id;
-                $scope.form_title = "Add New Property";
-                break;
-            case 'edit':
-                $scope.form_title = "Edit Property";
-                $scope.id = id;
-                $http.get(API_URL + '/properties/get_property/' + id)
-                    .then(function(response) {
-                        $scope.property = response.data;
-                    });
-                break;
-            default:
-                break;
-        }
-        $('#myModal').modal('show');
-        $scope.errors = null;
-        $scope.process = null;
-    };*/
 
     $scope.showDragDropWindow = function(id) {
 
@@ -257,98 +185,26 @@ app.controller('propertiesOfRelationsManagmentControllerJs', function($scope, $h
         };
     };
 
-    /*$scope.confirmRemove = function (id) {
+    $scope.remove = function (idPropRelationType) {
 
-        console.log("O id da prop é " + id);
-
-        $('#modalConfirm').modal('show');
-
-        $scope.remove = function(id) {
-
-        console.log("Consigo ter aqui o id e é: " + id);
-        var url = API_URL + "PropertyOfEntities_remove/" + id;
+        var url = API_URL + "/propertiesOfRelation/remove/" + idPropRelationType;
 
         $http({
             method: 'POST',
             url: url,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            //headers: {'Content-Type': 'json'}
         }).then(function (response) {
-            console.log("lalal 11");
-            console.log(response);
-            growl.success('This is success message.',{title: 'Success!'});
-            $scope.getEntities();
+            growl.success('SAVE_SUCCESS_MESSAGE' ,{title: 'Success!'});
+            // Atualizar os dados da tabela
+            $scope.getPropsOfRelation();
         }, function errorCallback(response) {
-            console.log("lalal");
-            console.log(response);
-            if (response.status == 400 || response.status == 500)
-            {
+            if (response.status == 400 || response.status == 500){
                 growl.error('This is error message.',{title: 'error!'});
-            }
-            else
-            {
+            } else {
                 $scope.errors = response.data;
             }
         });
-    };*/
-
-    $scope.openModaConfirm = function (size, id, parentSelector) {
-
-        console.log(id);
-
-        var modalInstance = $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: 'modalConfirm',
-            controller: 'ModalInstanceCtrl2',
-            scope: $scope,
-            size: size,
-            //appendTo: parentElem,
-            resolve: {
-            }
-        }).closed.then(function() {
-            //handle ur close event here
-            //alert("modal closed");
-        });
-    };
-
-    $scope.ModalInstanceCtrl2 = function ($scope, $uibModalInstance) {
-
-        $scope.remove = function(id) {
-
-            console.log("Consigo ter aqui o id e é: " + id);
-            /*var url = API_URL + "PropertyOfEntities_remove/" + id;
-
-            $http({
-                method: 'POST',
-                url: url,
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                //headers: {'Content-Type': 'json'}
-            }).then(function (response) {
-                console.log("lalal 11");
-                console.log(response);
-                growl.success('This is success message.',{title: 'Success!'});
-                $scope.cancel();
-            }, function errorCallback(response) {
-                console.log("lalal");
-                console.log(response);
-                if (response.status == 400 || response.status == 500)
-                {
-                    growl.error('This is error message.',{title: 'error!'});
-                }
-                else
-                {
-                    $scope.errors = response.data;
-                }
-            });*/
-        };
-
-        $scope.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
-        };
-    };
-
+    }
 
     $scope.getRelations = function(){
 
@@ -359,26 +215,6 @@ app.controller('propertiesOfRelationsManagmentControllerJs', function($scope, $h
             console.log($scope.relations);
         });
     }
-
-
-     //------------------------------------TESTES------------------------------
-    //Para usar o ng-table
-
-    /*$http.get('/propertiesOfRelation/get_propsOfRel1?page=1').then(function(response) {
-        $scope.tableParams = new NgTableParams({
-            count: 2,
-            group: "name"
-        }, {
-            paginationMaxBlocks: 13,
-            paginationMinBlocks: 2,
-            dataset: response.data
-
-        });
-
-        console.log(response.data);
-    });*/
-
-    //-------------------------------------------------------------------------
 
     $scope.getPropsOfRelation = function() {
 
@@ -425,20 +261,5 @@ app.controller('propertiesOfRelationsManagmentControllerJs', function($scope, $h
                 return response.data.data;
             });
     }
-
-    
-}).directive('pagination', function(){
-    return{
-        restrict: 'E',
-        template: '<ul class="pagination">'+
-        '<li ng-show="currentPage != 1"><a href="javascript:void(0)" ng-click="getRelations(1)">&laquo;</a></li>'+
-        '<li ng-show="currentPage != 1"><a href="javascript:void(0)" ng-click="getRelations(currentPage-1)">&lsaquo; [[ "BTNPAGINATION2" | translate]]</a></li>'+
-        '<li ng-repeat="i in range" ng-class="{active : currentPage == i}">'+
-        '<a href="javascript:void(0)" ng-click="getRelations(i)">{{i}}</a>'+
-        '</li>'+
-        '<li ng-show="currentPage != totalPages"><a href="javascript:void(0)" ng-click="getRelations(currentPage+1)">[[ "BTNPAGINATION1" | translate]] &rsaquo;</a></li>'+
-        '<li ng-show="currentPage != totalPages"><a href="javascript:void(0)" ng-click="getRelations(totalPages)">&raquo;</a></li>'+
-        '</ul>'
-    };
-});;
+});
 

@@ -27,40 +27,40 @@ class PropertiesController extends Controller {
 
     public function getUnits() {
 
-        $language_id = '1';
+        $url_text = 'PT';
 
-        $units = PropUnitType::with(['language' => function($query) use ($language_id) {
-                                    $query->where('language_id', $language_id);
+        $units = PropUnitType::with(['language' => function($query) use ($url_text) {
+                                    $query->where('slug', $url_text);
                                 }])
-                                ->whereHas('language', function ($query) use ($language_id){
-                                    return $query->where('language_id', $language_id);
+                                ->whereHas('language', function ($query) use ($url_text){
+                                    return $query->where('slug', $url_text);
                                 })->get();
 
         return response()->json($units);
     }
 
     public function getProperty($id) {
-        $language_id = '1';
+        $url_text = 'PT';
 
-        $property = Property::with(['language' => function($query) use ($language_id) {
-                                    $query->where('language_id', $language_id);
+        $property = Property::with(['language' => function($query) use ($url_text) {
+                                    $query->where('slug', $url_text);
                                 }])
-                            ->with(['units.language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+                            ->with(['units.language' => function($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
-                            ->with(['fkProperty' => function ($query) use ($language_id) {
-                                $query->with(['language' => function($query) use ($language_id) {
-                                    $query->where('language_id', $language_id);
+                            ->with(['fkProperty' => function ($query) use ($url_text) {
+                                $query->with(['language' => function($query) use ($url_text) {
+                                    $query->where('slug', $url_text);
                                 }]);
                             }])
-                            ->with(['readingEntTypes' => function ($query) use ($language_id) {
-                               $query->with(['entType.language' => function($query) use ($language_id) {
-                                    $query->where('language_id', $language_id);
+                            ->with(['readingEntTypes' => function ($query) use ($url_text) {
+                               $query->with(['entType.language' => function($query) use ($url_text) {
+                                    $query->where('slug', $url_text);
                                 }]);
                             }])
-                            ->with(['propertiesReading' => function($query) use ($language_id) {
-                                $query->with(['language' => function($query) use ($language_id) {
-                                    $query->where('language_id', $language_id);
+                            ->with(['propertiesReading' => function($query) use ($url_text) {
+                                $query->with(['language' => function($query) use ($url_text) {
+                                    $query->where('slug', $url_text);
                                 }]);
                             }])
                             ->find($id);

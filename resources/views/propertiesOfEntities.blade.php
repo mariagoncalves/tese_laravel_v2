@@ -1,6 +1,6 @@
 @extends('layouts.default')
 @section('content')
-    <h2>{{trans("properties/messages.Page_Name")}}</h2>
+    <h2>{{trans("properties/messages.Page_Name1")}}</h2>
     <div ng-controller="propertiesOfEntitiesManagmentControllerJs">
         <button type="button" class="btn btn-xs btn-success" ng-click="openModalPropsEnt('md', 'add', 0)">{{trans('properties/messages.ADD_PROPERTIES')}}</button>
         <br>
@@ -28,7 +28,7 @@
                 <td title="'Action'">
                     <button class="btn btn-default btn-xs btn-detail" ng-click="openModalPropsEnt('md', 'edit', entitiesProps.id)">{{trans('properties/messages.BTNTABLE1')}}</button>
                     <button class="btn btn-info btn-xs btn-delete">{{trans('properties/messages.BTNTABLE2')}}</button>
-                    <button class="btn btn-danger btn-xs btn-delete" ng-click="delete(relation.id)">{{trans('properties/messages.BTNTABLE4')}}</button>
+                    <button class="btn btn-danger btn-xs btn-delete" ng-click="delete(entitiesProps.id)">{{trans('properties/messages.BTNTABLE4')}}</button>
                 </td>
             </tr> 
         </table>
@@ -47,7 +47,6 @@
                         <ul ui-sortable="sortableOptionsEnt" ng-model="propsEnt" class="list-group">
                             <li ng-repeat="prop in propsEnt" class="list-group-item" data-id="[[ prop.id ]]">[[prop.language[0].pivot.name]]</li>
                         </ul>
-
                        <!-- <pre>[[propsEnt]]</pre> -->
                     </div>
                 </div>

@@ -2,7 +2,8 @@
 
 return [
 
-	'Page_Name'            => 'Properties',
+	'Page_Name1'           => 'Properties of Entities',
+	'Page_Name2'           => 'Propriedades of Relations',
 
 	'THEADER1'             => 'ID',
 	'THEADER2'             => 'Entity',
@@ -27,7 +28,6 @@ return [
 	'ADD_PROPERTIES'        => 'Add Properties',
 
 	'BTNTABLE1'            => 'Edit',
-	'BTNTABLE2'            => 'History',
 	'BTNTABLE3'            => 'Property drag and drop reorder',
 	'BTNTABLE4'            => 'Remove',
 

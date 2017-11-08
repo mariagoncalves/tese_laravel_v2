@@ -2,7 +2,8 @@
 
 return [
 
-	'Page_Name'            => 'Propriedades',
+	'Page_Name1'           => 'Propriedades da entidades',
+	'Page_Name2'           => 'Propriedades das relações',
 
 	'THEADER1'             => 'ID',
 	'THEADER2'             => 'Entidade',
@@ -23,11 +24,10 @@ return [
 	'THEADER17'            => 'Propriedade_info',
 	'THEADER18'            => 'Tipo de Output',
          
-	'NO_PROPERTIES'         => 'Não tem propriedades',
-	'ADD_PROPERTIES'        => 'Adicionar propriedades',
+	'NO_PROPERTIES'        => 'Não tem propriedades',
+	'ADD_PROPERTIES'       => 'Adicionar propriedades',
 
 	'BTNTABLE1'            => 'Editar',
-	'BTNTABLE2'            => 'Histórico',
 	'BTNTABLE3'            => 'Reordenar propriedades',
 	'BTNTABLE4'            => 'Remover',
 
