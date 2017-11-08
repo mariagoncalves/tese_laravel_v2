@@ -173,6 +173,9 @@ class DynamicSearchController extends Controller
         $propRefs = Property::with(['entType.language' => function ($query) use ($language_id) {
                                 $query->where('language_id', $language_id);
                             }])
+                            /*->with(['propAllowedValues.language' => function($query) use ($language_id) {
+                                $query->where('language_id', $language_id);
+                            }])*/
                             ->where('property.value_type', 'prop_ref')
                             ->whereIn('property.fk_property_id', $arrayPropsId)
                             ->get()->toArray();
@@ -187,6 +190,9 @@ class DynamicSearchController extends Controller
             $dadosPropRef['properties'] = [];
 
             $propsOfEnts = Property::with(['language' => function ($query) use ($language_id) {
+                                $query->where('language_id', $language_id);
+                            }])
+                            ->with(['propAllowedValues.language' => function($query) use ($language_id) {
                                 $query->where('language_id', $language_id);
                             }])
                             ->where('ent_type_id', $entRef['ent_type_id'])
@@ -234,6 +240,9 @@ class DynamicSearchController extends Controller
                                 $query->where('language_id', $language_id);
                             }])
                         ->with(['properties.language' => function ($query) use ($language_id) {
+                                $query->where('language_id', $language_id);
+                            }])
+                        ->with(['properties.propAllowedValues.language' => function ($query) use ($language_id) {
                                 $query->where('language_id', $language_id);
                             }])
                         ->with(['ent1.language' => function ($query) use ($language_id) {
@@ -288,6 +297,9 @@ class DynamicSearchController extends Controller
             }
 
             $properties = Property::with(['language' => function ($query) use ($language_id) {
+                                $query->where('language_id', $language_id);
+                            }])
+                            ->with(['propAllowedValues.language' => function ($query) use ($language_id) {
                                 $query->where('language_id', $language_id);
                             }])
                             ->where('ent_type_id', $ent_type_id)

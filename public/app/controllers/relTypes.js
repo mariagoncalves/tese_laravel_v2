@@ -26,7 +26,7 @@ app.controller('RelationTypesManagmentControllerJs', function($scope, $http, gro
             url: url,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(function (response) {
-            growl.success('This is success message.',{title: 'Success!'});
+            growl.success('SAVE_SUCCESS_MESSAGE' ,{title: 'Success!'});
             // Atualizar os dados da tabela
             $scope.getRelationsTable();
         }, function errorCallback(response) {

@@ -28,6 +28,6 @@ return [
 	'ADD_FORM_NAME'        => 'Add New Relation Type',
 	'BTN1FORM'             => 'Save changes',
 
-	'BTNPAGINATION1'      => 'Next',
-	'BTNPAGINATION2'      => 'Prev',
+	'BTNPAGINATION1'       => 'Next',
+	'BTNPAGINATION2'       => 'Prev',
 ];

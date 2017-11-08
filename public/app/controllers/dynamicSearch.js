@@ -138,9 +138,6 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
                         }, 100);
                     }
                 }
-
-
-
             });
         }
     }
@@ -186,9 +183,6 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
 
     $scope.getPropRefs = function (id) {
 
-        console.log("CHEIGOUUU ");
-        console.log("teste com id: " + id);
-
         $http.get(API_URL + '/dynamicSearch/getPropRefs/' + id).then(function(response) {
             $scope.entRefs = response.data;
             $scope.getPropertiesQuery('VT');
@@ -208,15 +202,15 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             }
         });
 
-        // Se existir, então vamos desbloquear todos os campos da tabela 2.
+        // Se existir, então vamos desbloquear todos os campos da tabela 2, 3 e 4.
         // Caso contrario, bloquear.
         if (existeChecked) {
             $("#checkRL").find("[type=checkbox], [type=text], [type=number], [type=radio], select").removeAttr('disabled');
             $("#table4").find("[type=checkbox], [type=text], [type=number], [type=radio], select").removeAttr('disabled');
             $("#table3").find("[type=checkbox], [type=text], [type=number], [type=radio], select").removeAttr('disabled');
         } else {
-            $("#checkRL").find("[type=checkbox]").prop("checked", false);
-            $("#checkRL").find("[type=checkbox], [type=text], [type=number], [type=radio], select").attr('disabled', true);
+            $("#checkRL, #table3, #table4").find("[type=checkbox]").prop("checked", false);
+            $("#checkRL, #table3, #table4").find("[type=checkbox], [type=text], [type=number], [type=radio], select").attr('disabled', true);
         }
     }
 
@@ -250,15 +244,6 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             }
         });
 
-        // Se existir, então vamos desbloquear todos os campos da tabela 4.
-        // Caso contrario, bloquear.
-        /*if (existeCheckedTable3) {
-            $("#table4").find("[type=checkbox], [type=text], [type=number], [type=radio], select").removeAttr('disabled');
-        } else {
-            $("#table4").find("[type=checkbox]").prop("checked", false);
-            $("#table4").find("[type=checkbox], [type=text], [type=number], [type=radio], select").attr('disabled', true);
-        }*/
-
         var existeCheckedTable1 = false;
         $("#table1").find("[type=checkbox]").each(function(index) {
             if ($(this).is(":checked")) {
@@ -275,9 +260,33 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
         }
     }
 
-    $scope.getPropsOfEnts = function (id) {
+    $scope.clickTable4 = function() {
 
-        console.log("teste com id getPropsOfEnts: " + id);
+        var existeCheckedTable4 = false;
+        $("#table4").find("[type=checkbox]").each(function(index) {
+            if ($(this).is(":checked")) {
+                existeCheckedTable4 = true;
+                return;
+            }
+        });
+
+        var existeCheckedTable1 = false;
+        $("#table1").find("[type=checkbox]").each(function(index) {
+            if ($(this).is(":checked")) {
+                existeCheckedTable1 = true;
+                return;
+            }
+        });
+
+        if ((existeCheckedTable1 && existeCheckedTable4) || existeCheckedTable4) {
+            $("#checkRL").find("[type=checkbox]").prop("checked", false);
+            $("#checkRL").find("[type=checkbox], [type=text], [type=number], [type=radio], select").attr('disabled', true);
+        } else {
+            $("#checkRL").find("[type=checkbox], [type=text], [type=number], [type=radio], select").removeAttr('disabled');
+        }
+    }
+
+    $scope.getPropsOfEnts = function (id) {
 
         $http.get(API_URL + '/dynamicSearch/getPropsOfEnts/' + id).then(function(response) {
             $scope.propsOfEnts[id] = response.data;
@@ -300,9 +309,6 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
 
     $scope.getEntsRelated = function (idRelType, idEntType) {
 
-        console.log("ID RELATION: " + idRelType);
-        console.log("ID ENTIDADE: " + idEntType);
-
         $http.get(API_URL + '/dynamicSearch/getEntsRelated/' + idRelType + '/' + idEntType).then(function(response) {
             $scope.entsRelated = response.data;
             $scope.getPropertiesQuery('ER');
@@ -312,8 +318,6 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
     }
 
     $scope.getPropsEntRelated = function (id) {
-
-        console.log("ID da entidade relacionada: " + id);
 
         $http.get(API_URL + '/dynamicSearch/getPropsEntRelated/' + id).then(function(response) {
             $scope.propsEntRelated = response.data[0];
@@ -488,6 +492,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
                     $(this).prop('checked', true);
                 }
             });
+            $scope.clickTable2();
         }
     }
 

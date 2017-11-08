@@ -2,7 +2,7 @@
 
 return [
 
-	'Page_Name'           => 'Tipos de relação',
+	'Page_Name'            => 'Tipos de relação',
 	
 	'THEADER1'             => 'ID',
 	'THEADER2'             => 'Relação',
@@ -13,7 +13,7 @@ return [
 	'THEADER7'             => 'Criado',
 	'THEADER8'             => 'Atualizado',
 	'THEADER9'             => 'Apagado',
-	'THEADER10'            => 'Adicionae tipos de relação',
+	'THEADER10'            => 'Adicionar tipos de relação',
 	'THEADER11'            => 'Remover',
          
 	'NO_RELATIONS'         => 'Não existe relações',
@@ -28,8 +28,6 @@ return [
 	'ADD_FORM_NAME'        => 'Adicionar novo tipo de relação',
 	'BTN1FORM'             => 'Guardar alterações',
 
-	'BTNPAGINATION1'      => 'Próximo',
-	'BTNPAGINATION2'      => 'Anterior',
-  
-
+	'BTNPAGINATION1'       => 'Próximo',
+	'BTNPAGINATION2'       => 'Anterior',
 ];
