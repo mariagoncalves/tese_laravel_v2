@@ -11,7 +11,7 @@
                 <td title="'Entity'" filter ="{entityFilter: 'text'}" sortable="'entity_name'" >
                     [[entitiesProps.entity_name]]
                     <div>
-                        <button class="btn btn-primary btn-xs" ng-click="showDragDropWindowEnt(entitiesProps.ent_id)"> [[ "BTNTABLE3" | translate]]</button>
+                        <button class="btn btn-primary btn-xs" ng-click="showDragDropWindowEnt(entitiesProps.ent_id)"> {{trans('properties/messages.BTNTABLE3')}}</button>
                     </div>
                 </td>
                 <td title="'{{trans('properties/messages.THEADER1')}}'" sortable="'id'" > [[entitiesProps.id]] </td>
@@ -25,10 +25,9 @@
                 <td title="'{{trans('properties/messages.THEADER10')}}'" sortable="'state'" > [[ entitiesProps.state ]] </td>
                 <td title="'{{trans('properties/messages.THEADER11')}}'" sortable="'created_at'" > [[ entitiesProps.created_at ]] </td>
                 <td title="'{{trans('properties/messages.THEADER12')}}'" sortable="'updated_at'" > [[ entitiesProps.updated_at ]] </td>
-                <td title="'Action'">
-                    <button class="btn btn-default btn-xs btn-detail" ng-click="openModalPropsEnt('md', 'edit', entitiesProps.id)">{{trans('properties/messages.BTNTABLE1')}}</button>
-                    <button class="btn btn-info btn-xs btn-delete">{{trans('properties/messages.BTNTABLE2')}}</button>
-                    <button class="btn btn-danger btn-xs btn-delete" ng-click="delete(entitiesProps.id)">{{trans('properties/messages.BTNTABLE4')}}</button>
+                <td title="'{{trans('properties/messages.THEADER19')}}'">
+                    <button class="btn btn-default btn-xs btn-warning" ng-click="openModalPropsEnt('md', 'edit', entitiesProps.id)">{{trans('properties/messages.BTNTABLE1')}}</button>
+                    <button class="btn btn-danger btn-xs btn-delete" ng-click="remove(entitiesProps.id)">{{trans('properties/messages.BTNTABLE4')}}</button>
                 </td>
             </tr> 
         </table>

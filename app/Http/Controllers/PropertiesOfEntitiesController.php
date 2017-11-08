@@ -24,29 +24,6 @@ class PropertiesOfEntitiesController extends Controller {
     	return view('propertiesOfEntities');
     }
 
-    public function getAllEnt($id = null) {
-
-
-        $language_id = '1';
-
-        $ents = EntType::with(['properties.language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
-                            }])
-                            ->with(['language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
-                            }])
-                            ->with(['properties.units.language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
-                            }])
-                            ->with(['properties' => function($query) {
-                                $query->orderBy('form_field_order', 'asc');
-                            }])->whereHas('language', function ($query) use ($language_id){
-                                return $query->where('language_id', $language_id);
-                            })->paginate(5);
-
-        return response()->json($ents);
-    }
-
     public function insertPropsEnt(Request $request) {
         try {
             $data = $request->all();
@@ -151,7 +128,6 @@ class PropertiesOfEntitiesController extends Controller {
                 'value_type'       => $data['property_valueType'      ],
                 'form_field_type'  => $data['property_fieldType'      ],
                 'unit_type_id'     => $data['unites_names'            ],
-                //'form_field_order' => $data['property_fieldOrder'     ],
                 'form_field_order' => $countPropEnt + 1,
                 'form_field_size'  => $data['property_fieldSize'      ],
                 'mandatory'        => $data['property_mandatory'      ],
@@ -281,7 +257,6 @@ class PropertiesOfEntitiesController extends Controller {
             'property_valueType'  => ['required'],
             'property_fieldType'  => $rulesFieldType,
             'property_mandatory'  => ['required'],
-            //'property_fieldOrder' => ['required', 'integer', 'min:1'],
             'unites_names'        => ['integer'],
             'property_fieldSize'  => $propertyFieldSize,
             'reference_entity'    => $rulesEntRef,
@@ -378,13 +353,13 @@ class PropertiesOfEntitiesController extends Controller {
 
     public function getPropsEntities($id = null) {
 
-        $language_id = '1';
+        $url_text = 'PT';
 
-        $propsEnt = EntType::with(['language' => function ($query) use ($language_id) {
-                                    $query->where('language_id', $language_id);
+        $propsEnt = EntType::with(['language' => function ($query) use ($url_text) {
+                                    $query->where('slug', $url_text);
                                 }])
-                            ->with(['properties.language' => function($query) use ($language_id) {
-                                    $query->where('language_id', $language_id);
+                            ->with(['properties.language' => function($query) use ($url_text) {
+                                    $query->where('slug', $url_text);
                                 }])
                             ->with(['properties' => function($query) {
                                     $query->orderBy('form_field_order', 'asc');
@@ -439,10 +414,10 @@ class PropertiesOfEntitiesController extends Controller {
 
     public function getEntities() {
 
-        $language_id = '1';
+        $url_text = 'PT';
 
-        $allEnts = EntType::with(['language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+        $allEnts = EntType::with(['language' => function($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
                             ->get();
 

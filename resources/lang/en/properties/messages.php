@@ -23,6 +23,7 @@ return [
 	'THEADER16'            => 'Entity_type_info',
 	'THEADER17'            => 'Property_info',
 	'THEADER18'            => 'Output Type',
+	'THEADER19'            => 'Action',
          
 	'NO_PROPERTIES'         => 'No Properties',
 	'ADD_PROPERTIES'        => 'Add Properties',

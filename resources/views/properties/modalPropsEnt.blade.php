@@ -172,6 +172,6 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="btn-save" ng-click="save(modalstate, id)" ng-disabled="frmProp.$invalid">[[ "BTN1FORM" | translate]]</button>
+        <button type="button" class="btn btn-primary" id="btn-save" ng-click="save(modalstate, id)" ng-disabled="frmProp.$invalid">{{trans('properties/messages.BTN1FORM')}}</button>
     </div>
 </div>

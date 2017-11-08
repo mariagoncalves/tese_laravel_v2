@@ -204,7 +204,7 @@ app.controller('propertiesOfRelationsManagmentControllerJs', function($scope, $h
                 $scope.errors = response.data;
             }
         });
-    }
+    };
 
     $scope.getRelations = function(){
 
@@ -214,7 +214,7 @@ app.controller('propertiesOfRelationsManagmentControllerJs', function($scope, $h
             $scope.relations = response.data;
             console.log($scope.relations);
         });
-    }
+    };
 
     $scope.getPropsOfRelation = function() {
 
@@ -260,6 +260,6 @@ app.controller('propertiesOfRelationsManagmentControllerJs', function($scope, $h
                 params.total(response.data.total);
                 return response.data.data;
             });
-    }
+    };
 });
 

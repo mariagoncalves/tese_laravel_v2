@@ -23,6 +23,7 @@ return [
 	'THEADER16'            => 'Tipo_entidade_info',
 	'THEADER17'            => 'Propriedade_info',
 	'THEADER18'            => 'Tipo de Output',
+	'THEADER19'            => 'Ação',
          
 	'NO_PROPERTIES'        => 'Não tem propriedades',
 	'ADD_PROPERTIES'       => 'Adicionar propriedades',

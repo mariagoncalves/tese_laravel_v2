@@ -191,6 +191,6 @@ app.controller('RelationTypesManagmentControllerJs', function($scope, $http, gro
                 params.total(response.data.total);
                 return response.data.data;
             });
-    }
+    };
 });
 

@@ -26,7 +26,7 @@
                 <td title="'{{trans('properties/messages.THEADER10')}}'" sortable="'state'" > [[ relationProps.state ]] </td>
                 <td title="'{{trans('properties/messages.THEADER11')}}'" sortable="'created_at'" > [[ relationProps.created_at ]] </td>
                 <td title="'{{trans('properties/messages.THEADER12')}}'" sortable="'updated_at'" > [[ relationProps.updated_at ]] </td>
-                <td title="'Action'">
+                <td title="'{{trans('properties/messages.THEADER19')}}'">
                     <button class="btn btn-default btn-xs btn-warning" ng-click="openModalPropsRel('md', 'edit', relationProps.id)">{{trans('properties/messages.BTNTABLE1')}}</button>
                     <button class="btn btn-danger btn-xs btn-delete" ng-click="remove(relationProps.id)">{{trans('properties/messages.BTNTABLE4')}}</button>
                 </td>

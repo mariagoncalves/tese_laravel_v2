@@ -1,54 +1,14 @@
 app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $http, growl, API_URL, $translatePartialLoader, $translate, $filter, NgTableParams, MyService, $uibModal, $timeout) {
 
-    $translatePartialLoader.addPart('properties');
-
-    setTimeout(function() { $translate.refresh(); }, 0);
-
-    $scope.dotranslate = function() {
-        var currentLang = $translate.proposedLanguage() || $translate.use();
-        if (currentLang == "en")
-            $translate.use('pt');
-        else
-            $translate.use('en');
-    };
-
     $scope.entities = [];
     $scope.states   = [];
     $scope.valueTypes = [];
     $scope.fieldTypes = [];
     $scope.units = [];
-    $scope.totalPages = 0;
-    $scope.currentPage = 1;
-    $scope.range = [];
     $scope.errors = [];
     $scope.propsEnt = [];
     $scope.propEntity = [];
-    //$scope.select2PropEntity = [];
     $scope.props = [];
-
-    /*$scope.getEntities = function(pageNumber) {
-
-        if (pageNumber === undefined) {
-            pageNumber = '1';
-        }
-        $http.get('/properties/get_props_ents?page='+pageNumber).then(function(response) {
-            console.log(response);
-            $scope.entities = response.data.data;
-
-            $scope.totalPages = response.data.last_page;
-            $scope.currentPage = response.data.current_page;
-
-            // Pagination Range
-            var pages = [];
-
-            for (var i = 1; i <= response.data.last_page; i++) {
-                pages.push(i);
-            }
-
-            $scope.range = pages;
-
-        });
-    };*/
 
     $scope.showDragDropWindowEnt = function(id) {
 
@@ -138,8 +98,7 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
             $scope.outputTypes = response.data;
             console.log($scope.outputTypes);
         });
-
-    }
+    };
 
     $scope.openModalPropsEnt = function (size, modalstate, id, parentSelector) {
 
@@ -276,7 +235,7 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
                 data: allEntType
             });
         });
-    }
+    };
 
     $scope.changes = function() {
 
@@ -316,7 +275,7 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
         } else {
             $("[name=property_outputType]").removeAttr("disabled");
         }
-    }
+    };
 
     $scope.getPropsByEnt = function () {
 
@@ -387,6 +346,8 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
     };
 
     $scope.remove = function(id) {
+
+        console.log("Id da prop da ent a remover: " + id);
         var url = API_URL + "PropertyOfEntities_remove/" + id;
 
         $http({
@@ -395,12 +356,10 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             //headers: {'Content-Type': 'json'}
         }).then(function (response) {
-            console.log("lalal 11");
             console.log(response);
             growl.success('This is success message.',{title: 'Success!'});
             $scope.getPropsOfEntities();
         }, function errorCallback(response) {
-            console.log("lalal");
             console.log(response);
             if (response.status == 400 || response.status == 500)
             {
@@ -412,23 +371,6 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
             }
         });
     };
-
-    //------------------------------------TESTES------------------------------
-    //Para usar o ng-table
-
-    /*$http.get('/PropertyEnt/get_props_ent?page=1').then(function(response) {
-        $scope.tableParams = new NgTableParams({
-            count: 2,
-            group: "name"
-        }, {
-            paginationMaxBlocks: 13,
-            paginationMinBlocks: 2,
-            dataset: response.data
-
-        });
-
-        console.log(response.data);
-    });*/
 
     $scope.getPropsOfEntities = function () {
 
@@ -448,9 +390,9 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
         };
 
         $scope.tableParams = new NgTableParams(initialParams, initialSettings);
-    }
+    };
 
-     $scope.getPropsOfEnt = function (params, filter, sort) {
+    $scope.getPropsOfEnt = function (params, filter, sort) {
 
         var url = '/propertiesOfEntities/get_propsOfEnt?page=' + params.page();
 
@@ -474,8 +416,7 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
                 params.total(response.data.total);
                 return response.data.data;
             });
-    }
-
+    };
 
     $scope.getEntities = function(){
 
@@ -483,22 +424,5 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
             $scope.entities = response.data;
             console.log($scope.entities);
         });
-    }
-
-
-    
-}).directive('pagination', function(){
-    return{
-        restrict: 'E',
-        template: '<ul class="pagination">'+
-        '<li ng-show="currentPage != 1"><a href="javascript:void(0)" ng-click="getEntities(1)">&laquo;</a></li>'+
-        '<li ng-show="currentPage != 1"><a href="javascript:void(0)" ng-click="getEntities(currentPage-1)">&lsaquo; [[ "BTNPAGINATION2" | translate]]</a></li>'+
-        '<li ng-repeat="i in range" ng-class="{active : currentPage == i}">'+
-        '<a href="javascript:void(0)" ng-click="getEntities(i)">{{i}}</a>'+
-        '</li>'+
-        '<li ng-show="currentPage != totalPages"><a href="javascript:void(0)" ng-click="getEntities(currentPage+1)">[[ "BTNPAGINATION1" | translate]] &rsaquo;</a></li>'+
-        '<li ng-show="currentPage != totalPages"><a href="javascript:void(0)" ng-click="getEntities(totalPages)">&raquo;</a></li>'+
-        '</ul>'
     };
-});;
-
+});
