@@ -15,6 +15,7 @@ return [
 	'THEADER9'             => 'Apagado',
 	'THEADER10'            => 'Adicionar tipos de relação',
 	'THEADER11'            => 'Remover',
+	'THEADER12'            => 'Ação',
          
 	'NO_RELATIONS'         => 'Não existe relações',
 	'BTNTABLE1'            => 'Editar',

@@ -5,19 +5,6 @@ app.controller('RelationTypesManagmentControllerJs', function($scope, $http, gro
     $scope.transactionStates = [];
     $scope.errors = [];
 
-    $translatePartialLoader.addPart('relTypes');
-
-    setTimeout(function() { $translate.refresh(); }, 0);
-
-    $scope.dotranslate = function() {
-        var currentLang = $translate.proposedLanguage() || $translate.use();
-        if (currentLang == "en") {
-            $translate.use('pt');
-        } else {
-            $translate.use('en');
-        }
-    };
-
     $scope.remove = function(id) {
         var url = API_URL + "Relation_Type_remove/" + id;
 
@@ -39,7 +26,6 @@ app.controller('RelationTypesManagmentControllerJs', function($scope, $http, gro
     };
 
     $scope.getStates = function() {
-        //Estado das propriedades
         $http.get('/properties/states').then(function(response) {
             $scope.states = response.data;
         });

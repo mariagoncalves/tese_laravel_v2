@@ -193,7 +193,7 @@ Route::post('/Process_Type_del/{id}', 'ProcessTypes@delete');
 // Rotas da gestão de Relações
 
 Route::get('/relationTypesManage/', 'RelationManagement@index');
-Route::get('/relTypes/get_relations', 'RelationManagement@getAllRels');
+//Route::get('/relTypes/get_relations', 'RelationManagement@getAllRels');
 Route::get('/getAllEntities', 'RelationManagement@getEntities');
 Route::get('/getAllTransactionTypes', 'RelationManagement@getTransactionTypes');
 Route::get('/getAllTransactionStates', 'RelationManagement@getTransactionStates');

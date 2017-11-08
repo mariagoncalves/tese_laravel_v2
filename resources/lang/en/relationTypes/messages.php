@@ -15,6 +15,7 @@ return [
 	'THEADER9'             => 'Deleted_at',
 	'THEADER10'            => 'Add Relations Type',
 	'THEADER11'            => 'Remove',
+	'THEADER12'            => 'Action',
          
 	'NO_RELATIONS'         => 'No Relations',
 	'BTNTABLE1'            => 'Edit',
