@@ -24,10 +24,10 @@ class DynamicSearchController extends Controller
 
     public function getEntities() {
 
-    	$language_id = '1';
+    	$url_text = 'PT';
 
-        $ents = EntType::with(['language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+        $ents = EntType::with(['language' => function($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])->get();
 
         return response()->json($ents);
@@ -59,19 +59,19 @@ class DynamicSearchController extends Controller
 
     	//\Log::debug($id);
 
-    	$language_id = '1';
+    	$url_text = 'PT';
 
-        $ents = EntType::with(['language' => function($query) use ($language_id)  {
-        						$query->where('language_id', $language_id);
+        $ents = EntType::with(['language' => function($query) use ($url_text)  {
+        						$query->where('slug', $url_text);
         					}])
-        				->with(['properties' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+        				->with(['properties' => function($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
-                        ->with(['properties.propAllowedValues.language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+                        ->with(['properties.propAllowedValues.language' => function($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
-        				->with(['properties.language' => function($query) use ($language_id) {
-        						$query->where('language_id', $language_id);
+        				->with(['properties.language' => function($query) use ($url_text) {
+        						$query->where('slug', $url_text);
         					}])->find($id);
 
         //\Log::debug($ents);
@@ -88,10 +88,10 @@ class DynamicSearchController extends Controller
 
     public function getEnumValues($id) {
 
-   		$language_id = '1';
+   		$url_text = 'PT';
 
-        $propAllowedValues = PropAllowedValue::with(['language' => function ($query) use ($language_id) {
-        											$query->where('language_id', $language_id);
+        $propAllowedValues = PropAllowedValue::with(['language' => function ($query) use ($url_text) {
+        											$query->where('slug', $url_text);
         										}])
         									->where('prop_allowed_value.property_id', $id)
         									->get();
@@ -103,10 +103,10 @@ class DynamicSearchController extends Controller
 
     public function getEntityInstances($entId, $propId) {
 
-        $language_id = '1';
+        $url_text = 'PT';
 
-        $fkEnt = Property::with(['fkEntType.entity.language' => function($query) use ($language_id) {
-        						$query->where('language_id', $language_id);
+        $fkEnt = Property::with(['fkEntType.entity.language' => function($query) use ($url_text) {
+        						$query->where('slug', $url_text);
         					}])
         					->where('ent_type_id' , $entId)
         					->where('value_type', 'ent_ref')
@@ -120,10 +120,10 @@ class DynamicSearchController extends Controller
 
     public function getEntRefs($idEntity) {
 
-        $language_id = '1';
+        $url_text = 'PT';
 
-        $entRefs = Property::with(['entType.language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+        $entRefs = Property::with(['entType.language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
                             ->where('property.value_type', 'ent_ref')
                             ->where('property.fk_ent_type_id', $idEntity)
@@ -135,8 +135,8 @@ class DynamicSearchController extends Controller
             $dadosEntRef = $entRef;
             $dadosEntRef['properties'] = [];
 
-            $propsOfEnts = Property::with(['language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+            $propsOfEnts = Property::with(['language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
                             ->where('ent_type_id', $entRef['ent_type_id'])
                             ->where('value_type', '!=', 'ent_ref') //Evita a verificação na vista
@@ -168,14 +168,11 @@ class DynamicSearchController extends Controller
         \Log::debug("TESTEEEEEEEEEE 1");             
         \Log::debug($arrayPropsId);
 
-        $language_id = '1';
+        $url_text = 'PT';
 
-        $propRefs = Property::with(['entType.language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+        $propRefs = Property::with(['entType.language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
-                            /*->with(['propAllowedValues.language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
-                            }])*/
                             ->where('property.value_type', 'prop_ref')
                             ->whereIn('property.fk_property_id', $arrayPropsId)
                             ->get()->toArray();
@@ -189,11 +186,11 @@ class DynamicSearchController extends Controller
             $dadosPropRef = $entRef;
             $dadosPropRef['properties'] = [];
 
-            $propsOfEnts = Property::with(['language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+            $propsOfEnts = Property::with(['language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
-                            ->with(['propAllowedValues.language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+                            ->with(['propAllowedValues.language' => function($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
                             ->where('ent_type_id', $entRef['ent_type_id'])
                             ->where('value_type', '!=', 'ent_ref') //Evita a verificação na vista
@@ -215,41 +212,27 @@ class DynamicSearchController extends Controller
         //return response()->json($propRefs);
     }
 
-    //public function getPropsOfEnts($id) {
-
-        /*$language_id = '1';
-
-        $propsOfEnts = Property::with(['language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
-                            }])
-                        ->where('property.ent_type_id', $id)
-                        ->where('property.value_type', '!=', 'ent_ref') //Evita a verificação na vista
-                        ->get();
-
-        return response()->json($propsOfEnts);*/
-    //}
-
     public function getRelsWithEnt($id) {
 
-        $language_id = '1';
+        $url_text = 'PT';
 
-        $relsWithEnt = RelType::with(['language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+        $relsWithEnt = RelType::with(['language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
-                        ->with(['properties' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+                        ->with(['properties' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
-                        ->with(['properties.language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+                        ->with(['properties.language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
-                        ->with(['properties.propAllowedValues.language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+                        ->with(['properties.propAllowedValues.language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
-                        ->with(['ent1.language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+                        ->with(['ent1.language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
-                        ->with(['ent2.language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+                        ->with(['ent2.language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
                         ->where(function($query) use ($id){
                             $query->where('ent_type1_id', $id)->orWhere('ent_type2_id', $id);
@@ -270,19 +253,19 @@ class DynamicSearchController extends Controller
     }
 
     public function getEntsRelated($idRelType, $idEntType) {
-        $language_id = '1';
+        $url_text = 'PT';
 
         $entsRelated = RelType::where(function ($query) use ($idEntType) {
                                 $query->where('ent_type1_id', $idEntType)->orWhere('ent_type2_id', $idEntType);
                             })
-                            ->with(['language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+                            ->with(['language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
-                            ->with(['ent1.language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+                            ->with(['ent1.language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
-                            ->with(['ent2.language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+                            ->with(['ent2.language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
                             ->get()
                             ->toArray();    
@@ -296,11 +279,11 @@ class DynamicSearchController extends Controller
                 $ent_type_id = $value['ent_type1_id'];
             }
 
-            $properties = Property::with(['language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+            $properties = Property::with(['language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
-                            ->with(['propAllowedValues.language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+                            ->with(['propAllowedValues.language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
                             ->where('ent_type_id', $ent_type_id)
                             ->with('entType')
@@ -442,7 +425,7 @@ class DynamicSearchController extends Controller
             'table3' => ['select' => false, 'properties' => [], 'resultRelation' => []],
             'table4' => ['select' => false, 'properties' => [], 'resultEntities' => []]
         ];
-        $language_id = '1';
+        $url_text    = 'PT';
         $result      = [];
         $query       = [];
 
@@ -578,10 +561,10 @@ class DynamicSearchController extends Controller
     }
 
     public function getValuesEntitiesTables($properties, $entities) {
-        $language_id = 1;
+        $url_text = 'PT';
         $result = Entity::with('values')
-                        ->with(['values.property.language' => function($query) use ($language_id) {
-                            $query->where('language_id', $language_id);
+                        ->with(['values.property.language' => function($query) use ($url_text) {
+                            $query->where('slug', $url_text);
                         }])
                         ->with(['values' => function($qu1) use ($properties) {
                             $qu1->whereIn('property_id', $properties);
@@ -595,10 +578,10 @@ class DynamicSearchController extends Controller
     }
 
     public function getValuesRelationTables($properties, $relations) {
-        $language_id = 1;
+        $url_text = 'PT';
         $result = Relation::with('values')
-                        ->with(['values.property.language' => function($query) use ($language_id) {
-                            $query->where('language_id', $language_id);
+                        ->with(['values.property.language' => function($query) use ($url_text) {
+                            $query->where('slug', $url_text);
                         }])
                         ->with(['values' => function($qu1) use ($properties) {
                             $qu1->whereIn('property_id', $properties);
@@ -610,10 +593,10 @@ class DynamicSearchController extends Controller
     }
 
     public function formPhraseAndQuery($idEntityType, $data, &$generalData) {
-        $language_id = 1;
+        $url_text = 'PT';
 
-        $ent = EntType::with(['language' => function($q) use ($language_id) {
-                        $q->where('language_id', $language_id);
+        $ent = EntType::with(['language' => function($q) use ($url_text) {
+                        $q->where('slug', $url_text);
                     }])->find($idEntityType);
 
         $phrase[] = "Pesquisa de todas as entidades do tipo ".$ent->language->first()->pivot->name;
@@ -849,7 +832,7 @@ class DynamicSearchController extends Controller
     }
 
     public function formQueryTable($data, $idProperty, $type, $position, &$queryTable1) {
-        $language_id = '1';
+        $url_text = 'PT';
 
         $property  = $this->getPropertyData($idProperty);
         $valueType = $property->value_type;
@@ -918,19 +901,19 @@ class DynamicSearchController extends Controller
     }
 
     public function getPropertyData($idProperty) {
-        $language_id = '1';
+        $url_text = 'PT';
 
-        $property = Property::with(['language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+        $property = Property::with(['language' => function($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
-                            ->with(['entType' => function($query) use ($language_id) {
-                                $query->with(['language' => function($query) use ($language_id) {
-                                    $query->where('language_id', $language_id);
+                            ->with(['entType' => function($query) use ($url_text) {
+                                $query->with(['language' => function($query) use ($url_text) {
+                                    $query->where('slug', $url_text);
                                 }]);
                             }])
-                            ->with(['relType' => function($query) use ($language_id) {
-                                $query->with(['language' => function($query) use ($language_id) {
-                                    $query->where('language_id', $language_id);
+                            ->with(['relType' => function($query) use ($url_text) {
+                                $query->with(['language' => function($query) use ($url_text) {
+                                    $query->where('slug', $url_text);
                                 }]);
                             }])
                             ->find($idProperty);
@@ -939,10 +922,10 @@ class DynamicSearchController extends Controller
     }
 
     public function getNameEntType($idEntType) {
-        $language_id = '1';
+        $url_text = 'PT';
 
-        $entType = EntType::with(['language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+        $entType = EntType::with(['language' => function($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
                             ->find($idEntType);
 
@@ -981,14 +964,14 @@ class DynamicSearchController extends Controller
 
     public function getSavedQueries () {
 
-        $language_id = '1';
+        $url_text = 'PT';
 
-        $dataQuery = Query::with(['entType.language' => function($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+        $dataQuery = Query::with(['entType.language' => function($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
                             ->with('conditions')
-                            ->with(['conditions.property.language' => function ($query) use ($language_id) {
-                                $query->where('language_id', $language_id);
+                            ->with(['conditions.property.language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
                             }])
                             ->with('conditions.operator')
                             ->get();

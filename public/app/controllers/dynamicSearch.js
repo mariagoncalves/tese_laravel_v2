@@ -1,17 +1,5 @@
 app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_URL, $translatePartialLoader, $translate, NgTableParams, MyService, $uibModal, $timeout) {
 
-    /*$translatePartialLoader.addPart('properties');
-
-    setTimeout(function() { $translate.refresh(); }, 0);
-
-    $scope.dotranslate = function() {
-        var currentLang = $translate.proposedLanguage() || $translate.use();
-        if (currentLang == "en")
-            $translate.use('pt');
-        else
-            $translate.use('en');
-    };*/
-
     $scope.entities = [];
     $scope.ents = [];
     $scope.operators = [];
@@ -31,9 +19,6 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
     $scope.formData = [];
     $scope.query_name = [];
     $scope.dataCondition = [];
-    
-
-
 
     $scope.getEntities = function () {
 
@@ -41,8 +26,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             $scope.entities = response.data;
             console.log($scope.entities);
         });
-    }
-
+    };
 
     $scope.getEntitiesData = function (id) {
 
@@ -55,7 +39,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             console.log('Get Entities Data: ');
             console.log($scope.ents);
         });
-    }
+    };
 
     $scope.getPropertiesQuery = function (tableType) {
         var idQuery = $("#idQuery").val();
@@ -140,7 +124,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
                 }
             });
         }
-    }
+    };
 
     $scope.getOperators = function () {
 
@@ -148,7 +132,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             $scope.operators = response.data;
             console.log($scope.operators);
         });
-    }
+    };
 
     $scope.getOperators();
 
@@ -159,7 +143,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             console.log("Prop Allowed value");
             console.log($scope.propAllowedValues);
         });
-    }
+    };
 
     $scope.getEntityInstances = function (entityId, propId) {
 
@@ -170,7 +154,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             console.log("Dados instancias getEntityInstances");
             console.log($scope.fkEnt);
         });
-    }
+    };
 
     $scope.getEntRefs = function (id) {
 
@@ -179,7 +163,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             console.log("Dados das ent refs");
             console.log($scope.entRefs);
         });
-    }
+    };
 
     $scope.getPropRefs = function (id) {
 
@@ -189,7 +173,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             console.log("Dados das prop refs");
             console.log($scope.entRefs);
         });
-    }
+    };
 
 
     $scope.clickTable1 = function ($event) {
@@ -212,7 +196,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             $("#checkRL, #table3, #table4").find("[type=checkbox]").prop("checked", false);
             $("#checkRL, #table3, #table4").find("[type=checkbox], [type=text], [type=number], [type=radio], select").attr('disabled', true);
         }
-    }
+    };
 
     $scope.clickTable2 = function ($event) {
         // Verificar se existe alguma checkbox selecionada na tabela 2
@@ -232,7 +216,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
         } else {
             $("#table3, #table4").find("[type=checkbox], [type=text], [type=number], [type=radio], select").removeAttr('disabled');
         }
-    }
+    };
 
     $scope.clickTable3 = function ($event) {
         // Verificar se existe alguma checkbox selecionada na tabela 3
@@ -258,7 +242,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
         } else {
             $("#checkRL").find("[type=checkbox], [type=text], [type=number], [type=radio], select").removeAttr('disabled');
         }
-    }
+    };
 
     $scope.clickTable4 = function() {
 
@@ -284,7 +268,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
         } else {
             $("#checkRL").find("[type=checkbox], [type=text], [type=number], [type=radio], select").removeAttr('disabled');
         }
-    }
+    };
 
     $scope.getPropsOfEnts = function (id) {
 
@@ -293,7 +277,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             console.log("Ddos getPropsOfEnts");
             console.log($scope.propsOfEnts);
         });
-    }
+    };
 
     $scope.getRelsWithEnt = function (id) {
 
@@ -305,7 +289,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             console.log("Ddos relsWithEnt");
             console.log($scope.relsWithEnt);
         });
-    }
+    };
 
     $scope.getEntsRelated = function (idRelType, idEntType) {
 
@@ -315,7 +299,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             console.log("Dados entsRelated TETETE: ");
             console.log($scope.entsRelated);
         });
-    }
+    };
 
     $scope.getPropsEntRelated = function (id) {
 
@@ -324,7 +308,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             console.log("Dados propsEntRelated");
             console.log($scope.propsEntRelated);
         });
-    }
+    };
 
     $scope.search = function (idEntityType) {
 
@@ -397,13 +381,13 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             $("#dynamic-search").hide();
             $("#dynamic-search-presentation").show();
         });
-    }
+    };
     
     $scope.showQueryResults = function (idQuery, idEntityType) {
 
         //Para fazer outra vez a pesquisa que já tinha sido feita faço um redirect para o form com os dados já selecionados
         window.location.href = "/dynamicSearch/entityDetails/" + idEntityType + "?query=" + idQuery;
-    }
+    };
 
     $scope.showResult = function (idQuery, idEntityType) {
 
@@ -411,14 +395,13 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
 
         window.location.href = "/dynamicSearch/entityDetails/" + idEntityType + "?query=" + idQuery + "&pesquisa=1";
 
-    }
+    };
 
     $scope.voltar = function() {
         $("#dynamic-search").show();
         $("#dynamic-search-presentation").hide();
         $("#query_name").val("");
-    }
-
+    };
      
     $scope.inactiveActive = function(idEntity) {
 
@@ -432,7 +415,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             $scope.search($scope.idEntityType);
             growl.success('A instância foi ' + ($scope.state == 'active' ? 'Desativada' : 'Ativada' + '.'),{title: 'Success!'});
         });
-    }
+    };
 
     $scope.saveSearch = function (idEntityType) {
 
@@ -456,7 +439,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             growl.success('Pesquisa guardada com sucesso',{title: 'Sucesso'});
 
         });
-    }
+    };
 
     $scope.getSavedQueries = function () {
 
@@ -465,10 +448,9 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             console.log("Nome da query");
             console.log($scope.queries);
         });
+    };
 
-    }
-
-     $scope.checkUncheckAll = function (tableType) {
+    $scope.checkUncheckAll = function (tableType) {
 
         if(tableType == 'ET') {
             console.log("É da primeira tabela");
@@ -494,7 +476,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
             });
             $scope.clickTable2();
         }
-    }
+    };
 
     $scope.blockUnblockSaveButton = function () {
 
@@ -506,7 +488,7 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
         } else {
              $("#save_button").prop("disabled", false);
         }
-    }
+    };
 
 });
 
