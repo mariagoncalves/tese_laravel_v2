@@ -50,6 +50,12 @@ class PropUnitTypeTableSeeder extends Seeder
                 'state'      => 'active',
                 'updated_by' => '1',
                 'deleted_by' => NULL
+            ],
+            [
+                'id'         => '5',           
+                'state'      => 'active',
+                'updated_by' => '1',
+                'deleted_by' => NULL
             ]
         ];
 

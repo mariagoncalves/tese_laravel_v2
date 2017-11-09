@@ -30,7 +30,7 @@ class RelTypeTableSeeder extends Seeder
         $dados = [
             [
                 'id'                  => '1',
-                'ent_type1_id'        => '4',
+                'ent_type1_id'        => '6',
                 'ent_type2_id'        => '1',
                 't_state_id'          => '1',
                 'state'               => 'active',
@@ -40,6 +40,16 @@ class RelTypeTableSeeder extends Seeder
             ],
             [
                 'id'                  => '2',
+                'ent_type1_id'        => '6',
+                'ent_type2_id'        => '3',
+                't_state_id'          => '1',
+                'state'               => 'active',
+                'transaction_type_id' => '1',
+                'updated_by'          => '1',
+                'deleted_by'          => NULL
+            ],
+            [
+                'id'                  => '3',
                 'ent_type1_id'        => '2',
                 'ent_type2_id'        => '4',
                 't_state_id'          => '1',

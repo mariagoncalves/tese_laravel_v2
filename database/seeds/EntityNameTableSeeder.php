@@ -37,7 +37,7 @@ class EntityNameTableSeeder extends Seeder
         	[
         		'entity_id'   => '4',
                 'language_id' => '1',
-                'name'        => 'Transporte escolar 2017',
+                'name'        => 'Transporte escolar 2018',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
         	],
@@ -92,6 +92,20 @@ class EntityNameTableSeeder extends Seeder
                 'entity_id'   => '12',
                 'language_id' => '1',
                 'name'        => 'Municipe nº 600',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'entity_id'   => '13',
+                'language_id' => '1',
+                'name'        => 'Entidade 1',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'entity_id'   => '14',
+                'language_id' => '1',
+                'name'        => 'Entidade 2',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ]

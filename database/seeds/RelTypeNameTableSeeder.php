@@ -17,12 +17,19 @@ class RelTypeNameTableSeeder extends Seeder
         	[
         		'rel_type_id' => '1',
         		'language_id' => '1',
-        		'name'        => 'Pessoa pede transporte',
+        		'name'        => 'Entidade pede transporte',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
         	],
             [
                 'rel_type_id' => '2',
+                'language_id' => '1',
+                'name'        => 'Entidade pede apoios',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'rel_type_id' => '3',
                 'language_id' => '1',
                 'name'        => 'Pessoa participa em concurso',
                 'updated_by'  => '1',

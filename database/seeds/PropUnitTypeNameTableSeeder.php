@@ -41,6 +41,13 @@ class PropUnitTypeNameTableSeeder extends Seeder
                 'updated_by'        => '1',
                 'deleted_by'        => NULL
         	],
+            [
+                'prop_unit_type_id' => '5',
+                'language_id'       => '1',
+                'name'              => '€',
+                'updated_by'        => '1',
+                'deleted_by'        => NULL
+            ],
         ];
 
         foreach ($dados as $value) {
