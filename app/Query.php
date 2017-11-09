@@ -47,4 +47,22 @@ class Query extends Model
         return $this->belongsTo('App\EntType', 'ent_type_id', 'id');
     }
 
+    public function scopeSearchSavedQueries($query, $id, $data) {
+        if ($id != null) {
+            $query->where('id', $id);
+        }
+
+        if (isset($data['query']) && $data['query'] != '') {
+            $query->where('query.name', 'LIKE', '%'.$data['query'].'%');
+        }
+
+        if (isset($data['entity']) && $data['entity'] != '') {
+            $query->where('ent_type_name.name', 'LIKE', '%'.$data['entity'].'%');
+        }
+
+        if (isset($data['property']) && $data['property'] != '') {
+            $query->where('property_name.name', 'LIKE', '%'.$data['property'].'%');
+        }
+    }
+
 }

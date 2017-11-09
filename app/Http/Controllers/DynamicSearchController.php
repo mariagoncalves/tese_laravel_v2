@@ -995,5 +995,84 @@ class DynamicSearchController extends Controller
         return response()->json($dataCondition);
 
     }
+
+    //testes ng table saved queries
+    public function getAllSavedsQueries(Request $request, $id = null) {
+
+        /*$url_text = 'PT';
+
+        $dataQuery = Query::with(['entType.language' => function($query) use ($url_text) {
+                                $query->where('slug', $url_text);
+                            }])
+                            ->with('conditions')
+                            ->with(['conditions.property.language' => function ($query) use ($url_text) {
+                                $query->where('slug', $url_text);
+                            }])
+                            ->with('conditions.operator')
+                            ->get();
+
+        \Log::debug($dataQuery);
+
+        return response()->json($dataQuery);*/
+
+        \Log::debug("Tou a chegar ao metodoodd");
+
+        $data  = $request->all();
+        $count = 5;
+
+        // É de acordo com a váriavel 'count' que será apresentado o número de 'rel_types'.
+        // Caso seja o 'count' 5, então será apresentado 5 'rel_types' na tabela.
+        if (isset($data['count']) && $data['count'] != "") {
+            $count = $data['count'];
+        }
+
+        // As váriaveis 'colSorting' e 'typeSorting' são utilizadas para ordenar os dados.
+        // Por defeito, é ordenado pelo o 'created_at' e por ordem 'desc'.
+        $colSorting  = 'created_at';
+        $typeSorting = 'desc';
+        if (isset($data['colSorting']) && $data['colSorting'] != "" && isset($data['typeSorting']) && $data['typeSorting'] != "") {
+            $colSorting  = $data['colSorting'];
+            $typeSorting = $data['typeSorting'];
+        }
+
+        $dataSavedQuery = Query::leftJoin('ent_type', function($query) {
+                                    $query->on('ent_type.id', '=', 'query.ent_type_id');
+                                })
+                                ->leftJoin('ent_type_name', function($query) {
+                                    $query->on('ent_type.id', '=', 'ent_type_name.ent_type_id')->where('ent_type_name.language_id', 1);
+                                })
+                                ->leftJoin('condition', function($query) {
+                                    $query->on('query.id', '=', 'condition.query_id');
+                                })
+                                ->leftJoin('property', function($query){
+                                    $query->on('condition.property_id', '=', 'property.id');
+                                })
+                                ->leftJoin('property_name', function($query){
+                                    $query->on('property.id', '=', 'property_name.property_id')->where('property_name.language_id', 1);;
+                                })
+                                ->leftJoin('operator', function($query){
+                                    $query->on('condition.operator_id', '=', 'operator.id');
+                                })
+                                ->select([
+                                    'query.name AS query_name',
+                                    'query.id AS query_id',
+                                    'query.created_at AS created_at',
+                                    'ent_type.id AS ent_type_id',
+                                    'ent_type_name.name AS entity_name',
+                                    'operator.operator_type AS operator_type',
+                                    'condition.value AS value',
+                                    'property_name.name AS property_name'
+                                ])
+                                ->searchSavedQueries($id, $data)
+                                ->orderBy($colSorting, $typeSorting)
+                                ->paginate($count)
+                                ->toArray();
+
+        \Log::debug("Dados saved queries");
+        \Log::debug($dataSavedQuery);
+
+        return response()->json($dataSavedQuery);
+
+    }
     
 }

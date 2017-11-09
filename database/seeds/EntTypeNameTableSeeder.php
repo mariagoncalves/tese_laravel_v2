@@ -47,6 +47,13 @@ class EntTypeNameTableSeeder extends Seeder
                 'name'        => 'Freguesia',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
+            ],
+            [
+                'ent_type_id' => '6',
+                'language_id' => '1',
+                'name'        => 'Entidade',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
             ]
         ];
 

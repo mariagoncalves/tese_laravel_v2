@@ -8,7 +8,7 @@
 
         <table ng-table="tableParams" ng-init="getPropsOfEntities()" class="table table-condensed table-bordered table-hover" show-filter="true">
             <tr ng-repeat="entitiesProps in tableParams.data">
-                <td title="'Entity'" filter ="{entityFilter: 'text'}" sortable="'entity_name'" >
+                <td title="'{{trans('properties/messages.THEADER7')}}'" filter ="{entityFilter: 'text'}" sortable="'entity_name'" >
                     [[entitiesProps.entity_name]]
                     <div>
                         <button class="btn btn-primary btn-xs" ng-click="showDragDropWindowEnt(entitiesProps.ent_id)"> {{trans('properties/messages.BTNTABLE3')}}</button>

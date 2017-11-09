@@ -490,5 +490,59 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
         }
     };
 
+
+    //TESTES NG TBLE NO SAVED QUERIES----------------------------------------------------------------
+
+    $scope.getSavesQueryTable = function () {
+
+        var initialParams = {
+            sorting: { created_at: "desc" }, // Ordenação por defeito da tabela
+            count: 5, // Número de dados por página na tabela
+        };
+
+        var initialSettings = {
+            counts: [5, 10, 15], // Número possiveis de apresentação dos dados da tabela
+            getData: function (params) {
+                var filterObj = params.filter(),
+                    sortObj   = params.sorting();
+
+                return $scope.getSavesQuery(params, filterObj, sortObj);
+            }
+        };
+
+        $scope.tableParams = new NgTableParams(initialParams, initialSettings);
+    };
+
+    $scope.getSavesQuery = function (params, filter, sort) {
+
+        var url = '/dynamicSearch/getSavedQuery?page=' + params.page();
+
+        url += '&count=' + params.count();
+
+        // Parametro de pesquisa quando é pesquisado pelo nome da query
+        if (filter.queryFilter != undefined && filter.queryFilter != '') {
+            url += '&query=' + filter.queryFilter;
+        }
+        // Parametro de pesquisa quando é pesquisado pelo nome da entidade
+        if (filter.propertyFilter != undefined && filter.propertyFilter != '') {
+            url += '&entity=' + filter.propertyFilter;
+        }
+
+        // Parametro de pesquisa quando é pesquisado pelo nome da propriedade
+        if (filter.propertyFilter != undefined && filter.propertyFilter != '') {
+            url += '&property=' + filter.propertyFilter;
+        }
+
+        var colSorting  = Object.keys(sort)[0],
+            typeSorting = sort[colSorting];
+        // Parametro para ordenar os dados
+        url += '&colSorting=' + colSorting + "&typeSorting=" + typeSorting;
+
+        return $http.get(url).then(function (response) {
+                params.total(response.data.total);
+                return response.data.data;
+            });
+    };
+
 });
 

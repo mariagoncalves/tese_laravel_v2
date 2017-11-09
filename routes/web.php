@@ -242,7 +242,6 @@ Route::get('/propertiesOfEntities/get_propsOfEnt/{id?}','PropertiesOfEntitiesCon
 
 Route::get('/properties/getAllEntities','PropertiesOfEntitiesController@getEntities');
 
-
 //----------------------------------Propriedades da Relação----------------------------------------------------
 
 Route::get('/propertiesManageRel', 'PropertiesOfRelationsController@getAllPropertiesOfRelations');
@@ -306,6 +305,8 @@ Route::get('/dynamicSearch/getSavedQueries', 'DynamicSearchController@getSavedQu
 Route::get('/dynamicSearch/getPropertiesQuery/{idQuery?}/{tableType?}', 'DynamicSearchController@getPropertiesQuery');
 
 
+//Teste ng table saved query
+Route::get('/dynamicSearch/getSavedQuery/{id?}','DynamicSearchController@getAllSavedsQueries');
 
 //******************************************Duarte***********************************************//
 //Users

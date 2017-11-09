@@ -33,8 +33,24 @@
             </tbody>
     	</table>
     </div>
-</div>
 
+    <!-- New test with ng table-->
+    <table ng-table="tableParams" ng-init="getSavesQueryTable()" class="table table-condensed table-bordered table-hover" show-filter="true">
+        <tr ng-repeat="savedQuery in tableParams.data">
+            <td title="'Nome da query'" filter ="{queryFilter: 'text'}" sortable="'query_name'" groupable ="'query_name'">
+                [[savedQuery.query_name]]
+                <br>
+                <button class="btn btn-sm btn-primary" type = "button" ng-click = "showQueryResults(savedQuery.query_id, savedQuery.ent_type_id)" > {{trans("dynamicSearch/messages.BTN4FORM")}} </button>
+                <button class="btn btn-sm btn-primary" type = "button" ng-click = "showResult(savedQuery.query_id, savedQuery.ent_type_id)" > {{trans("dynamicSearch/messages.BTN1FORM")}} </button>
+            </td>
+            <td title="'Entidade'" filter ="{entityFilter: 'text'}" sortable="'entity_name'" > [[savedQuery.entity_name]] </td>
+            <td title="'Propriedade'" filter ="{propertyFilter: 'text'}" sortable="'property_name'" > [[savedQuery.property_name]] </td>
+            <td title="'Operador'" sortable="'operator_type'" > [[savedQuery.operator_type]] </td>
+            <td title="'Valor'" sortable="'value'" > [[savedQuery.value]] </td>
+            <td title="'Data'" sortable="'created_at'" > [[savedQuery.created_at]] </td>
+        </tr> 
+    </table>
+</div>
 @stop
 @section('footerContent')
     <script src="<?= asset('app/controllers/dynamicSearch.js') ?>"></script>
