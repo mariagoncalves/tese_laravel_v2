@@ -364,7 +364,7 @@ class ValueTableSeeder extends Seeder
             //Values para a instancia de entidade transporte 4
             [
                 'id'          => '34',
-                'entity_id'   => '1',
+                'entity_id'   => '4',
                 'property_id' => '2',
                 'value'       => 'Transporte para visita de estudo',
                 'relation_id' => NULL,
@@ -374,7 +374,7 @@ class ValueTableSeeder extends Seeder
             ],
             [
                 'id'          => '35',
-                'entity_id'   => '1',
+                'entity_id'   => '4',
                 'property_id' => '3',
                 'value'       => 'Professora Alice',
                 'relation_id' => NULL,
@@ -384,7 +384,7 @@ class ValueTableSeeder extends Seeder
             ],
             [
                 'id'          => '36',
-                'entity_id'   => '1',
+                'entity_id'   => '4',
                 'property_id' => '4',
                 'value'       => '913003009',
                 'relation_id' => NULL,
@@ -394,7 +394,7 @@ class ValueTableSeeder extends Seeder
             ],
             [
                 'id'          => '37',
-                'entity_id'   => '1',
+                'entity_id'   => '4',
                 'property_id' => '5',
                 'value'       => 'Visita de estudo',
                 'relation_id' => NULL,
@@ -404,9 +404,9 @@ class ValueTableSeeder extends Seeder
             ],
             [
                 'id'          => '38',
-                'entity_id'   => '1',
+                'entity_id'   => '4',
                 'property_id' => '6',
-                'value'       => 'Escola do maritimo',
+                'value'       => 'Escola maritimo',
                 'relation_id' => NULL,
                 'state'       => 'active',
                 'updated_by'  => '1',
@@ -414,7 +414,7 @@ class ValueTableSeeder extends Seeder
             ],
              [
                 'id'          => '39',
-                'entity_id'   => '1',
+                'entity_id'   => '4',
                 'property_id' => '7',
                 'value'       => 'Avenida do mar',
                 'relation_id' => NULL,
@@ -424,7 +424,7 @@ class ValueTableSeeder extends Seeder
             ],
             [
                 'id'          => '40',
-                'entity_id'   => '1',
+                'entity_id'   => '4',
                 'property_id' => '8',
                 'value'       => '26-06-2018',
                 'relation_id' => NULL,
@@ -434,7 +434,7 @@ class ValueTableSeeder extends Seeder
             ],
             [
                 'id'          => '41',
-                'entity_id'   => '1',
+                'entity_id'   => '4',
                 'property_id' => '9',
                 'value'       => '27-06-2018',
                 'relation_id' => NULL,
@@ -444,7 +444,7 @@ class ValueTableSeeder extends Seeder
             ],
             [
                 'id'          => '42',
-                'entity_id'   => '1',
+                'entity_id'   => '4',
                 'property_id' => '10',
                 'value'       => '09:00',
                 'relation_id' => NULL,
@@ -454,7 +454,7 @@ class ValueTableSeeder extends Seeder
             ],
             [
                 'id'          => '43',
-                'entity_id'   => '1',
+                'entity_id'   => '4',
                 'property_id' => '11',
                 'value'       => '08:00',
                 'relation_id' => NULL,
@@ -464,7 +464,7 @@ class ValueTableSeeder extends Seeder
             ],
             [
                 'id'          => '44',
-                'entity_id'   => '1',
+                'entity_id'   => '4',
                 'property_id' => '12',
                 'value'       => '2',
                 'relation_id' => NULL,
@@ -474,7 +474,7 @@ class ValueTableSeeder extends Seeder
             ],
             [
                 'id'          => '45',
-                'entity_id'   => '1',
+                'entity_id'   => '4',
                 'property_id' => '13',
                 'value'       => '15',
                 'relation_id' => NULL,
@@ -484,7 +484,7 @@ class ValueTableSeeder extends Seeder
             ],
             [
                 'id'          => '46',
-                'entity_id'   => '1',
+                'entity_id'   => '4',
                 'property_id' => '14',
                 'value'       => '0',
                 'relation_id' => NULL,
@@ -494,7 +494,7 @@ class ValueTableSeeder extends Seeder
             ],
             [
                 'id'          => '47',
-                'entity_id'   => '1',
+                'entity_id'   => '4',
                 'property_id' => '15',
                 'value'       => 'Sem observações',
                 'relation_id' => NULL,

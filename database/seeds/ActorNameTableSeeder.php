@@ -12,28 +12,35 @@ class ActorNameTableSeeder extends Seeder
      */
     public function run()
     {
-        //Fazendo seeds ao modo antigo
+        //Atores do gestão de concursos
         $dados = [
         	[
         		'actor_id'    => '1',
         		'language_id' => '1',
-        		'name'        => 'Decisor sobre cedencia de transporte',
+        		'name'        => 'Gestor de concursos',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
         	],
         	[	'actor_id'    => '2',
         		'language_id' => '1',
-        		'name'        => 'Decisor sobre cedencia de apoios',
+        		'name'        => 'Responsável por abrir concursos',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
         	],
         	[
         		'actor_id'    => '3',
         		'language_id' => '1',
-        		'name'        => 'Requerente de transporte',
+        		'name'        => 'Candidato',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
-        	]
+        	],
+            [
+                'actor_id'    => '4',
+                'language_id' => '1',
+                'name'        => 'Admissor de candidatura',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ]
         ];
 
         foreach ($dados as $value) {

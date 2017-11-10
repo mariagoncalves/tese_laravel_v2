@@ -14,30 +14,50 @@ class TransactionTypeNameTableSeeder extends Seeder
     {
         //Fazendo seeds ao modo antigo
         $dados = [
+
+            //Transações referentes ao concurso
         	[
         		'transaction_type_id' => '1',
         		'language_id'         => '1',
-        		't_name'              => 'Decisao sobre cedencia de transporte',
-        		'rt_name'             => 'Decisao sobre cedencia de transporte foi efetuada',
+        		't_name'              => 'Gestão de concursos',
+        		'rt_name'             => 'Gestão de concursos foi iniciada',
                 'updated_by'          => '1',
                 'deleted_by'          => NULL
         	],
         	[
         		'transaction_type_id' => '2',
         		'language_id'         => '1',
-        		't_name'              => 'Decisão sobre apoios',
-        		'rt_name'             => 'Decisão sobre apoios foi efetuada',
+        		't_name'              => 'Abertura do concurso FCF',
+        		'rt_name'             => 'Abertura do concurso FCF foi efetuada',
                 'updated_by'          => '1',
                 'deleted_by'          => NULL
         	],
         	[
         		'transaction_type_id' => '3',
         		'language_id'         => '1',
-        		't_name'              => 'Solicitação de pedido',
-        		'rt_name'             => 'Solicitação de pedido foi efetuada',
+        		't_name'              => 'Candidatura ao concurso FCF',
+        		'rt_name'             => 'Candidatura ao concurso FCF foi efetuada',
                 'updated_by'          => '1',
                 'deleted_by'          => NULL
         	],
+            [
+                'transaction_type_id' => '4',
+                'language_id'         => '1',
+                't_name'              => 'Admissão de candidatura ao FCF',
+                'rt_name'             => 'Admissão de candidatura ao concurso FCF foi efetuada',
+                'updated_by'          => '1',
+                'deleted_by'          => NULL
+            ],
+
+            //Transação teste
+            [
+                'transaction_type_id' => '5',
+                'language_id'         => '1',
+                't_name'              => 'Transação teste',
+                'rt_name'             => 'Transação teste foi efetuada',
+                'updated_by'          => '1',
+                'deleted_by'          => NULL
+            ]
         ];
 
         foreach ($dados as $value) {

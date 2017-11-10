@@ -63,7 +63,8 @@ class DatabaseSeeder extends Seeder
         $this->call(OperatorTableSeeder::class);
         /*
         $this->call(CustomFormHasPropTableSeeder::class); (Verificar se a tabela existe ainda, parece que foi alterado para o customFormHasEntType)
+        */
         $this->call(CausalLinkTableSeeder::class);
-        $this->call(WaitingLinkTableSeeder::class);*/
+        $this->call(WaitingLinkTableSeeder::class);
     }
 }

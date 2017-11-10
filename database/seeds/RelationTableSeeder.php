@@ -35,7 +35,7 @@ class RelationTableSeeder extends Seeder
             [
                 'id'                   => '2',
                 'rel_type_id'          => '1',
-                'entity1_id'           => '3',
+                'entity1_id'           => '4',
                 'entity2_id'           => '14',
                 'transaction_state_id' => '1',
                 'state'                => 'active',

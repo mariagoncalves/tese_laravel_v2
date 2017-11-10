@@ -40,7 +40,7 @@ class ProcessTableSeeder extends Seeder
         $dados = [
             [
                 'id'              => '1',           
-                'process_type_id' => '1',
+                'process_type_id' => '2',
                 'proc_state'      => 'execution',
                 'state'           => 'active',
                 'updated_by'      => '1',

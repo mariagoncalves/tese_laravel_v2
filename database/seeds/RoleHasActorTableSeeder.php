@@ -22,11 +22,21 @@ class RoleHasActorTableSeeder extends Seeder
                 'updated_by' => '1',
                 'deleted_by' => NULL
         	],
-        	[	'role_id'    => '2',
-        		'actor_id'   => '3',
+        	[	'role_id'    => '1',
+        		'actor_id'   => '2',
                 'updated_by' => '1',
                 'deleted_by' => NULL
-        	]
+        	],
+            [   'role_id'    => '2',
+                'actor_id'   => '4',
+                'updated_by' => '1',
+                'deleted_by' => NULL
+            ],
+            [   'role_id'    => '3',
+                'actor_id'   => '3',
+                'updated_by' => '1',
+                'deleted_by' => NULL
+            ]
         ];
 
         foreach ($dados as $value) {
