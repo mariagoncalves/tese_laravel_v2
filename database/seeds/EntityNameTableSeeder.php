@@ -108,6 +108,34 @@ class EntityNameTableSeeder extends Seeder
                 'name'        => 'Entidade 2',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
+            ],
+            [
+                'entity_id'   => '15',
+                'language_id' => '1',
+                'name'        => 'Local 1',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'entity_id'   => '16',
+                'language_id' => '1',
+                'name'        => 'Local 2',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'entity_id'   => '17',
+                'language_id' => '1',
+                'name'        => 'Local 3',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'entity_id'   => '18',
+                'language_id' => '1',
+                'name'        => 'Local 4',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
             ]
 
         ];

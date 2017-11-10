@@ -128,6 +128,34 @@ class EntityTableSeeder extends Seeder
                 'transaction_state_id' => '1',
                 'updated_by'           => '1',
                 'deleted_by'           => NULL
+            ],
+            [   'id'                   => '15',
+                'ent_type_id'          => '7',
+                'state'                => 'active',
+                'transaction_state_id' => '1',
+                'updated_by'           => '1',
+                'deleted_by'           => NULL
+            ],
+            [   'id'                   => '16',
+                'ent_type_id'          => '7',
+                'state'                => 'active',
+                'transaction_state_id' => '1',
+                'updated_by'           => '1',
+                'deleted_by'           => NULL
+            ],
+            [   'id'                   => '17',
+                'ent_type_id'          => '7',
+                'state'                => 'active',
+                'transaction_state_id' => '1',
+                'updated_by'           => '1',
+                'deleted_by'           => NULL
+            ],
+            [   'id'                   => '18',
+                'ent_type_id'          => '7',
+                'state'                => 'active',
+                'transaction_state_id' => '1',
+                'updated_by'           => '1',
+                'deleted_by'           => NULL
             ]
         ];
 

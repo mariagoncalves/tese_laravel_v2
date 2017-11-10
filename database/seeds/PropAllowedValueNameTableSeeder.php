@@ -21,64 +21,120 @@ class PropAllowedValueNameTableSeeder extends Seeder
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
         	],
-        	[
-        		'p_a_v_id'    => '2',
-        		'language_id' => '1',
-        		'name'        => 'Recreativa',
+            [
+                'p_a_v_id'    => '2',
+                'language_id' => '1',
+                'name'        => 'Cultural',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
-        	],
-        	[
-        		'p_a_v_id'    => '3',
-        		'language_id' => '1',
-        		'name'        => 'Educativa',
+            ],
+            [
+                'p_a_v_id'    => '3',
+                'language_id' => '1',
+                'name'        => 'Desportiva',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
-        	],
-        	[
-        		'p_a_v_id'    => '4',
-        		'language_id' => '1',
-        		'name'        => 'Desportiva',
+            ],
+            [
+                'p_a_v_id'    => '4',
+                'language_id' => '1',
+                'name'        => 'Ambiente e património cultural',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
-        	],
+            ],
             [
                 'p_a_v_id'    => '5',
                 'language_id' => '1',
-                'name'        => 'Hortas urbanas municipais',
+                'name'        => 'Promoção da saúde e prevenção de doenças',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
             [
                 'p_a_v_id'    => '6',
                 'language_id' => '1',
-                'name'        => 'Hortas urbanas sociais',
+                'name'        => 'Proteção civil',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
             [
                 'p_a_v_id'    => '7',
                 'language_id' => '1',
+                'name'        => 'Informação e defesa dos interesses dos cidadãos',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+        	[
+                'p_a_v_id'    => '8',
+                'language_id' => '1',
+                'name'        => 'Educativa',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+        	[
+        		'p_a_v_id'    => '9',
+        		'language_id' => '1',
+        		'name'        => 'Recreativa',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+        	],
+        	[
+        		'p_a_v_id'    => '10',
+        		'language_id' => '1',
+        		'name'        => 'Promoção do desenvolvimento economico',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+        	],
+            [
+                'p_a_v_id'    => '11',
+                'language_id' => '1',
+                'name'        => 'Promoção da igualdade de género',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'p_a_v_id'    => '12',
+                'language_id' => '1',
+                'name'        => 'Promoção da cidadania e dos direitos humanos',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'p_a_v_id'    => '13',
+                'language_id' => '1',
+                'name'        => 'Hortas urbanas municipais',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'p_a_v_id'    => '14',
+                'language_id' => '1',
+                'name'        => 'Hortas urbanas sociais',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'p_a_v_id'    => '15',
+                'language_id' => '1',
                 'name'        => 'Jardins de habitação social',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
             [
-                'p_a_v_id'    => '8',
+                'p_a_v_id'    => '16',
                 'language_id' => '1',
                 'name'        => 'Jardins unifamiliares',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
             [
-                'p_a_v_id'    => '9',
+                'p_a_v_id'    => '17',
                 'language_id' => '1',
                 'name'        => 'Varandas, balcões, terraços e escadarias',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
             [
-                'p_a_v_id'    => '10',
+                'p_a_v_id'    => '18',
                 'language_id' => '1',
                 'name'        => 'Unidades hoteleiras',
                 'updated_by'  => '1',

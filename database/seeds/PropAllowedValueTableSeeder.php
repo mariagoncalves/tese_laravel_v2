@@ -29,74 +29,133 @@ class PropAllowedValueTableSeeder extends Seeder
         $dados = [
             [
                 'id'          => '1',
-                'property_id' => '12',
+                'property_id' => '29',
                 'state'       => 'active',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
             [
                 'id'          => '2',
-                'property_id' => '12',
+                'property_id' => '29',
                 'state'       => 'active',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
             [
                 'id'          => '3',
-                'property_id' => '12',
+                'property_id' => '29',
                 'state'       => 'active',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
             [
                 'id'          => '4',
-                'property_id' => '12',
+                'property_id' => '29',
                 'state'       => 'active',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
             [
                 'id'          => '5',
-                'property_id' => '6',
+                'property_id' => '29',
                 'state'       => 'active',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
             [
                 'id'          => '6',
-                'property_id' => '6',
+                'property_id' => '29',
                 'state'       => 'active',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
             [
                 'id'          => '7',
-                'property_id' => '6',
+                'property_id' => '29',
                 'state'       => 'active',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
             [
                 'id'          => '8',
-                'property_id' => '6',
+                'property_id' => '29',
                 'state'       => 'active',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
             [
                 'id'          => '9',
-                'property_id' => '6',
+                'property_id' => '29',
                 'state'       => 'active',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
             [
                 'id'          => '10',
-                'property_id' => '6',
+                'property_id' => '29',
                 'state'       => 'active',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
-            ]
+            ],
+            [
+                'id'          => '11',
+                'property_id' => '29',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '12',
+                'property_id' => '29',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+
+
+
+            [
+                'id'          => '13',
+                'property_id' => '17',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '14',
+                'property_id' => '17',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '15',
+                'property_id' => '17',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '16',
+                'property_id' => '17',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '17',
+                'property_id' => '17',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '18',
+                'property_id' => '17',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
         ];
 
         foreach ($dados as $value) {

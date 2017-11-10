@@ -1114,35 +1114,304 @@ class ValueTableSeeder extends Seeder
                 'deleted_by'  => NULL
             ],
 
-
-
-
+            //Values para a instancia de entidade entidade 13
             [
-                'id'          => '38',
+                'id'          => '107',
+                'entity_id'   => '13',
+                'property_id' => '48',
+                'value'       => 'Musica e Sons Lda',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '108',
+                'entity_id'   => '13',
+                'property_id' => '49',
+                'value'       => '511511511',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '109',
+                'entity_id'   => '13',
+                'property_id' => '50',
+                'value'       => 'Santo António',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '110',
+                'entity_id'   => '13',
+                'property_id' => '51',
+                'value'       => '9000-087',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '111',
+                'entity_id'   => '13',
+                'property_id' => '52',
+                'value'       => 'Funchal',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '112',
+                'entity_id'   => '13',
+                'property_id' => '53',
+                'value'       => 'Santo António',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '113',
+                'entity_id'   => '13',
+                'property_id' => '54',
+                'value'       => '912122122',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '114',
+                'entity_id'   => '13',
+                'property_id' => '55',
+                'value'       => '291966966',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '115',
+                'entity_id'   => '13',
+                'property_id' => '56',
+                'value'       => 'musicasesons@gmail.com',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+
+            //Values para a instancia de entidade entidade 14
+            [
+                'id'          => '116',
+                'entity_id'   => '14',
+                'property_id' => '48',
+                'value'       => 'Escola horacio bento',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '117',
+                'entity_id'   => '14',
+                'property_id' => '49',
+                'value'       => '511511500',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '118',
+                'entity_id'   => '14',
+                'property_id' => '50',
+                'value'       => 'Sé',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '119',
+                'entity_id'   => '14',
+                'property_id' => '51',
+                'value'       => '9000-087',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '120',
+                'entity_id'   => '14',
+                'property_id' => '52',
+                'value'       => 'Funchal',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '121',
+                'entity_id'   => '14',
+                'property_id' => '53',
+                'value'       => 'Sé',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '122',
+                'entity_id'   => '14',
+                'property_id' => '54',
+                'value'       => '912122133',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '123',
+                'entity_id'   => '14',
+                'property_id' => '55',
+                'value'       => '291966999',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '124',
+                'entity_id'   => '14',
+                'property_id' => '56',
+                'value'       => 'escolahb@gmail.com',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+
+            //Values para a instancia de entidade locais 15
+            [
+                'id'          => '125',
+                'entity_id'   => '15',
+                'property_id' => '1',
+                'value'       => 'Escola da levada',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+
+            //Values para a instancia de entidade locais 16
+            [
+                'id'          => '126',
+                'entity_id'   => '16',
+                'property_id' => '1',
+                'value'       => 'Barreiros',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+
+            //Values para a instancia de entidade locais 17
+            [
+                'id'          => '127',
+                'entity_id'   => '17',
+                'property_id' => '1',
+                'value'       => 'Escola maritimo',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+
+            //Values para a instancia de entidade locais 18
+            [
+                'id'          => '128',
+                'entity_id'   => '18',
+                'property_id' => '1',
+                'value'       => 'Avenida do mar',
+                'relation_id' => NULL,
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+
+
+
+            //Values para a instancia de relaçao 1
+            [
+                'id'          => '129',
                 'entity_id'   => NULL,
-                'property_id' => '20',
+                'property_id' => '57',
                 'value'       => '18-08-2017',
                 'relation_id' => '1',
                 'state'       => 'active',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
+
+            //Values para a instancia de relaçao 2
             [
-                'id'          => '39',
+                'id'          => '130',
                 'entity_id'   => NULL,
-                'property_id' => '20',
+                'property_id' => '57',
                 'value'       => '01-09-2017',
                 'relation_id' => '2',
                 'state'       => 'active',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
+            //Values para a instancia de relaçao 3
             [
-                'id'          => '40',
+                'id'          => '131',
                 'entity_id'   => NULL,
-                'property_id' => '20',
+                'property_id' => '59',
                 'value'       => '01-09-2017',
                 'relation_id' => '3',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            //Values para a instancia de relaçao 4
+            [
+                'id'          => '132',
+                'entity_id'   => NULL,
+                'property_id' => '59',
+                'value'       => '24-09-2017',
+                'relation_id' => '4',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+
+            //Values para a instancia de relaçao 5
+            [
+                'id'          => '133',
+                'entity_id'   => NULL,
+                'property_id' => '59',
+                'value'       => '12-10-2017',
+                'relation_id' => '5',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            //Values para a instancia de relaçao 1
+            [
+                'id'          => '134',
+                'entity_id'   => NULL,
+                'property_id' => '58',
+                'value'       => '01-09-2017',
+                'relation_id' => '6',
                 'state'       => 'active',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL

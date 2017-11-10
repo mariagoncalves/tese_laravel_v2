@@ -25,7 +25,7 @@ class RelationNameTableSeeder extends Seeder
             [
                 'relation_id' => '2',
                 'language_id' => '1',
-                'name'        => 'Entidade 2 pede transporte escolar 2017',
+                'name'        => 'Entidade 2 pede transporte escolar 2018',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
 
@@ -48,6 +48,13 @@ class RelationNameTableSeeder extends Seeder
                 'relation_id' => '5',
                 'language_id' => '1',
                 'name'        => 'Municipe nº 500 participa em concurso Funchal Cidade Florida 2017',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'relation_id' => '6',
+                'language_id' => '1',
+                'name'        => 'Entidade 1 pede apoio para concerto',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ]
