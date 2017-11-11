@@ -50,4 +50,14 @@ return [
 	'BTN2FORM'             => 'Guardar',
 	'BTN3FORM'             => 'Voltar',
 	'BTN4FORM'             => 'Abrir/Editar pesquisa',
+
+	'SEARCH_PHRASE_GEN'  => 'Pesquisa de todas as entidades do tipo',
+	'SEARCH_PHRASE_T1'   => '- Cujo valor para a propriedade ', 
+	'SEARCH_PHRASE_T1_A' => 'é',  
+
+	'SEARCH_PHRASE_T2'   => '- Que referencie uma entidade do tipo', 
+	'SEARCH_PHRASE_T2_A' => 'cuja propriedade',  
+
+	'SEARCH_PHRASE_T3'   => '- Que está presente na relação do tipo ', 
+
 ];

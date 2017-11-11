@@ -50,4 +50,13 @@ return [
 	'BTN2FORM'             => 'Save',
 	'BTN3FORM'             => 'Go back',
 	'BTN4FORM'             => 'Open/Edit search',
+
+	'SEARCH_PHRASE_GEN'  => 'Search for all entities of type',  
+	'SEARCH_PHRASE_T1'   => '- Whose value for the property ', 
+	'SEARCH_PHRASE_T1_A' => 'is',  
+
+	'SEARCH_PHRASE_T2'   => '- Which references an entity of the type ', 
+	'SEARCH_PHRASE_T2_A' => 'whose property',  
+
+	'SEARCH_PHRASE_T3'   => '- Which is present in the type relationship ', 
 ];

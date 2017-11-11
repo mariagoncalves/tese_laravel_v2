@@ -399,8 +399,8 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
         url += '&count=' + params.count();
 
         // Parametro de pesquisa quando é pesquisado pelo nome da entidade
-        if (filter.relationFilter != undefined && filter.relationFilter != '') {
-            url += '&relation=' + filter.relationFilter;
+        if (filter.entityFilter != undefined && filter.entityFilter != '') {
+            url += '&entity=' + filter.entityFilter;
         }
         // Parametro de pesquisa quando é pesquisado pelo nome da propriedade
         if (filter.propertyFilter != undefined && filter.propertyFilter != '') {

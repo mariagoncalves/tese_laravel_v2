@@ -107,6 +107,9 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
 
                     } else if (dataCondition[i].property.value_type == "file") {
                         $("#" + idTable).find("[name=file" + tableType + keyProp + "]").val(dataCondition[i].value);
+
+                    } else if (dataCondition[i].property.value_type == "prop_ref") {
+                        $("#" + idTable).find("[name=propRef" + tableType + keyProp + "]").val(dataCondition[i].value);
                     }
                 }
 

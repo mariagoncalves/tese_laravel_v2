@@ -352,6 +352,8 @@ class DynamicSearchController extends Controller
             $valueQuery = $data['select'.$type.$position];
         } else  if ($valueType == "bool") {
             $valueQuery = $data['radio'.$type.$position];
+        } else if ($valueType == "prop_ref") {
+            $valueQuery = $data['propRef'.$type.$position];
         }
 
         if($operatorQuery == "") {
@@ -602,7 +604,7 @@ class DynamicSearchController extends Controller
                         $q->where('slug', $url_text);
                     }])->find($idEntityType);
 
-        $phrase[] = "Pesquisa de todas as entidades do tipo ".$ent->language->first()->pivot->name;
+        $phrase[] = trans("dynamicSearch/messages.SEARCH_PHRASE_GEN")." ".$ent->language->first()->pivot->name;
 
         \Log::debug("DADOS TESEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE (TABELA 1): ");
 
@@ -779,24 +781,24 @@ class DynamicSearchController extends Controller
         $valueType = $property->value_type;
 
         if ($type == 'ET') {
-            $auxPhrase  = '- Cujo valor para a propriedade '.$nameProp.' é ';
+            $auxPhrase  = trans("dynamicSearch/messages.SEARCH_PHRASE_T1")." ".$nameProp." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T1_A")." ";
         } elseif ($type == 'VT') {
             $nameEntity = $property->entType->language->first()->pivot->name;
-            $auxPhrase = "- Que referencie uma entidade do tipo ".$nameEntity." cuja propriedade ".$nameProp." é ";
+            $auxPhrase = trans("dynamicSearch/messages.SEARCH_PHRASE_T2")." ".$nameEntity." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T2_A")." ".$nameProp." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T1_A")." ";
         } else {
             if ($property->relType) {
                 $nameEntType1 = $this->getNameEntType($property->relType->ent_type1_id);
                 $nameEntType2 = $this->getNameEntType($property->relType->ent_type2_id);
 
                 if ($type == 'RL') {
-                    $auxPhrase = "- Que está presente na relação do tipo ".$nameEntType1." - ".$nameEntType2." cuja propriedade ".$nameProp." é ";
+                    $auxPhrase = trans("dynamicSearch/messages.SEARCH_PHRASE_T3")." ".$nameEntType1." - ".$nameEntType2." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T2_A")." ".$nameProp." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T1_A")." ";
 
                 } else {
-                    $auxPhrase = "- Que tem uma relação com a entidade do tipo ".$nameEntType2." cuja propriedade ".$nameProp." é ";
+                    $auxPhrase = "- Que tem uma relação com a entidade do tipo ".$nameEntType2." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T2_A")." ".$nameProp." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T1_A")." ";
 
                 }
             } else {
-                $auxPhrase  = '- Cuja propriedade '.$nameProp.' é ';
+                $auxPhrase  = '- Cuja propriedade '.$nameProp." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T1_A")." ";
             }
         } 
 
@@ -827,6 +829,10 @@ class DynamicSearchController extends Controller
             $phrase[] = $auxPhrase . ($valueQuery == '' ? 'qualquer' : $valueQuery).';';
         } else  if ($valueType == "bool") {
             $valueQuery = $data['radio'.$type.$position];
+            // Formar a frase 
+            $phrase[] = $auxPhrase . ($valueQuery == '' ? 'qualquer' : $valueQuery).';';
+        } else if ($valueType == "prop_ref") {
+            $valueQuery = $data['propRef'.$type.$position];
             // Formar a frase 
             $phrase[] = $auxPhrase . ($valueQuery == '' ? 'qualquer' : $valueQuery).';';
         }
