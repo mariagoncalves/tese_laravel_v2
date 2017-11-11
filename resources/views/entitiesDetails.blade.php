@@ -70,9 +70,15 @@
 										</div>
 										<div ng-switch-when="file"> <input type="text" name="fileET[[ key1 ]]"> </div>
 										<!-- Não sei se é para por o prop-ref -->
-										<div ng-switch-default> 
-								        	<input type="text" name="propRefET[[ key1 ]]">
-								        	
+										<div ng-switch-when="prop_ref">
+											<select name = "propRefET[[ key1 ]]">
+												<option></option>
+								        		<option ng-repeat = "value in property.fk_property.values" value = "[[value.value]]"> 
+								        			[[ value.value ]] 
+								        		</option>
+								        	</select>
+										</div>
+										<div ng-switch-default> 								        	
 										</div>
 									</div>
 			                    </td> 
@@ -148,7 +154,6 @@
 													<input type="text" name="fileVT[[ propOfEnt.key ]]" disabled>
 												</div>
 												<div ng-switch-default> 
-										        	<input type="text" name="propRefVT[[ propOfEnt.key ]]" disabled>
 												</div>
 											</div>
 					                    </td>
@@ -206,12 +211,12 @@
 								        		</option>
 								        	</select>
 										</div>
-										<div ng-switch-when="ent_ref"> 
+										<!-- <div ng-switch-when="ent_ref"> 
 											<select name = "ent_refRL[[ prop.key ]]" ng-init = "getEntityInstances(ents.id, prop.id)" disabled>
 								        		<option></option>
 								        		<option ng-repeat = "inst in fkEnt.fk_ent_type.entity"> [[ inst.language[0].pivot.name ]] </option>
 								        	</select>
-										</div>
+										</div> -->
 								        <div ng-switch-when="int"> 
 											<select name = "operatorsRL" disabled>
 								        		<option></option>
@@ -229,7 +234,14 @@
 										<div ng-switch-when="file"> 
 											<input type="text" name="fileRL[[ prop.key ]]" disabled>
 										</div>
-
+										<div ng-switch-when="prop_ref"> 
+											<select name = "propRefRL[[ prop.key ]]" disabled>
+								        		<option></option>
+								        		<option ng-repeat = "value in prop.fk_property.values" value = "[[value.value]]">
+								        			[[ value.value ]] 
+								        		</option>
+								        	</select>
+										</div>
 										<div ng-switch-default> 
 								        	<input type="text" name="propRefRL[[ prop.key ]]" disabled>
 										</div>
@@ -297,12 +309,12 @@
 								        		</option>
 								        	</select>
 										</div>
-										<div ng-switch-when="ent_ref"> 
+										<!-- <div ng-switch-when="ent_ref"> 
 											<select name = "ent_refER[[ property.key ]]" ng-init = "getEntityInstances(property.ent_type_id, property.id)" disabled>
 								        		<option></option>
 								        		<option ng-repeat = "inst in fkEnt[property.id].fk_ent_type.entity"> [[ inst.language[0].pivot.name ]] </option>
 								        	</select>
-										</div>
+										</div> -->
 								        <div ng-switch-when="int"> 
 											<select name = "operatorsER[[ property.key ]]" disabled>
 								        		<option></option>
@@ -321,6 +333,14 @@
 											<input type="text" name="fileER[[ property.key ]]" disabled>
 										</div>
 
+										<div ng-switch-when="prop_ref">
+											<select name = "propRefER[[ property.key ]]" disabled>
+												<option></option>
+								        		<option ng-repeat = "value in property.fk_property.values" value = "[[value.value]]"> 
+								        			[[ value.value ]] 
+								        		</option>
+								        	</select>
+										</div>
 										<div ng-switch-default> 
 								        	<input type="text" name="propRefER[[ key3 ]]" disabled>
 										</div>

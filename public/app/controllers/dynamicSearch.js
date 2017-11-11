@@ -110,6 +110,11 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
                     }
                 }
 
+                $scope.clickTable1();
+                $scope.clickTable2();
+                $scope.clickTable3();
+                $scope.clickTable4();
+
                 var searchExist = $("#idSearch").val();
 
                 if (searchExist != null && searchExist != undefined && searchExist != "" && searchExist == 1) {

@@ -283,19 +283,19 @@ class PropertiesOfRelationsController extends Controller {
         }
 
         $dataPropsRel = RelType::leftJoin('rel_type_name', function($query) {
-                                    $query->on('rel_type.id', '=', 'rel_type_name.rel_type_id')->where('rel_type_name.language_id', 1);
+                                    $query->on('rel_type.id', '=', 'rel_type_name.rel_type_id')->where('rel_type_name.language_id', 1)->whereNull('rel_type_name.deleted_at');
                                 })
                                 ->leftJoin('property', function($query) {
-                                    $query->on('rel_type.id', '=', 'property.rel_type_id');
+                                    $query->on('rel_type.id', '=', 'property.rel_type_id')->whereNull('property.deleted_at');
                                 })
                                 ->leftJoin('property_name', function($query){
-                                    $query->on('property.id', '=', 'property_name.property_id');
+                                    $query->on('property.id', '=', 'property_name.property_id')->whereNull('property_name.deleted_at');
                                 })
                                 ->leftJoin('prop_unit_type', function($query) {
-                                    $query->on('property.unit_type_id', '=', 'prop_unit_type.id');
+                                    $query->on('property.unit_type_id', '=', 'prop_unit_type.id')->whereNull('prop_unit_type.deleted_at');
                                 })
                                 ->leftJoin('prop_unit_type_name', function($query) {
-                                    $query->on('prop_unit_type.id', '=', 'prop_unit_type_name.prop_unit_type_id');
+                                    $query->on('prop_unit_type.id', '=', 'prop_unit_type_name.prop_unit_type_id')->whereNull('prop_unit_type_name.deleted_at');
                                 })
 
                                 ->select([

@@ -70,6 +70,7 @@ class DynamicSearchController extends Controller
                         ->with(['properties.propAllowedValues.language' => function($query) use ($url_text) {
                                 $query->where('slug', $url_text);
                             }])
+                        ->with('properties.fkProperty.values')
         				->with(['properties.language' => function($query) use ($url_text) {
         						$query->where('slug', $url_text);
         					}])->find($id);
@@ -228,6 +229,7 @@ class DynamicSearchController extends Controller
                         ->with(['properties.propAllowedValues.language' => function ($query) use ($url_text) {
                                 $query->where('slug', $url_text);
                             }])
+                        ->with('properties.fkProperty.values')
                         ->with(['ent1.language' => function ($query) use ($url_text) {
                                 $query->where('slug', $url_text);
                             }])
@@ -285,6 +287,7 @@ class DynamicSearchController extends Controller
                             ->with(['propAllowedValues.language' => function ($query) use ($url_text) {
                                 $query->where('slug', $url_text);
                             }])
+                            ->with('fkProperty.values')
                             ->where('ent_type_id', $ent_type_id)
                             ->with('entType')
                             ->get()->toArray();
@@ -846,11 +849,19 @@ class DynamicSearchController extends Controller
             $valueQuery    = $data['double'.$type.$position];
             $operatorQuery = $this->getOperatorSymbol($data['operators'.$type.$position]);
         } else  if ($valueType == "text") {
-            $valueQuery = $data['text'.$type.$position];
+            $operatorQuery = 'LIKE';
+            $valueQuery = '%'.$data['text'.$type.$position].'%';
         } else  if ($valueType == "enum") {
             $valueQuery = $data['select'.$type.$position];
         } else  if ($valueType == "bool") {
             $valueQuery = $data['radio'.$type.$position];
+        } else if ($valueType == "prop_ref") {
+            $valueQuery    = $data['propRef'.$type.$position];
+        }
+
+        if ($operatorQuery == '~') {
+            $operatorQuery = 'LIKE';
+            $valueQuery = '%'.$valueQuery.'%';
         }
 
         if($valueQuery != "") {

@@ -35,7 +35,7 @@
     </div>
 
     <!-- New test with ng table-->
-    <table ng-table="tableParams" ng-init="getSavesQueryTable()" class="table table-condensed table-bordered table-hover" show-filter="true">
+    <!-- <table ng-table="tableParams" ng-init="getSavesQueryTable()" class="table table-condensed table-bordered table-hover" show-filter="true">
         <tr ng-repeat="savedQuery in tableParams.data">
             <td title="'Nome da query'" filter ="{queryFilter: 'text'}" sortable="'query_name'" groupable ="'query_name'">
                 [[savedQuery.query_name]]
@@ -49,7 +49,7 @@
             <td title="'Valor'" sortable="'value'" > [[savedQuery.value]] </td>
             <td title="'Data'" sortable="'created_at'" > [[savedQuery.created_at]] </td>
         </tr> 
-    </table>
+    </table> -->
 </div>
 @stop
 @section('footerContent')
