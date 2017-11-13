@@ -59,4 +59,9 @@ return [
 	'SEARCH_PHRASE_T2_A' => 'whose property',  
 
 	'SEARCH_PHRASE_T3'   => '- Which is present in the type relationship ', 
+
+	'SEARCH_PHRASE_T4'   => '- Who has a relationship with an entity of type ', 
+	'SEARCH_PHRASE_T4_A' => '- Whose property ', 
+
+	'ANY'                => 'any'
 ];

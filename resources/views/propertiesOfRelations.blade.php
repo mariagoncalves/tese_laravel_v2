@@ -18,11 +18,11 @@
                 <td title="'{{trans('properties/messages.THEADER1')}}'" sortable="'id'" > [[relationProps.id]] </td>
                 <td title="'{{trans('properties/messages.THEADER3')}}'" filter ="{propertyFilter: 'text'}" sortable="'property_name'" > [[relationProps.property_name]] </td>
                 <td title="'{{trans('properties/messages.THEADER4')}}'" sortable="'value_type'" > [[relationProps.value_type]] </td>
-                <td title="'{{trans('properties/messages.THEADER5')}}'" sortable="'form_field_name'" > [[relationProps.form_field_name]] </td>
+                <td title="'{{trans('properties/messages.THEADER5')}}'" sortable="'form_field_name'" > [[relationProps.form_field_name == null ? "-" : relationProps.form_field_name]] </td>
                 <td title="'{{trans('properties/messages.THEADER6')}}'" sortable="'form_field_type'" > [[relationProps.form_field_type]] </td>
-                <td title="'{{trans('properties/messages.THEADER7')}}'" sortable="'unit_type'" > [[relationProps.unit_name]] </td>
+                <td title="'{{trans('properties/messages.THEADER7')}}'" sortable="'unit_name'" > [[relationProps.unit_name == null ? "-" : relationProps.unit_name]] </td>
                 <td title="'{{trans('properties/messages.THEADER8')}}'" sortable="'form_field_size'" > [[relationProps.form_field_size]] </td>
-                <td title="'{{trans('properties/messages.THEADER9')}}'" sortable="'mandatory'" > [[ relationProps.mandatory ]] </td>
+                <td title="'{{trans('properties/messages.THEADER9')}}'" sortable="'mandatory'" > [[ relationProps.mandatory == "1" ? "Sim" : "Não"]] </td>
                 <td title="'{{trans('properties/messages.THEADER10')}}'" sortable="'state'" > [[ relationProps.state ]] </td>
                 <td title="'{{trans('properties/messages.THEADER11')}}'" sortable="'created_at'" > [[ relationProps.created_at ]] </td>
                 <td title="'{{trans('properties/messages.THEADER12')}}'" sortable="'updated_at'" > [[ relationProps.updated_at ]] </td>

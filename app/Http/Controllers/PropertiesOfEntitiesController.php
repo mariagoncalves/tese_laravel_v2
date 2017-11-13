@@ -252,7 +252,7 @@ class PropertiesOfEntitiesController extends Controller {
         }
 
         $rules = [
-            'property_name'       => ['required','string' , Rule::unique('property_name' , 'name')->where('language_id', '1')->ignore($id, 'property_id')],
+            'property_name'       => ['required','string'/* , Rule::unique('property_name' , 'name')->where('language_id', '1')->ignore($id, 'property_id')*/],
             'property_state'      => ['required'],
             'property_valueType'  => ['required'],
             'property_fieldType'  => $rulesFieldType,

@@ -794,11 +794,11 @@ class DynamicSearchController extends Controller
                     $auxPhrase = trans("dynamicSearch/messages.SEARCH_PHRASE_T3")." ".$nameEntType1." - ".$nameEntType2." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T2_A")." ".$nameProp." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T1_A")." ";
 
                 } else {
-                    $auxPhrase = "- Que tem uma relação com a entidade do tipo ".$nameEntType2." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T2_A")." ".$nameProp." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T1_A")." ";
+                    $auxPhrase = trans("dynamicSearch/messages.SEARCH_PHRASE_T4")." ".$nameEntType2." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T2_A")." ".$nameProp." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T1_A")." ";
 
                 }
             } else {
-                $auxPhrase  = '- Cuja propriedade '.$nameProp." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T1_A")." ";
+                $auxPhrase  = trans("dynamicSearch/messages.SEARCH_PHRASE_T4_A")." ".$nameProp." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T1_A")." ";
             }
         } 
 
@@ -814,27 +814,32 @@ class DynamicSearchController extends Controller
         if ($valueType == "int") {
             $valueQuery    = $data['int'.$type.$position];
             // Formar a frase 
-            $phrase[] = $auxPhrase . ($valueQuery == '' ? 'qualquer' : $operatorQuery.' '.$valueQuery).';';
+            $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $operatorQuery.' '.$valueQuery).';';
         }  else if ($valueType == "double") {
             $valueQuery    = $data['double'.$type.$position];
             // Formar a frase 
-            $phrase[] = $auxPhrase . ($valueQuery == '' ? 'qualquer' : $operatorQuery.' '.$valueQuery) . ';';
+            $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $operatorQuery.' '.$valueQuery) . ';';
         } else  if ($valueType == "text") {
             $valueQuery = $data['text'.$type.$position];
             // Formar a frase 
-            $phrase[] = $auxPhrase . ($valueQuery == '' ? 'qualquer' : $valueQuery).';';
+            $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         } else  if ($valueType == "enum") {
             $valueQuery = $data['select'.$type.$position];
             // Formar a frase 
-            $phrase[] = $auxPhrase . ($valueQuery == '' ? 'qualquer' : $valueQuery).';';
+            $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         } else  if ($valueType == "bool") {
-            $valueQuery = $data['radio'.$type.$position];
+            if(!isset($data['radio'.$type.$position]) || (!isset($data['radio'.$type.$position]) && $data['radio'.$type.$position] == undefined)) {
+                $valueQuery = '';
+            } else {
+                $valueQuery = $data['radio'.$type.$position];
+            }
+            
             // Formar a frase 
-            $phrase[] = $auxPhrase . ($valueQuery == '' ? 'qualquer' : $valueQuery).';';
+            $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         } else if ($valueType == "prop_ref") {
             $valueQuery = $data['propRef'.$type.$position];
             // Formar a frase 
-            $phrase[] = $auxPhrase . ($valueQuery == '' ? 'qualquer' : $valueQuery).';';
+            $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         }
 
         return $phrase;
@@ -860,7 +865,11 @@ class DynamicSearchController extends Controller
         } else  if ($valueType == "enum") {
             $valueQuery = $data['select'.$type.$position];
         } else  if ($valueType == "bool") {
-            $valueQuery = $data['radio'.$type.$position];
+            if(!isset($data['radio'.$type.$position]) || (!isset($data['radio'.$type.$position]) && $data['radio'.$type.$position] == undefined)) {
+                $valueQuery = '';
+            } else {
+                $valueQuery = $data['radio'.$type.$position];
+            }
         } else if ($valueType == "prop_ref") {
             $valueQuery    = $data['propRef'.$type.$position];
         }

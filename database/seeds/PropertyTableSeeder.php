@@ -386,7 +386,7 @@ class PropertyTableSeeder extends Seeder
             ],
             [
                 'id'               => '19',
-                'ent_type_id'      => '1',
+                'ent_type_id'      => '3',
                 'rel_type_id'      => NULL,
                 'value_type'       => 'text',
                 'form_field_type'  => 'text',

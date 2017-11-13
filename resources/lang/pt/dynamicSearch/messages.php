@@ -60,4 +60,9 @@ return [
 
 	'SEARCH_PHRASE_T3'   => '- Que está presente na relação do tipo ', 
 
+	'SEARCH_PHRASE_T4'   => '- Que tem uma relação com a entidade do tipo ', 
+	'SEARCH_PHRASE_T4_A' => '- Cuja propriedade ', 
+
+	'ANY'                => 'qualquer'
+
 ];
