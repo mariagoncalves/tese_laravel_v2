@@ -24,6 +24,7 @@ return [
 	'THEADER17'            => 'Propriedade_info',
 	'THEADER18'            => 'Tipo de Output',
 	'THEADER19'            => 'Ação',
+	'THEADER20'            => 'Tipo de Transação',
          
 	'NO_PROPERTIES'        => 'Não tem propriedades',
 	'ADD_PROPERTIES'       => 'Adicionar propriedades',

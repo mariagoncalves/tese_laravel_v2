@@ -100,6 +100,17 @@ app.controller('propertiesOfEntitiesManagmentControllerJs', function($scope, $ht
         });
     };
 
+    $scope.getTransactionsStates = function() {
+
+        console.log("TÁ A CHEGAR AO GET TRANSACTION TYPES");
+
+        $http.get('/properties/getTransactionsStates').then(function(response) {
+            console.log(response.data);
+            $scope.transactionStates = response.data;
+            console.log($scope.transactionStates);
+        });
+    };
+
     $scope.openModalPropsEnt = function (size, modalstate, id, parentSelector) {
 
         var modalInstance = $uibModal.open({

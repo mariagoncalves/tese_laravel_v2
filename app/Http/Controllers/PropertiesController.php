@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Property;
 use App\PropUnitType;
+use App\TState;
 use Illuminate\Support\Facades\Log;
 
 class PropertiesController extends Controller {
@@ -23,6 +24,20 @@ class PropertiesController extends Controller {
     public function getFieldTypes() {
         $fieldTypes = Property::getValoresEnum('form_field_type', 'property');
         return response()->json($fieldTypes);
+    }
+
+    public function getTransactionsStates() {
+
+        $url_text = 'PT';
+
+        $transactionStates = TState::with(['language' => function($query) use ($url_text) {
+                                    $query->where('slug', $url_text);
+                                }])
+                                ->whereHas('language', function ($query) use ($url_text){
+                                    return $query->where('slug', $url_text);
+                                })->get();
+
+        return response()->json($transactionStates);
     }
 
     public function getUnits() {

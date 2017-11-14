@@ -8,6 +8,7 @@ app.controller('propertiesOfRelationsManagmentControllerJs', function($scope, $h
     $scope.errors = [];
     $scope.propsRel = [];
     $scope.result = [];
+    $scope.transactionStates = [];
 
     $scope.showDragDropWindow = function(id) {
 
@@ -81,6 +82,17 @@ app.controller('propertiesOfRelationsManagmentControllerJs', function($scope, $h
         $http.get('/properties/fieldTypes').then(function(response) {
             $scope.fieldTypes = response.data;
             console.log($scope.fieldTypes);
+        });
+    };
+
+    $scope.getTransactionsStates = function() {
+
+        console.log("TÁ A CHEGAR AO GET TRANSACTION TYPES");
+
+        $http.get('/properties/getTransactionsStates').then(function(response) {
+            console.log(response.data);
+            $scope.transactionStates = response.data;
+            console.log($scope.transactionStates);
         });
     };
 

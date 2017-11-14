@@ -66,6 +66,20 @@
                 </div>
             </div>
 
+            <div class="form-group" ng-init="getTransactionsStates()">
+                <label class="col-sm-3 control-label">Transaction State:</label>
+                <div class="col-sm-9">
+                    <select class="form-control" name="transactionsState">
+                        <option value=""></option>
+                        <option ng-repeat="transactionState in transactionStates" ng-value="transactionState.language[0].pivot.t_state_id" ng-selected="transactionState.language[0].pivot.t_state_id == property.t_state_id">[[ transactionState.language[0].pivot.name ]]</option>
+                    </select>
+                    <ul ng-repeat="error in errors.transactionsState" style="padding-left: 15px;">
+                        <li>[[ error ]]</li>
+                    </ul>
+                </div>
+                <br>
+            </div>
+
             <div class="form-group" ng-init="getUnits()">
                 <label for="units" class="col-sm-3 control-label">{{trans('properties/messages.THEADER7')}}:</label>
                 <div class="col-sm-9">

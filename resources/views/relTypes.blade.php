@@ -16,7 +16,6 @@
                 <td title="'{{ trans('relationTypes/messages.THEADER3') }} 1'" filter="{ entity1Filter: 'text'}" sortable="'entity1'">[[ relType.entity1 ]]</td>
                 <td title="'{{ trans('relationTypes/messages.THEADER3') }} 2'" filter="{ entity2Filter: 'text'}" sortable="'entity2'">[[ relType.entity2 ]]</td>
                 <td title="'{{ trans('relationTypes/messages.THEADER4') }}'" filter="{ transTypeFilter: 'text'}" sortable="'transaction_type'">[[ relType.transaction_type ]]</td>
-                <td title="'{{ trans('relationTypes/messages.THEADER5') }}'" filter="{ transStateFilter: 'text'}" width="95px" sortable="'t_state_name'" >[[ relType.t_state_name ]]</td>
                 <td title="'{{ trans('relationTypes/messages.THEADER6') }}'" filter="{ stateFilter: 'text'}" sortable="'state'" width="85px">[[ relType.state ]]</td>
                 <td title="'{{ trans('relationTypes/messages.THEADER7') }}'" sortable="'created_at'" width="90px">[[ relType.created_at ]]</td>
                 <td title="'{{ trans('relationTypes/messages.THEADER8') }}'" sortable="'updated_at'" width="90px">[[ relType.updated_at ]]</td>

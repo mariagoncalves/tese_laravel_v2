@@ -13,6 +13,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(LanguageTableSeeder::class);
         $this->call(UsersTableSeeder::class);
+        $this->call(TStateTableSeeder::class);
+        $this->call(TStateNameTableSeeder::class); //(Remover)
         $this->call(PropUnitTypeTableSeeder::class);
         $this->call(PropUnitTypeNameTableSeeder::class); //(Remover)
         $this->call(ProcessTypeTableSeeder::class);
@@ -27,9 +29,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleHasUserTableSeeder::class);
         $this->call(ProcessTableSeeder::class);
         $this->call(ProcessNameTableSeeder::class); //(Remover)
-
-        $this->call(TStateTableSeeder::class);
-        $this->call(TStateNameTableSeeder::class); //(Remover)
 
         $this->call(TransactionTypeTableSeeder::class);
         $this->call(TransactionTypeNameTableSeeder::class); // (Remover)

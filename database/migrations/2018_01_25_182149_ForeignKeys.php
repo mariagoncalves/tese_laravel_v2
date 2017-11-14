@@ -235,6 +235,9 @@ class ForeignKeys extends Migration
             $table->foreign('t_state_id')->references('id')->on('t_state')->onDelete('no action')->onUpdate('no action');
             $table->foreign('caused_t')->references('id')->on('transaction_type')->onDelete('no action')->onUpdate('no action');
         });
+		Schema::table('custom_form', function(Blueprint $table) {
+            $table->foreign('t_state_id')->references('id')->on('t_state')->onDelete('no action')->onUpdate('no action');
+        });
 //
 //
         Schema::table('custom_form_has_transaction_type', function(Blueprint $table) {
@@ -504,6 +507,9 @@ class ForeignKeys extends Migration
             $table->dropForeign(['causing_t']);
             $table->dropForeign(['t_state_id']);
             $table->dropForeign(['caused_t']);
+        });
+		Schema::table('custom_form', function (Blueprint $table) {
+            $table->dropForeign(['t_state_id']);
         });
         Schema::table('custom_form_has_transaction_type', function (Blueprint $table) {
             $table->dropForeign(['transaction_type_id']);

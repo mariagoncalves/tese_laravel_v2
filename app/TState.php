@@ -24,6 +24,10 @@ class TState extends Model
         return $this->hasMany('App\CausalLink', 't_state_id', 'id');
     }
 
+    public function customForm() {
+        return $this->hasMany('App\CustomForm', 't_state_id', 'id');
+    }
+
     public function waitedFact() {
         return $this->hasMany('App\WaitingLink', 'waited_fact', 'id');
     }

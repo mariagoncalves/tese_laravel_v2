@@ -14,6 +14,7 @@ class CustomForm extends Model
     public $timestamps = true;
 
     protected $fillable = [
+		't_state_id',
         'state',
 		'updated_by',
         'deleted_by'
@@ -21,8 +22,12 @@ class CustomForm extends Model
 
     protected $guarded = [];
 
-    public function transactionType() {
+    public function transactionTypes() {
         return $this->belongsToMany('App\TransactionType', 'custom_form_has_transaction_type' , 'custom_form_id', 'transaction_type_id')->withPivot('field_order','mandatory_form','created_at','updated_at','deleted_at');
+    }
+	
+	public function t_states() {
+        return $this->belongsTo('App\TStates', 't_state_id', 'id');
     }
 
     public function language() {

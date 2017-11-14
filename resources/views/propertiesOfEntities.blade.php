@@ -21,6 +21,7 @@
                 <td title="'{{trans('properties/messages.THEADER6')}}'" sortable="'form_field_type'" > [[entitiesProps.form_field_type]] </td>
                 <td title="'{{trans('properties/messages.THEADER7')}}'" sortable="'unit_name'" > [[ entitiesProps.unit_name == null ? "-" : entitiesProps.unit_name ]] </td>
                 <td title="'{{trans('properties/messages.THEADER8')}}'" sortable="'form_field_size'" > [[entitiesProps.form_field_size]] </td>
+                <td title="'{{trans('properties/messages.THEADER20')}}'" sortable="'t_state_name'" > [[entitiesProps.t_state_name]] </td>
                 <td title="'{{trans('properties/messages.THEADER9')}}'" sortable="'mandatory'" > [[ entitiesProps.mandatory == "1" ? "Sim" : "Não"]]  </td>
                 <td title="'{{trans('properties/messages.THEADER10')}}'" sortable="'state'" > [[ entitiesProps.state ]] </td>
                 <td title="'{{trans('properties/messages.THEADER11')}}'" sortable="'created_at'" > [[ entitiesProps.created_at ]] </td>

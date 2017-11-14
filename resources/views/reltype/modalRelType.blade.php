@@ -58,7 +58,7 @@
                 <br>
             </div>
 
-            <div class="form-group" ng-init="getTransactionsStates()">
+            <!-- <div class="form-group" ng-init="getTransactionsStates()">
                 <label class="col-sm-3 control-label">{{trans('relationTypes/messages.THEADER5')}}:</label>
                 <div class="col-sm-9">
                     <select class="form-control" name="transactionsState">
@@ -70,7 +70,7 @@
                     </ul>
                 </div>
                 <br>
-            </div>
+            </div> -->
 
             <div class="form-group" ng-init="getStates()">
                 <label for="Gender" class="col-sm-3 control-label">{{trans('relationTypes/messages.THEADER6')}}:</label>

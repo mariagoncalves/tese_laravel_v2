@@ -82,6 +82,7 @@ class PropertiesOfEntitiesController extends Controller {
                 'property_valueType'       => ['required'],
                 'property_fieldType'       => $rulesFieldType,
                 'property_mandatory'       => ['required'],
+                'transactionsState'        => ['required'],
                 'unites_names'             => ['integer'],
                 'property_fieldSize'       => $propertyFieldSize,
                 'property_state'           => ['required'],
@@ -125,6 +126,7 @@ class PropertiesOfEntitiesController extends Controller {
 
             $data1 = array(
                 'ent_type_id'      => $data['entity_type'             ],
+                't_state_id'       => $data['transactionsState'      ],
                 'value_type'       => $data['property_valueType'      ],
                 'form_field_type'  => $data['property_fieldType'      ],
                 'unit_type_id'     => $data['unites_names'            ],
@@ -257,6 +259,7 @@ class PropertiesOfEntitiesController extends Controller {
             'property_valueType'  => ['required'],
             'property_fieldType'  => $rulesFieldType,
             'property_mandatory'  => ['required'],
+            'transactionsState'   => ['required'],
             'unites_names'        => ['integer'],
             'property_fieldSize'  => $propertyFieldSize,
             'reference_entity'    => $rulesEntRef,
@@ -289,6 +292,7 @@ class PropertiesOfEntitiesController extends Controller {
 
 
         $data1 = array(
+            't_state_id'       => $data['transactionsState'      ],
             'value_type'       => $data['property_valueType'      ],
             'form_field_type'  => $data['property_fieldType'      ],
             'unit_type_id'     => $data['unites_names'            ],
@@ -461,6 +465,12 @@ class PropertiesOfEntitiesController extends Controller {
                                 ->leftJoin('prop_unit_type_name', function($query) {
                                     $query->on('prop_unit_type.id', '=', 'prop_unit_type_name.prop_unit_type_id')->whereNull('prop_unit_type_name.deleted_at');
                                 })
+                                ->leftJoin('t_state', function($query) {
+                                    $query->on('property.t_state_id', '=', 't_state.id')->whereNull('t_state.deleted_at');
+                                })
+                                ->leftJoin('t_state_name', function($query) {
+                                    $query->on('t_state_name.t_state_id', '=', 't_state.id')->whereNull('t_state_name.deleted_at');
+                                })
 
                                 ->select([
                                     'ent_type.id AS ent_id',
@@ -468,6 +478,7 @@ class PropertiesOfEntitiesController extends Controller {
                                     'property.*',
                                     'property_name.name AS property_name',
                                     'property_name.form_field_name AS form_field_name',
+                                    't_state_name.name AS t_state_name',
                                     'prop_unit_type.id AS id_unit',
                                     'prop_unit_type_name.name AS unit_name',
                                 ])

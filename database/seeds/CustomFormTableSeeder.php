@@ -38,24 +38,28 @@ class CustomFormTableSeeder extends Seeder
         $dados = [
             [
                 'id'         => '1',
+                't_state_id' => '1',
                 'state'      => 'active',
                 'updated_by' => '1',
                 'deleted_by' => NULL
             ],
             [
                 'id'         => '2',
+                't_state_id' => '1',
                 'state'      => 'active',
                 'updated_by' => '1',
                 'deleted_by' => NULL
             ],
             [
                 'id'         => '3',
+                't_state_id' => '1',
                 'state'      => 'active',
                 'updated_by' => '1',
                 'deleted_by' => NULL
             ],
             [
                 'id'         => '4',
+                't_state_id' => '1',
                 'state'      => 'active',
                 'updated_by' => '1',
                 'deleted_by' => NULL

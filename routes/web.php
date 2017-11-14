@@ -259,7 +259,6 @@ Route::get('/properties/getAllRelations','PropertiesOfRelationsController@getRel
 
 Route::post('/propertiesOfRelation/remove/{id}', 'PropertiesOfRelationsController@remove');
 
-
 //--------------------------Métodos comuns as entidades e as relações---------------------------
 
 Route::get('/properties/states', 'PropertiesController@getStates');
@@ -268,6 +267,9 @@ Route::get('/properties/fieldTypes', 'PropertiesController@getFieldTypes');
 Route::get('/properties/units', 'PropertiesController@getUnits');
 Route::get('/properties/get_property/{id?}', 'PropertiesController@getProperty');
 
+
+
+Route::get('/properties/getTransactionsStates', 'PropertiesController@getTransactionsStates');
 //----------------------------------Pesquisa Dinâmica----------------------------------------------------
 
 Route::get('/dynamicSearch', 'DynamicSearchController@index');

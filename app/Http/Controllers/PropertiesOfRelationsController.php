@@ -59,6 +59,7 @@ class PropertiesOfRelationsController extends Controller {
                 'property_valueType_rel'  => ['required'],
                 'property_fieldType_rel'  => $rulesFieldType,
                 'property_mandatory_rel'  => ['required'],
+                'transactionsState'       => ['required'],
                 'units_name'              => ['integer'],
                 'property_fieldSize_rel'  => $propertyFieldSize,
                 'property_state_rel'      => ['required'],
@@ -81,6 +82,7 @@ class PropertiesOfRelationsController extends Controller {
 
             $data1 = array(
                 'rel_type_id'      => $data['relation_type'          ],
+                't_state_id'       => $data['transactionsState'      ],
                 'value_type'       => $data['property_valueType_rel' ],
                 'form_field_type'  => $data['property_fieldType_rel' ],
                 'unit_type_id'     => $data['units_name'             ],
@@ -163,6 +165,7 @@ class PropertiesOfRelationsController extends Controller {
             'property_valueType_rel'  => ['required'],
             'property_fieldType_rel'  => $rulesFieldType,
             'property_mandatory_rel'  => ['required'],
+            'transactionsState'       => ['required'],
             'units_name'              => ['integer'],
             'property_fieldSize_rel'  => $propertyFieldSize
         ];
@@ -180,6 +183,7 @@ class PropertiesOfRelationsController extends Controller {
         }
 
         $data1 = array(
+            't_state_id'       => $data['transactionsState'      ],
             'value_type'       => $data['property_valueType_rel' ],
             'form_field_type'  => $data['property_fieldType_rel' ],
             'unit_type_id'     => $data['units_name'             ],
@@ -260,8 +264,7 @@ class PropertiesOfRelationsController extends Controller {
 
         return response()->json(['error' => 'An error occurred. Try later.'], 500);
     }
-
-
+    
     public function getAll_test(Request $request, $id = null) {
 
         $data  = $request->all();
@@ -297,6 +300,12 @@ class PropertiesOfRelationsController extends Controller {
                                 ->leftJoin('prop_unit_type_name', function($query) {
                                     $query->on('prop_unit_type.id', '=', 'prop_unit_type_name.prop_unit_type_id')->whereNull('prop_unit_type_name.deleted_at');
                                 })
+                                ->leftJoin('t_state', function($query) {
+                                    $query->on('property.t_state_id', '=', 't_state.id')->whereNull('t_state.deleted_at');
+                                })
+                                ->leftJoin('t_state_name', function($query) {
+                                    $query->on('t_state_name.t_state_id', '=', 't_state.id')->whereNull('t_state_name.deleted_at');
+                                })
 
                                 ->select([
                                     'rel_type.id AS rel_id',
@@ -304,6 +313,7 @@ class PropertiesOfRelationsController extends Controller {
                                     'property.*',
                                     'property_name.name AS property_name',
                                     'property_name.form_field_name AS form_field_name',
+                                    't_state_name.name AS t_state_name',
                                     'prop_unit_type.id AS id_unit',
                                     'prop_unit_type_name.name AS unit_name',
                                 ])

@@ -43,11 +43,11 @@ app.controller('RelationTypesManagmentControllerJs', function($scope, $http, gro
         });
     };
 
-    $scope.getTransactionsStates = function() {
+    /*$scope.getTransactionsStates = function() {
         $http.get('/getAllTransactionStates').then(function(response) {
             $scope.transactionStates = response.data;
         });
-    };
+    };*/
 
     $scope.openModalRelTypes = function (size, modalstate, id, parentSelector) {
 
