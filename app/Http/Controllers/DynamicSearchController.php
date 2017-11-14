@@ -833,7 +833,6 @@ class DynamicSearchController extends Controller
             } else {
                 $valueQuery = $data['radio'.$type.$position];
             }
-            
             // Formar a frase 
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         } else if ($valueType == "prop_ref") {

@@ -87,9 +87,9 @@ class Property extends Model
         return $this->belongToMany('App\Query', 'property_can_read_result', 'reading_property', 'providing_result')->withPivot('output_type','created_at','updated_at','deleted_at');
     }
 
-    public function condicions() {
+    public function conditions() {
 
-        return $this->hasMany('App\Condicion', 'property_id', 'id');
+        return $this->hasMany('App\Condition', 'property_id', 'id');
     }
 
     public function relTypes() {
