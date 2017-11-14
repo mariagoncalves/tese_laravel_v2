@@ -27,7 +27,7 @@ class RelationTableSeeder extends Seeder
                 'rel_type_id'          => '1',
                 'entity1_id'           => '13',
                 'entity2_id'           => '1',
-                'transaction_state_id' => '1',
+                'transaction_id'       => '1',
                 'state'                => 'active',
                 'updated_by'           => '1',
                 'deleted_by'           => NULL
@@ -37,7 +37,7 @@ class RelationTableSeeder extends Seeder
                 'rel_type_id'          => '1',
                 'entity1_id'           => '4',
                 'entity2_id'           => '14',
-                'transaction_state_id' => '1',
+                'transaction_id'       => '1',
                 'state'                => 'active',
                 'updated_by'           => '1',
                 'deleted_by'           => NULL
@@ -47,7 +47,7 @@ class RelationTableSeeder extends Seeder
                 'rel_type_id'          => '3',
                 'entity1_id'           => '3',
                 'entity2_id'           => '8',
-                'transaction_state_id' => '1',
+                'transaction_id'       => '1',
                 'state'                => 'active',
                 'updated_by'           => '1',
                 'deleted_by'           => NULL
@@ -57,7 +57,7 @@ class RelationTableSeeder extends Seeder
                 'rel_type_id'          => '3',
                 'entity1_id'           => '9',
                 'entity2_id'           => '3',
-                'transaction_state_id' => '1',
+                'transaction_id'       => '1',
                 'state'                => 'active',
                 'updated_by'           => '1',
                 'deleted_by'           => NULL
@@ -67,7 +67,7 @@ class RelationTableSeeder extends Seeder
                 'rel_type_id'          => '3',
                 'entity1_id'           => '10',
                 'entity2_id'           => '3',
-                'transaction_state_id' => '1',
+                'transaction_id'       => '1',
                 'state'                => 'active',
                 'updated_by'           => '1',
                 'deleted_by'           => NULL
@@ -77,7 +77,7 @@ class RelationTableSeeder extends Seeder
                 'rel_type_id'          => '2',
                 'entity1_id'           => '13',
                 'entity2_id'           => '2',
-                'transaction_state_id' => '1',
+                'transaction_id'       => '1',
                 'state'                => 'active',
                 'updated_by'           => '1',
                 'deleted_by'           => NULL
