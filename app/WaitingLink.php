@@ -17,7 +17,7 @@ class WaitingLink extends Model
         'waited_t',
         'waited_fact',
         'waiting_fact',
-        'waiting_transaction',
+        'waiting_t',
         'min',
         'max',
 		'updated_by',
@@ -27,7 +27,7 @@ class WaitingLink extends Model
     protected $guarded = [];
 
     public function waitingTransaction() {
-        return $this->belongsTo('App\TransactionType', 'waiting_transaction', 'id');
+        return $this->belongsTo('App\TransactionType', 'waiting_t', 'id');
     }
 
     public function waitedT() {

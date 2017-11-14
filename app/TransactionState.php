@@ -27,14 +27,6 @@ class TransactionState extends Model
     public function transaction() {
         return $this->belongsTo('App\Transaction', 'transaction_id', 'id');
     }
-	
-	public function entities() {
-        return $this->hasMany('App\Entity', 'transaction_state_id', 'id');
-    }
-
-    public function relations() {
-        return $this->hasMany('App\Relation', 'transaction_state_id', 'id');
-    }
 
     public function tState() {
         return $this->belongsTo('App\TState', 't_state_id', 'id');

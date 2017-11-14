@@ -18,7 +18,6 @@ class EntType extends Model
         'transaction_type_id',
         'par_ent_type_id',
         'par_prop_type_val',
-		't_state_id',
 		'updated_by',
         'deleted_by'
     ];
@@ -27,10 +26,6 @@ class EntType extends Model
 
     public function transactionsType() {
         return $this->belongsTo('App\TransactionType', 'transaction_type_id', 'id');
-    }
-
-    public function tStates() {
-        return $this->belongsTo('App\TState', 't_state_id', 'id');
     }
 
     public function entity() {
@@ -48,8 +43,9 @@ class EntType extends Model
     public function entType() {
         return $this->belongsTo('App\EntType', 'par_ent_type_id', 'id');
     }
+
     public function propAllowedValue() {
-        return $this->belongsTo('App\prop_allowed_value', 'par_prop_type_val', 'id');
+        return $this->belongsTo('App\PropAllowedValue', 'par_prop_type_val', 'id');
     }
 
     public function fkEntType() {
@@ -89,7 +85,7 @@ class EntType extends Model
 
         return $this->belongsTo('App\Users', 'deleted_by', 'id');
     }
-	
+
 	public function scopeSearchPropsEnt($query, $id, $data) {
         if ($id != null) {
             $query->where('id', $id);
@@ -103,5 +99,4 @@ class EntType extends Model
             $query->where('property_name.name', 'LIKE', '%'.$data['property'].'%');
         }
     }
-
 }

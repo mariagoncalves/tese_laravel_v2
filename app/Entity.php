@@ -16,7 +16,7 @@ class Entity extends Model
     protected $fillable = [
         'ent_type_id',
         'state',
-		'transaction_state_id',
+		'transaction_id',
 		'updated_by',
         'deleted_by'
     ];
@@ -27,8 +27,8 @@ class Entity extends Model
         return $this->belongsTo('App\EntType', 'ent_type_id', 'id');
     }
 	
-	public function transactionState() {
-        return $this->belongsTo('App\TransactionState', 'transaction_state_id', 'id');
+	public function transaction() {
+        return $this->belongsTo('App\Transaction', 'transaction_id', 'id');
     }
 
     public function values() {

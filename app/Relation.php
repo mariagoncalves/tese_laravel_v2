@@ -17,7 +17,7 @@ class Relation extends Model
         'rel_type_id',
         'entity1_id',
         'entity2_id',
-        'transaction_state_id',
+        'transaction_id',
         'state',
 		'updated_by',
         'deleted_by'
@@ -31,6 +31,10 @@ class Relation extends Model
 
     public function entity2() {
         return $this->belongsTo('App\Entity', 'entity2_id', 'id');
+    }
+
+    public function transaction() {
+        return $this->belongsTo('App\Transaction', 'transaction_id', 'id');
     }
 
     public function relType() {

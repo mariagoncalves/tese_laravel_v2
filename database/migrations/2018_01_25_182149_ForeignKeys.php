@@ -195,7 +195,7 @@ class ForeignKeys extends Migration
             $table->foreign('deleted_by')->references('id')->on('users')->onDelete('no action')->onUpdate('no action');
         });
 
-        Schema::table('operator', function(Blueprint $table) {
+		Schema::table('operator', function(Blueprint $table) {
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('no action')->onUpdate('no action');
             $table->foreign('deleted_by')->references('id')->on('users')->onDelete('no action')->onUpdate('no action');
         });
@@ -219,8 +219,6 @@ class ForeignKeys extends Migration
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('no action')->onUpdate('no action');
             $table->foreign('deleted_by')->references('id')->on('users')->onDelete('no action')->onUpdate('no action');
         });
-
-
 //        Schema::table('agent', function (Blueprint $table) {
 //            $table->foreign('user_id')->references('id')->on('users')->onDelete('no action')->onUpdate('no action');
 //        });
@@ -241,6 +239,7 @@ class ForeignKeys extends Migration
 //
         Schema::table('custom_form_has_transaction_type', function(Blueprint $table) {
             $table->foreign('transaction_type_id')->references('id')->on('transaction_type')->onDelete('no action')->onUpdate('no action');
+
             $table->foreign('custom_form_id')->references('id')->on('custom_form')->onDelete('no action')->onUpdate('no action');
             //$table->primary(array('transaction_type_id', 'custom_form_id'));
         });
@@ -255,7 +254,7 @@ class ForeignKeys extends Migration
 //
         Schema::table('entity', function(Blueprint $table) {
             $table->foreign('ent_type_id')->references('id')->on('ent_type')->onDelete('no action')->onUpdate('no action');
-			$table->foreign('transaction_state_id')->references('id')->on('transaction_state')->onDelete('no action')->onUpdate('no action');
+			$table->foreign('transaction_id')->references('id')->on('transaction')->onDelete('no action')->onUpdate('no action');
         });
 
 //
@@ -265,17 +264,15 @@ class ForeignKeys extends Migration
         });
 //
         Schema::table('rel_type', function(Blueprint $table) {
-
             $table->foreign('ent_type1_id')->references('id')->on('ent_type')->onDelete('no action')->onUpdate('no action');
             $table->foreign('ent_type2_id')->references('id')->on('ent_type')->onDelete('no action')->onUpdate('no action');
-            $table->foreign('t_state_id')->references('id')->on('t_state')->onDelete('no action')->onUpdate('no action');
         });
 //
         Schema::table('relation', function(Blueprint $table) {
             $table->foreign('rel_type_id')->references('id')->on('rel_type')->onDelete('no action')->onUpdate('no action');
             $table->foreign('entity1_id')->references('id')->on('entity')->onDelete('no action')->onUpdate('no action');
             $table->foreign('entity2_id')->references('id')->on('entity')->onDelete('no action')->onUpdate('no action');
-            $table->foreign('transaction_state_id')->references('id')->on('transaction_state')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('transaction_id')->references('id')->on('transaction')->onDelete('no action')->onUpdate('no action');
         });
 
         Schema::table('rel_type', function(Blueprint $table) {
@@ -322,7 +319,7 @@ class ForeignKeys extends Migration
             $table->foreign('waited_t')->references('id')->on('transaction_type')->onDelete('no action')->onUpdate('no action');
             $table->foreign('waited_fact')->references('id')->on('t_state')->onDelete('no action')->onUpdate('no action');
             $table->foreign('waiting_fact')->references('id')->on('t_state')->onDelete('no action')->onUpdate('no action');
-            $table->foreign('waiting_transaction')->references('id')->on('transaction_type')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('waiting_t')->references('id')->on('transaction_type')->onDelete('no action')->onUpdate('no action');
         });
 //
 
@@ -353,6 +350,7 @@ class ForeignKeys extends Migration
         Schema::table('property', function (Blueprint $table) {
             $table->foreign('unit_type_id')->references('id')->on('prop_unit_type')->onDelete('no action')->onUpdate('no action');
             $table->foreign('rel_type_id')->references('id')->on('rel_type')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('t_state_id')->references('id')->on('t_state')->onDelete('no action')->onUpdate('no action');
             $table->foreign('fk_ent_type_id')->references('id')->on('ent_type')->onDelete('no action')->onUpdate('no action');
 			$table->foreign('fk_property_id')->references('id')->on('property')->onDelete('no action')->onUpdate('no action');
         });
@@ -366,7 +364,6 @@ class ForeignKeys extends Migration
         });
         Schema::table('ent_type', function (Blueprint $table) {
             $table->foreign('transaction_type_id')->references('id')->on('transaction_type')->onDelete('no action')->onUpdate('no action');
-            $table->foreign('t_state_id')->references('id')->on('t_state')->onDelete('no action')->onUpdate('no action');
         });
 
         Schema::table('property_can_read_property', function (Blueprint $table) {
@@ -379,7 +376,7 @@ class ForeignKeys extends Migration
             $table->foreign('providing_ent_type')->references('id')->on('ent_type')->onDelete('no action')->onUpdate('no action');
         });
 
-        Schema::table('condition', function (Blueprint $table) {
+		Schema::table('condition', function (Blueprint $table) {
             $table->foreign('query_id')->references('id')->on('query')->onDelete('no action')->onUpdate('no action');
             $table->foreign('operator_id')->references('id')->on('operator')->onDelete('no action')->onUpdate('no action');
             $table->foreign('property_id')->references('id')->on('property')->onDelete('no action')->onUpdate('no action');
@@ -398,7 +395,6 @@ class ForeignKeys extends Migration
             $table->foreign('reading_property')->references('id')->on('property')->onDelete('no action')->onUpdate('no action');
             $table->foreign('providing_result')->references('id')->on('query')->onDelete('no action')->onUpdate('no action');
         });
-
     }
 
     public function down()
@@ -412,19 +408,13 @@ class ForeignKeys extends Migration
             $table->dropForeign(['waited_t']);
             $table->dropForeign(['waited_fact']);
             $table->dropForeign(['waiting_fact']);
-            $table->dropForeign(['waiting_transaction']);
+            $table->dropForeign(['waiting_t']);
         });
         Schema::table('value', function (Blueprint $table) {
             $table->dropForeign(['property_id']);
         });
         Schema::table('transaction_type', function (Blueprint $table) {
             $table->dropForeign(['process_type_id']);
-        });
-
-        Schema::table('ent_type', function (Blueprint $table) {
-            $table->dropForeign(['transaction_type_id']);
-            $table->dropForeign(['transaction_type_id']);
-            $table->dropForeign(['transaction_type_id']);
         });
         Schema::table('transaction_state', function (Blueprint $table) {
             $table->dropForeign(['transaction_id']);
@@ -479,7 +469,7 @@ class ForeignKeys extends Migration
 
         Schema::table('entity', function (Blueprint $table) {
             $table->dropForeign(['ent_type_id']);
-			$table->dropForeign(['transaction_state_id']);
+			$table->dropForeign(['transaction_id']);
         });
 
         Schema::table('value', function (Blueprint $table) {
@@ -494,6 +484,7 @@ class ForeignKeys extends Migration
 
         Schema::table('property', function (Blueprint $table) {
             $table->dropForeign(['ent_type_id']);
+            $table->dropForeign(['t_state_id']);
         });
 
 //        Schema::table('transaction_state', function (Blueprint $table) {
@@ -524,17 +515,17 @@ class ForeignKeys extends Migration
             $table->dropForeign(['providing_property']);
         });
 
-        Schema::table('property_can_read_result', function (Blueprint $table) {
+		Schema::table('property_can_read_result', function (Blueprint $table) {
             $table->dropForeign(['reading_property']);
             $table->dropForeign(['providing_result']);
         });
-
+		
         Schema::table('property_can_read_ent_type', function (Blueprint $table) {
             $table->dropForeign(['reading_property']);
             $table->dropForeign(['providing_ent_type']);
         });
 
-        Schema::table('property_can_read_rel_type', function (Blueprint $table) {
+		Schema::table('property_can_read_rel_type', function (Blueprint $table) {
             $table->dropForeign(['reading_property']);
             $table->dropForeign(['providing_rel_type']);
         });
@@ -548,8 +539,6 @@ class ForeignKeys extends Migration
         Schema::table('query', function (Blueprint $table) {
             $table->dropForeign('ent_type_id');
         });
-
-
         // Updated by e Deleted by
 
         Schema::table('actor', function(Blueprint $table) {
@@ -713,7 +702,7 @@ class ForeignKeys extends Migration
             $table->dropForeign(['updated_by']);
             $table->dropForeign(['deleted_by']);
         });
-       Schema::table('property_can_read_rel_type', function (Blueprint $table) {
+		Schema::table('property_can_read_rel_type', function (Blueprint $table) {
             $table->dropForeign(['updated_by']);
             $table->dropForeign(['deleted_by']);
         });
@@ -729,7 +718,7 @@ class ForeignKeys extends Migration
             $table->dropForeign(['updated_by']);
             $table->dropForeign(['deleted_by']);
         });
-        Schema::table('operator', function (Blueprint $table) {
+		 Schema::table('operator', function (Blueprint $table) {
             $table->dropForeign(['updated_by']);
             $table->dropForeign(['deleted_by']);
         });

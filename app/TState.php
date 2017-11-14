@@ -32,8 +32,8 @@ class TState extends Model
         return $this->hasMany('App\WaitingLink', 'waiting_fact', 'id');
     }
 
-    public function entType() {
-        return $this->hasMany('App\EntType', 't_state_id', 'id');
+    public function properties() {
+        return $this->hasMany('App\Property', 't_state_id', 'id');
     }
 
     public function transactionsState() {

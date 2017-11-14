@@ -20,7 +20,6 @@ class CreateEntTypeTable extends Migration
             $table->integer('transaction_type_id')->unsigned();
             $table->integer('par_ent_type_id')->nullable()->unsigned();
             $table->integer('par_prop_type_val')->nullable()->unsigned();
-            $table->integer('t_state_id')->nullable()->unsigned();
             $table->integer('updated_by')->nullable()->unsigned();
             $table->integer('deleted_by')->nullable()->unsigned();
             $table->timestamps();

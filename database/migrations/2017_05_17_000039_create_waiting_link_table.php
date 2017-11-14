@@ -17,7 +17,7 @@ class CreateWaitingLinkTable extends Migration
             $table->integer('waited_t')->unsigned();
             $table->integer('waited_fact')->unsigned();
             $table->integer('waiting_fact')->unsigned();
-            $table->integer('waiting_transaction')->unsigned();
+            $table->integer('waiting_t')->unsigned();
             $table->string('min',45);
             $table->string('max', 45);
             $table->integer('updated_by')->nullable()->unsigned();

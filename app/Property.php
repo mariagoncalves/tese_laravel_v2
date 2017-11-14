@@ -17,6 +17,7 @@ class Property extends Model
     protected $fillable = [
         'ent_type_id',
         'rel_type_id',
+        't_state_id',
         'value_type',
         'form_field_type',
         'unit_type_id',
@@ -33,6 +34,10 @@ class Property extends Model
 
     protected $guarded = [];
 
+    public function tStates() {
+        return $this->belongsTo('App\TState', 't_state_id', 'id');
+    }
+
     public function entType() {
         return $this->belongsTo('App\EntType', 'ent_type_id', 'id');
     }
@@ -45,9 +50,9 @@ class Property extends Model
         return $this->belongsTo('App\Property', 'fk_property_id', 'id');
     }
 
-    /*public function customForms() {
+    public function customForms() {
         return $this->belongsToMany('App\CustomForm', 'custom_form_has_prop');
-    }*/
+    }
 
     public function relType() {
         return $this->belongsTo('App\RelType', 'rel_type_id', 'id');
@@ -66,23 +71,23 @@ class Property extends Model
     }
 
     public function readingEntTypes() {
-        return $this->belongsToMany('App\EntType', 'property_can_read_ent_type', 'reading_property', 'providing_ent_type')->withPivot('output_type','created_at','updated_at');
+        return $this->belongsToMany('App\EntType', 'property_can_read_ent_type', 'reading_property', 'providing_ent_type')->withPivot('output_type','created_at','updated_at','deleted_at');
     }
 
     //ir buscar as propriedades que dão informação a uma certa propriedade
     public function propertiesReading() {
-        return $this->belongsToMany('App\Property', 'property_can_read_property', 'reading_property', 'providing_property')->withPivot('output_type', 'created_at','updated_at');
+        return $this->belongsToMany('App\Property', 'property_can_read_property', 'reading_property', 'providing_property')->withPivot('output_type','created_at','updated_at','deleted_at');
     }
 
     public function propertiesProviding() {
-        return $this->belongsToMany('App\Property', 'property_can_read_property', 'providing_property', 'reading_property')->withPivot('output_type','created_at','updated_at');
+        return $this->belongsToMany('App\Property', 'property_can_read_property', 'providing_property', 'reading_property')->withPivot('output_type','created_at','updated_at','deleted_at');
     }
 
     public function language() {
         return $this->belongsToMany('App\Language', 'property_name', 'property_id', 'language_id')->withPivot('name','form_field_name','created_at','updated_at','deleted_at');
     }
-
-    public function queries() {
+	
+	public function queries() {
 
         return $this->belongToMany('App\Query', 'property_can_read_result', 'reading_property', 'providing_result')->withPivot('output_type','created_at','updated_at','deleted_at');
     }

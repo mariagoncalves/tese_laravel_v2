@@ -14,10 +14,8 @@ class RelType extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'id',
         'ent_type1_id',
         'ent_type2_id',
-        't_state_id',
         'state',
         'transaction_type_id',
 		'updated_by',
@@ -25,11 +23,6 @@ class RelType extends Model
     ];
 
     protected $guarded = [];
-
-    public function tState() {
-
-        return $this->belongsTo('App\TState', 't_state_id', 'id');
-    }
 
     public function transactionsType() {
         return $this->belongsTo('App\TransactionType', 'transaction_type_id', 'id');
@@ -69,7 +62,7 @@ class RelType extends Model
 
         return $this->belongsTo('App\Users', 'deleted_by', 'id');
     }
-
+	
     public function scopeSearchRelTypes($query, $id, $data) {
         if ($id != null) {
             $query->where('id', $id);

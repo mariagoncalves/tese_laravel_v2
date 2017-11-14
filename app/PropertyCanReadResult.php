@@ -3,11 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+//use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PropertyCanReadResult extends Model
 {
-    use SoftDeletes;
+    //use SoftDeletes;
 
     protected $table = 'property_can_read_result';
 
@@ -17,7 +17,7 @@ class PropertyCanReadResult extends Model
         'reading_property',
         'providing_result',
         'output_type',
-        'updated_by',
+		'updated_by',
         'deleted_by'
     ];
 

@@ -35,6 +35,14 @@ class Transaction extends Model
         return $this->hasMany('App\TransactionState', 'transaction_id', 'id');
     }
 
+    public function entities() {
+        return $this->hasMany('App\Entity', 'transaction_id', 'id');
+    }
+
+    public function relations() {
+        return $this->hasMany('App\Relation', 'transaction_id', 'id');
+    }
+
     public function updatedBy() {
 
         return $this->belongsTo('App\Users', 'updated_by', 'id');

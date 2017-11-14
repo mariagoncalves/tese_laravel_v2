@@ -27,8 +27,8 @@ class TransactionAck extends Model
         return $this->belongsTo('App\TransactionState', 'transaction_state_id', 'id');
     }
 
-    public function agent() {
-        return $this->belongsTo('App\Agent', 'agent_id', 'id');
+    public function user() {
+        return $this->belongsTo('App\Users', 'user_id', 'id');
     }
 
     public function updatedBy() {
