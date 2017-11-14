@@ -828,7 +828,7 @@ class DynamicSearchController extends Controller
             // Formar a frase 
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         } else  if ($valueType == "bool") {
-            if(!isset($data['radio'.$type.$position]) || (!isset($data['radio'.$type.$position]) && $data['radio'.$type.$position] == undefined)) {
+            if(!isset($data['radio'.$type.$position])) {
                 $valueQuery = '';
             } else {
                 $valueQuery = $data['radio'.$type.$position];
@@ -864,7 +864,7 @@ class DynamicSearchController extends Controller
         } else  if ($valueType == "enum") {
             $valueQuery = $data['select'.$type.$position];
         } else  if ($valueType == "bool") {
-            if(!isset($data['radio'.$type.$position]) || (!isset($data['radio'.$type.$position]) && $data['radio'.$type.$position] == undefined)) {
+            if(!isset($data['radio'.$type.$position])) {
                 $valueQuery = '';
             } else {
                 $valueQuery = $data['radio'.$type.$position];
