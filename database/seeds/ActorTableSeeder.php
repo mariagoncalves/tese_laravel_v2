@@ -55,6 +55,11 @@ class ActorTableSeeder extends Seeder
                 'id'          => '4',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '5',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
             ]
         ];
 

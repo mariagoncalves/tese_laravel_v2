@@ -17,7 +17,7 @@ class ProcessNameTableSeeder extends Seeder
         	[
         		'process_id'  => '1',
         		'language_id' => '1',
-        		'name'        => 'Processo gestão de concuros nº1',
+        		'name'        => 'Processo gestão de concursos nº1',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
         	]

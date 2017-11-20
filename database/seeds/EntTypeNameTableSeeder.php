@@ -24,7 +24,7 @@ class EntTypeNameTableSeeder extends Seeder
         	[
         		'ent_type_id' => '2',
                 'language_id' => '1',
-                'name'        => 'Concurso',
+                'name'        => 'Candidatua ao concurso',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
         	],
@@ -59,6 +59,27 @@ class EntTypeNameTableSeeder extends Seeder
                 'ent_type_id' => '7',
                 'language_id' => '1',
                 'name'        => 'Locais',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'ent_type_id' => '8',
+                'language_id' => '1',
+                'name'        => 'Abertura de concurso',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'ent_type_id' => '9',
+                'language_id' => '1',
+                'name'        => 'Decisão sobre candidatura ao concurso',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'ent_type_id' => '10',
+                'language_id' => '1',
+                'name'        => 'Gestão de concurso',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ]

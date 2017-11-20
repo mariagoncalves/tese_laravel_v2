@@ -31,7 +31,7 @@ class EntTypeTableSeeder extends Seeder
             [
                 'id'                  => '1',
                 'state'               => 'active',
-                'transaction_type_id' => '3',
+                'transaction_type_id' => '5',
                 'par_ent_type_id'     => NULL,
                 'par_prop_type_val'   => NULL,
                 'updated_by'          => '1',
@@ -49,7 +49,7 @@ class EntTypeTableSeeder extends Seeder
             [
                 'id'                  => '3',
                 'state'               => 'active',
-                'transaction_type_id' => '3',
+                'transaction_type_id' => '5',
                 'par_ent_type_id'     => NULL,
                 'par_prop_type_val'   => NULL,
                 'updated_by'          => '1',
@@ -58,7 +58,7 @@ class EntTypeTableSeeder extends Seeder
             [
                 'id'                  => '4',
                 'state'               => 'active',
-                'transaction_type_id' => '3',
+                'transaction_type_id' => '5',
                 'par_ent_type_id'     => NULL,
                 'par_prop_type_val'   => NULL,
                 'updated_by'          => '1',
@@ -67,7 +67,7 @@ class EntTypeTableSeeder extends Seeder
             [
                 'id'                  => '5',
                 'state'               => 'active',
-                'transaction_type_id' => '3',
+                'transaction_type_id' => '5',
                 'par_ent_type_id'     => NULL,
                 'par_prop_type_val'   => NULL,
                 'updated_by'          => '1',
@@ -76,7 +76,7 @@ class EntTypeTableSeeder extends Seeder
             [
                 'id'                  => '6',
                 'state'               => 'active',
-                'transaction_type_id' => '3',
+                'transaction_type_id' => '5',
                 'par_ent_type_id'     => NULL,
                 'par_prop_type_val'   => NULL,
                 'updated_by'          => '1',
@@ -85,7 +85,34 @@ class EntTypeTableSeeder extends Seeder
             [
                 'id'                  => '7',
                 'state'               => 'active',
-                'transaction_type_id' => '3',
+                'transaction_type_id' => '5',
+                'par_ent_type_id'     => NULL,
+                'par_prop_type_val'   => NULL,
+                'updated_by'          => '1',
+                'deleted_by'          => NULL
+            ],
+            [
+                'id'                  => '8',
+                'state'               => 'active',
+                'transaction_type_id' => '2',
+                'par_ent_type_id'     => NULL,
+                'par_prop_type_val'   => NULL,
+                'updated_by'          => '1',
+                'deleted_by'          => NULL
+            ],
+            [
+                'id'                  => '9',
+                'state'               => 'active',
+                'transaction_type_id' => '4',
+                'par_ent_type_id'     => NULL,
+                'par_prop_type_val'   => NULL,
+                'updated_by'          => '1',
+                'deleted_by'          => NULL
+            ],
+            [
+                'id'                  => '10',
+                'state'               => 'active',
+                'transaction_type_id' => '1',
                 'par_ent_type_id'     => NULL,
                 'par_prop_type_val'   => NULL,
                 'updated_by'          => '1',

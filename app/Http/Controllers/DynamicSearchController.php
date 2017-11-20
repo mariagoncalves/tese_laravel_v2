@@ -304,30 +304,6 @@ class DynamicSearchController extends Controller
         return response()->json($entsRelated);
     }
 
-
-    /*public function registarQueryPesquisa ($data, $idEntityType) {
-
-        \Log::debug("NOMEEEEEEEEER QUERYYY");
-        \Log::debug($data['query_name']);
-         \Log::debug("iddddddddddddddddd  QUERYYY");
-        \Log::debug($idEntityType);
-
-        $data1 = array(
-                'name'      => $data['query_name'],
-                'ent_type_id' => $idEntityType
-            );
-
-        $dataQuery = Query::create($data1);
-        $idQuery   = $dataQuery->id;
-
-        for ($i=0; $i < $data['numTableET']; $i++) { 
-            if (isset($data['checkET'.$i])) {
-                $this->createCondicion($idQuery, $data['checkET'.$i], 'ET', $i, $data);
-            }
-        }
-
-    }*/
-
     public function createCondition($idQuery, $idProperty, $type, $position, $data) {
 
         $property = $this->getPropertyData($idProperty);
@@ -383,10 +359,7 @@ class DynamicSearchController extends Controller
 
     public function saveSearch (Request $request, $idEntityType) {
 
-        \Log::debug("Tá a chegar ao método");
         $data = $request->all();
-        \Log::debug("Teste ao salvar pesquisa");
-        \Log::debug($data);
 
         $data1 = array(
                 'name'      => $data['query_name'],
@@ -421,7 +394,6 @@ class DynamicSearchController extends Controller
         }
     }
 
-
     public function search(Request $request, $idEntityType) {
         $data        = $request->all();
         $generalData = [
@@ -433,10 +405,6 @@ class DynamicSearchController extends Controller
         $url_text    = 'PT';
         $result      = [];
         $query       = [];
-
-        /*if (isset($data['query_name']) && $data['query_name'] != "") {
-            $this->registarQueryPesquisa($data, $idEntityType);
-        }*/
 
         //Formar a frase e realizar pesquisa de acordo com a pesquisa..
         $phrase = $this->formPhraseAndQuery($idEntityType, $data, $generalData);
@@ -476,7 +444,6 @@ class DynamicSearchController extends Controller
             // Percorrer as entidades da tabela 1
             foreach ($resultsTables['result1'] as $entity) {
 
-                //$relations = $generalData['table1']['relTable4'][$entity['id']] ?? [];
                 $relations = isset($generalData['table1']['relTable4'][$entity['id']]) ? $generalData['table1']['relTable4'][$entity['id']] : [];
                 foreach ($relations as $idRelation) {
                     $valuesDataResult = [];
@@ -488,7 +455,7 @@ class DynamicSearchController extends Controller
                     // Percorrer as relacoes da tabela 4
                     foreach ($resultsTables['result4'] as $dataRelation) {
                         if ($dataRelation['id'] == $idRelation) {
-                            // Cada value da relação da tabela 3
+                            // Cada value da relação da tabela 4
                             foreach ($dataRelation['values'] as $valueData2) {
                                 $valuesDataResult[] = $valueData2;
                             }
@@ -502,7 +469,6 @@ class DynamicSearchController extends Controller
             // Percorrer as entidades da tabela 1
             foreach ($resultsTables['result1'] as $entity) {
 
-                //$relations = $generalData['table1']['relTable3'][$entity['id']] ?? [];
                 $relations = isset($generalData['table1']['relTable3'][$entity['id']]) ? $generalData['table1']['relTable3'][$entity['id']] : [];
                 foreach ($relations as $idRelation) {
                     $valuesDataResult = [];
@@ -528,7 +494,6 @@ class DynamicSearchController extends Controller
             // Percorrer as entidades da tabela 1
             foreach ($resultsTables['result1'] as $entity) {
 
-                //$relations = $generalData['table1']['relTable2'][$entity['id']] ?? [];
                 $relations = isset($generalData['table1']['relTable2'][$entity['id']]) ? $generalData['table1']['relTable2'][$entity['id']] : [];
                 foreach ($relations as $idEntityRelation) {
                     $valuesDataResult = [];
@@ -561,6 +526,9 @@ class DynamicSearchController extends Controller
                 $resultFinal[] = $valuesDataResult;
             }
         }
+
+        \Log::debug("RESULTADO FINAL");
+        \Log::debug($resultFinal);
 
         return $resultFinal;
     }
@@ -642,7 +610,6 @@ class DynamicSearchController extends Controller
         if ($generalData['table2']['select']) {
             $propertiesTable1 = $this->getPropertiesEntities($generalData['table1']['resultEntities']);
 
-            $relacaoEntreTable1e2 = [];
             $resultTable2 = $queryTable2->distinct('id')->get(['id'])->toArray();
 
             $entitiesIdsTable2 = $this->formatArrayData($resultTable2, 'id');
@@ -650,9 +617,6 @@ class DynamicSearchController extends Controller
             foreach ($entitiesIdsTable2 as $key => $id_entity2) {
 
                 $values = Value::with('property')->where('entity_id', $id_entity2)->get();
-
-                \Log::debug("VALORESSSSSS TESTEEEEEEEEEEEEEEEEEEE");
-                \Log::debug($values);
 
                 foreach ($values as $valueData) {
                     if (in_array($valueData->property->fk_property_id, $propertiesTable1)) {
@@ -739,9 +703,6 @@ class DynamicSearchController extends Controller
             //Trazia todos os dados da entidade mas especifiquei que só quero o id
             $resultTable4     = $queryTable4->distinct('id')->get(['id'])->toArray();
             $entitiesIdsTable4 = $this->formatArrayData($resultTable4, 'id');
-
-            //\Log::debug("TESTEE FINAL 1122: ");
-            //\Log::debug($entitiesIdsTable4);
 
             $newIdsTable1 = [];
             $newIdsTable4 = [];

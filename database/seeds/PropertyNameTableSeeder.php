@@ -505,6 +505,24 @@ class PropertyNameTableSeeder extends Seeder
                 'form_field_name' => NULL,
                 'updated_by'      => '1',
                 'deleted_by'      => NULL
+            ],
+
+            //Propriedades de concurso (abertura)
+            [
+                'property_id'     => '60',
+                'language_id'     => '1',
+                'name'            => 'Nome do concurso',
+                'form_field_name' => NULL,
+                'updated_by'      => '1',
+                'deleted_by'      => NULL
+            ],
+            [
+                'property_id'     => '61',
+                'language_id'     => '1',
+                'name'            => 'Prazo de candidatura',
+                'form_field_name' => NULL,
+                'updated_by'      => '1',
+                'deleted_by'      => NULL
             ]
         ];
 

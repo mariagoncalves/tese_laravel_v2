@@ -37,7 +37,14 @@ class ActorNameTableSeeder extends Seeder
             [
                 'actor_id'    => '4',
                 'language_id' => '1',
-                'name'        => 'Admissor de candidatura',
+                'name'        => 'Responsável pela candidatura ao concurso',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'actor_id'    => '5',
+                'language_id' => '1',
+                'name'        => 'Decisor sobre candidatura ao concurso',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ]

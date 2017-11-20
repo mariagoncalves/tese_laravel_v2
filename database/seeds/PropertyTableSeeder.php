@@ -342,7 +342,7 @@ class PropertyTableSeeder extends Seeder
 
             ],
 
-            //Propriedades de concurso (2)
+            //Propriedades de concurso (candidatura) (2)
             [
                 'id'               => '16',
                 'ent_type_id'      => '2',
@@ -1142,7 +1142,7 @@ class PropertyTableSeeder extends Seeder
                 'id'               => '57',
                 'ent_type_id'      => NULL,
                 'rel_type_id'      => '1',
-                't_state_id'       => '1',
+                't_state_id'       => '3',
                 'value_type'       => 'text',
                 'form_field_type'  => 'text',
                 'unit_type_id'     => NULL,
@@ -1164,7 +1164,7 @@ class PropertyTableSeeder extends Seeder
                 'id'               => '58',
                 'ent_type_id'      => NULL,
                 'rel_type_id'      => '2',
-                't_state_id'       => '1',
+                't_state_id'       => '3',
                 'value_type'       => 'text',
                 'form_field_type'  => 'text',
                 'unit_type_id'     => NULL,
@@ -1184,7 +1184,7 @@ class PropertyTableSeeder extends Seeder
                 'id'               => '59',
                 'ent_type_id'      => NULL,
                 'rel_type_id'      => '3',
-                't_state_id'       => '1',
+                't_state_id'       => '3',
                 'value_type'       => 'text',
                 'form_field_type'  => 'text',
                 'unit_type_id'     => NULL,
@@ -1199,6 +1199,48 @@ class PropertyTableSeeder extends Seeder
                 'deleted_by'       => NULL
 
             ],
+
+            //Propriedades de concurso (abertura)
+            [
+
+                'id'               => '60',
+                'ent_type_id'      => '8',
+                'rel_type_id'      => NULL,
+                't_state_id'       => '3',
+                'value_type'       => 'text',
+                'form_field_type'  => 'text',
+                'unit_type_id'     => NULL,
+                'form_field_order' => '1',
+                'mandatory'        => '1',
+                'state'            => 'active',
+                'fk_ent_type_id'   => NULL,
+                'fk_property_id'   => NULL,
+                'form_field_size'  => '100',
+                'can_edit'         => '1',
+                'updated_by'       => '1',
+                'deleted_by'       => NULL
+
+            ],
+            [
+
+                'id'               => '61',
+                'ent_type_id'      => '8',
+                'rel_type_id'      => NULL,
+                't_state_id'       => '3',
+                'value_type'       => 'text',
+                'form_field_type'  => 'text',
+                'unit_type_id'     => NULL,
+                'form_field_order' => '2',
+                'mandatory'        => '1',
+                'state'            => 'active',
+                'fk_ent_type_id'   => NULL,
+                'fk_property_id'   => NULL,
+                'form_field_size'  => '100',
+                'can_edit'         => '1',
+                'updated_by'       => '1',
+                'deleted_by'       => NULL
+
+            ]
         ];
 
         foreach ($dados as $value) {
