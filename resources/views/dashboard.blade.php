@@ -33,7 +33,7 @@
             <div class="panel-heading">
                 <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i>{{trans("dashboard/messages.CustomFormsPanelName")}}</h3>
             </div>
-            <div class="panel-body">
+            <div class="panel-body" ng-cloak>
                 <div class="col-lg-2 col-md-6" ng-repeat="customform in customforms_">
                     <div class="panel panel-green">
                         <div class="panel-heading">
@@ -57,8 +57,8 @@
             <div class="panel-heading">
                 <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> {{trans("dashboard/messages.ExistingInicTransactionsPanelName")}}</h3>
             </div>
-            <div class="panel-body">
-                <div class="alert alert-danger" ng-show="tableParamsInicTrans==null" ng-cloak>
+            <div class="panel-body" ng-cloak>
+                <div class="alert alert-danger" ng-show="tableParamsInicTrans==null">
                     [[ "EMPTY_TABLE" | translate ]] [[  "Page_Name" | translate ]]
                 </div>
                 <div class="table-responsive">
@@ -126,7 +126,7 @@
             <div class="panel-heading">
                 <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i>{{trans("dashboard/messages.ExistingExecTransactionsPanelName")}}</h3>
             </div>
-            <div class="panel-body">
+            <div class="panel-body" ng-cloak>
                 <div class="alert alert-danger" ng-show="tableParamsExecTrans==null">
                     [[ "EMPTY_TABLE" | translate ]] [[  "Page_Name" | translate ]]
                 </div>

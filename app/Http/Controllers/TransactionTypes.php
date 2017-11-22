@@ -160,7 +160,7 @@ class TransactionTypes extends Controller
                 't_name' => $request->input('t_name'),
                 'rt_name' => $request->input('rt_name')
             );
-            $transactiontype->language()->updateExistingPivot($id, $attributes);
+            $transactiontype->language()->updateExistingPivot($transactiontype->language()->first()->id, $attributes);
 
             DB::commit();
             $success = true;

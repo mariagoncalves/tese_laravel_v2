@@ -70,20 +70,23 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             //alert('Modal dismissed at: ' + new Date());
         });
 
+        modalInstance.opened.then(function (response) {
+                if (min == 1 && max == 1) {
+                    $scope.modalDialog = {};
+                    //alert("entrou");
+                    $scope.modalDialog.number = 1;
+                    $scope.modalDialog.id = id;
+                    modalInstance.close($scope.modalDialog);
+                }
+            }
+        );
+
         return deferred.promise;
     };
 
     var ArrModalDialogOpened = [];
     $scope.ModalInstanceCtrlDialog = function ($scope, $uibModalInstance, $timeout, trans_id, trans_min, trans_max, trans_type_name) {
         ArrModalDialogOpened.push($uibModalInstance);
-
-        if (trans_min === 1 && trans_max === 1)
-        {
-            $scope.modalDialogForm = {};
-            $scope.modalDialogForm.number = 1;
-            $scope.modalDialogForm.id = trans_id;
-            $uibModalInstance.close($scope.modalDialogForm);
-        }
 
         $scope.transTypeName = trans_type_name;
         $scope.transTypeMin = trans_min;
@@ -151,6 +154,9 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
 
     $scope.modalsArrData = [];
     $scope.ModalInstanceCtrl = function ($scope, $uibModalInstance, $timeout, trans_id, flag_inic_process, process_type_id) {
+        $scope.modal_formTab = {};
+        console.log($scope.modal_formTab);
+        $scope.modalInstance = $uibModalInstance;
         var index_m = 0;
         var indexTabLocal = 0;
 
@@ -259,29 +265,6 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             }
 
             counter++;
-
-            return deferred.promise;
-        };
-
-        $scope.getCausalLinksOfTr = function ($trans_type_id, $arr_t_states_id) {
-            var deferred = $q.defer();
-
-                $http({
-                    method: 'POST',
-                    url: API_URL + "/dashboard/get_causal_links_tr",
-                    data: $.param({ 't_states_id' : $arr_t_states_id,
-                            'transaction_type_id':$trans_type_id
-                        }
-                    ),
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    ignoreLoadingBar: false
-                }).then(function (response) {
-                        deferred.resolve(response);
-                    }, function errorCalback(response) {
-                        deferred.reject(response);
-                    }).finally(function () {
-                    // called no matter success or failure
-                });
 
             return deferred.promise;
         };
@@ -411,7 +394,7 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                                     $scope.mytype = ++$type; //tem de ser ++type senao nao coloca o valor incrementado na variable $scope.mytype
                                     $scope.myindexTab = indexTabLocal++;
 
-                                    console.log($scope.modal_formTab);
+                                    //console.log($scope.modal_formTab);
 
                                     $scope.addTab($title, $templateurl);
 
@@ -557,7 +540,7 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
 
                         $scope.myPromise = promiseStack[key];
 
-                        console.log($scope.modal_formTab);
+                        //console.log($scope.modal_formTab);
 
                         if (value.data !== null)
                         {
@@ -672,67 +655,92 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             });
         };
 
-        $scope.save = function ($form_Tab) {
-            //$scope.modal_formTab.push({ causalinks :[]});
-            var types = [];
-            var typesOnFormTabs = $scope.modal_formTab.tab;
-            typesOnFormTabs.forEach(function (item, i) {
-                types.push(item.type);
-            });
-                $scope.getCausalLinksOfTr(trans_id, types).then(function (response) {
-                    var causallinks = response.data;
-                    causallinks.forEach(function (item, i) {
-                        $scope.openModalDialog('sm', causallinks[i].caused_t, causallinks[i].min, causallinks[i].max, item.caused_transaction.language[0].pivot.t_name).then(function (data) {
-                                $scope.modal_formTab.causalinks.push({
-                                    transaction_type_id: causallinks[i].caused_t,
-                                    t_state_id: 1,
-                                    numberofTrs: data.number
-                                });
-
-                                if (ArrModalDialogOpened.length === 0)
-                                {
-                                    $scope.sendData($scope.modal_formTab).then(function (response){
-                                        $uibModalInstance.close('save');
-                                    });
-                                }
-                        });
-                    });
-                }).catch(function (response) {
-                    if (response.status === 400) {
-                        $scope.sendData($scope.modal_formTab).then(function (response){
-                            $uibModalInstance.close('save');
-                        });
-                    }
-                });
-            console.log($scope.modal_formTab);
-        };
-
-        $scope.sendData = function ($data) {
-            var deferred = $q.defer();
-
-            var data = [];
-            data.push($data);
-
-            $http({
-                method: 'POST',
-                url: API_URL + "/dashboard/send_data",
-                data: data,
-                headers: {'Content-Type': 'application/json'},
-                ignoreLoadingBar: false
-            }).then(function (response) {
-                deferred.resolve(response);
-            }, function errorCalback(response) {
-                deferred.reject(response);
-            }).finally(function () {
-                // called no matter success or failure
-            });
-
-            return deferred.promise;
-        };
-
         $scope.cancel = function () {
             $uibModalInstance.close('cancel');
         };
+    };
+
+    $scope.save = function ($form_Tab, $modalInstance) {
+        var types = [];
+        var typesOnFormTabs = $form_Tab.tab;
+
+        console.log($form_Tab);
+        typesOnFormTabs.forEach(function (item, i) {
+            types.push(item.type);
+        });
+        //trans_id
+        $scope.getCausalLinksOfTr($form_Tab.transaction_type_id, types).then(function (response) {
+            var causallinks = response.data;
+            causallinks.forEach(function (item, i) {
+                $scope.openModalDialog('sm', causallinks[i].caused_t, causallinks[i].min, causallinks[i].max, item.caused_transaction.language[0].pivot.t_name).then(function (data) {
+                    $form_Tab.causalinks.push({
+                        transaction_type_id: causallinks[i].caused_t,
+                        t_state_id: 1,
+                        numberofTrs: data.number
+                    });
+
+                    if (ArrModalDialogOpened.length === 0)
+                    {
+                        $scope.sendData($form_Tab).then(function (response){
+                            $modalInstance.close('save');
+                        });
+                    }
+                });
+            });
+        }).catch(function (response) {
+            if (response.status === 400) {
+                $scope.sendData($form_Tab).then(function (response){
+                    $modalInstance.close('save');
+                });
+            }
+        });
+        console.log($form_Tab);
+    };
+
+    $scope.getCausalLinksOfTr = function ($trans_type_id, $arr_t_states_id) {
+        var deferred = $q.defer();
+
+        $http({
+            method: 'POST',
+            url: API_URL + "/dashboard/get_causal_links_tr",
+            data: $.param({ 't_states_id' : $arr_t_states_id,
+                    'transaction_type_id':$trans_type_id
+                }
+            ),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            ignoreLoadingBar: false
+        }).then(function (response) {
+            deferred.resolve(response);
+        }, function errorCalback(response) {
+            deferred.reject(response);
+        }).finally(function () {
+            // called no matter success or failure
+        });
+
+        return deferred.promise;
+    };
+
+    $scope.sendData = function ($data) {
+        var deferred = $q.defer();
+
+        var data = [];
+        data.push($data);
+
+        $http({
+            method: 'POST',
+            url: API_URL + "/dashboard/send_data",
+            data: data,
+            headers: {'Content-Type': 'application/json'},
+            ignoreLoadingBar: false
+        }).then(function (response) {
+            deferred.resolve(response);
+        }, function errorCalback(response) {
+            deferred.reject(response);
+        }).finally(function () {
+            // called no matter success or failure
+        });
+
+        return deferred.promise;
     };
 
     $scope.modal.transaction_type_id = null;
@@ -917,9 +925,22 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                     return trans_type_id
                 }
             }
-        }).closed.then(function() {
-            //handle ur close event here
-            //alert("modal closed");
+        }).result.then(function(result) {
+            //Get triggers when modal is closed
+            //alert(reason);
+            $scope.modal = [];
+            //$scope.modal_processTab = [];
+            //$scope.modal_formTab = [];
+            uploader.clearQueue();
+
+            $scope.modal_formTab.length = 0;
+            $scope.getAllInicExecTrans();
+            alert("entrou closed");
+        }, function(reason){
+            //gets triggers when modal is dismissed.
+            uploader.clearQueue();
+            $scope.modal_formTab.length = 0;
+            alert("entrou dismissed");
         });
 
         /*modalInstance.result.then(function () {
@@ -931,14 +952,46 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
     };
 
     $scope.ModalInstanceCtrl_trans_state = function ($scope, $uibModalInstance, trans_id, actor_Can, process_id, transaction_type_id) {
+        $scope.modal_formTab = {};
+        $scope.modalInstance = $uibModalInstance;
         var indexTabLocal = 0;
         var index_m = 0;
-        $scope.types = [];
         //$scope.modal_formTab.push({ tab :[], causalinks :[], types : []});
+        $scope.modal_formTab.relTypeExist = false;
         $scope.modal_formTab.tab = [];
         $scope.modal_formTab.causalinks = [];
-        $scope.modal_formTab.types = [];
+
+        var proc = {id:process_id};
+        $scope.modal_formTab.process = proc; //se não for selecionado nenhum valor na selectbox o valor vem undefined, se selecionado vem null
+        $scope.modal_formTab.transaction_type_id = transaction_type_id;
+        $scope.modal_formTab.transaction_id = trans_id;
+        //$scope.modal_formTab.process_type_id = process_type_id;
+
+
         $scope.myindex = index_m;
+
+        $scope.updateValue = function(choice, i, indexTab){
+            console.log($scope.modal_formTab);
+            console.log(choice);
+            console.log(i);
+            var index = $scope.modal_formTab.tab[indexTab].propsform[i].fields[choice];
+            console.log(index);
+            if (index === false)
+            {
+                delete $scope.modal_formTab.tab[indexTab].propsform[i].fields[choice];
+            }
+
+            if (isEmpty($scope.modal_formTab.tab[indexTab].propsform[i].fields))
+            {
+                delete $scope.modal_formTab.tab[indexTab].propsform[i].fields;
+            }
+
+            //console.log($scope.modal_formTab.tab[indexTab].propsform[i].fields);
+        };
+
+        function isEmpty(obj) {
+            return Object.keys(obj).length === 0;
+        }
 
         $scope.tabs = [{
             title: 'Transaction State',
@@ -981,8 +1034,9 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
         };
 
         $scope.changeTabBoot = function ($title, $templateurl, $tabnumber, $type) {
+            alert("Current transaction state is: " + $type);
             $scope.tabs.splice(($scope.activeTabIndex + 1), ($scope.tabs.length - 1));
-            alert($scope.activeTabIndex);
+            //alert($scope.activeTabIndex);
             if ($scope.activeTabIndex === 0)
                 $scope.modal_formTab.tab.splice(0, ($scope.modal_formTab.tab.length - 1));
             else
@@ -993,7 +1047,8 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             }*/
 
             $scope.verifyCanDoNextTransState(trans_id, $type, actor_Can, transaction_type_id).then(function (response) {
-                var type = response.data.nextState;
+                var type = parseInt(response.data.nextState);
+
                 //alert("The next transaction state is: " + type);
 
                     //a guarda da recursividade
@@ -1057,12 +1112,11 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
 
                                         growl.success('Loading done successfully.', {title: 'Success!', referenceId: index_m});
                                         $scope.showBtnType = false;
-                                        $scope.types.push(type);
-                                        $scope.mytype = type; //tem de ser ++type senao nao coloca o valor incrementado na variable $scope.mytype
+                                        $scope.mytype = (type === 1 ? type + 1 : type); //tem de ser ++type senao nao coloca o valor incrementado na variable $scope.mytype
                                         //$scope.myindexTab = indexTabLocal++;
                                         $scope.myindexTab = ++$tabnumber;
 
-                                        console.log($scope.modal_formTab);
+                                        //console.log($scope.modal_formTab);
 
                                         $scope.addTab($title, $templateurl);
                                     }
@@ -1080,6 +1134,10 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                                         //indexTabLocal++;
                                         ++$tabnumber;
                                         counterTStatesCan = 0;
+
+                                        $scope.myMessage = "There is no form associated to transaction state " + type;
+
+                                        $scope.addTab("Info", 'tabError');
                                         $timeout(function () {
                                             //$scope.verifyCanDoNextTransState(trans_id, type, actor_Can, transaction_type_id);
                                             //$scope.changeTabBoot($id, $title, $templateurl, ++$tabnumber, ++$type, $process_id); //nao pode ser $tabnumber++
@@ -1164,10 +1222,6 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             });
 
             return deferred.promise;
-        };
-
-        $scope.art = function ($data) {
-            console.log($data);
         };
 
         $scope.cancel = function () {
@@ -1255,6 +1309,7 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             var indexTabLocal = 0;
             customFormfileUpload = false;
 
+            $scope.getAllInicExecTrans();
 
         }, function(){
             //Get triggers when modal is dimissed
@@ -1320,7 +1375,6 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                     //Assumindo que todas os tipos de transações pertencem ao mesmo tipo de processo. Buscar id do tipo de processo pela  primeira Tipo de trasanção
                     $scope.modal_formTab1[index_m].process_type_id = response.data.transaction_types[0].process_type_id;
 
-                    console.log($scope.modal_formTab1);
                     if(response.data.transaction_types !== undefined)
                     {
                         //File verification
@@ -1339,7 +1393,7 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
         };
 
         //Mudar a Tab
-        $scope.changeTabBoot = function ($id, $title, $templateurl, $tabnumber, $type, $process_id) {
+        $scope.all = function ($title, $templateurl, $tabnumber, $process_id) {
 
             //Verificar se selecionou um processo
             if($process_id === undefined || $process_id === null)
@@ -1606,7 +1660,6 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             $scope.$watch(function () {
                 return ngModel.$viewValue;
             }, function (value) {
-                console.log(value);
                 if (!value) {
                     el.val("");
                 }

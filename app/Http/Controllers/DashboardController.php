@@ -39,7 +39,7 @@ use Config;
 
 class DashboardController extends Controller
 {
-    //
+     //
     private $url_text;
     private $user_id;
 
@@ -399,23 +399,35 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                     $processName->save();
                 }
 
-                $transaction = new Transaction;
-                $transaction->transaction_type_id = $col->transaction_type_id;
-                $transaction->state = "active";
-                $transaction->process_id = $col->process === null ? $process->id : $col->process->id; //buscar o processo ID
-                $transaction->save();
+                if (!isset($col->transaction_id))
+                {
+                    $transaction = new Transaction;
+                    $transaction->transaction_type_id = $col->transaction_type_id;
+                    $transaction->state = "active";
+                    $transaction->process_id = $col->process === null ? $process->id : $col->process->id; //buscar o processo ID
+                    $transaction->save();
+                }
 
                 $counterEntType = 0;
                 $counterRelType = 0;
                 foreach ($col->tab as $keyTab => $valueTab)
                 {
                     $transactionState = new TransactionState;
-                    $transactionState->transaction_id = $transaction->id;
+                    $transactionState->transaction_id = !isset($col->transaction_id) ? $transaction->id : $col->transaction_id;
                     $transactionState->t_state_id = $valueTab->type;
                     $transactionState->save();
 
                     if ($valueTab->relTypeExist == false && $valueTab->entTypeExist == true) //nao existe rel type e não existe ent type por exemplo verificar esta parte
                     {
+                        if (isset($col->transaction_id))
+                        {
+                            $ents = Entity::where('transaction_id', $col->transaction_id)->get();
+                            if ($ents->isNotEmpty())
+                            {
+                                $counterEntType=1;
+                            }
+                        }
+
                         if ($counterEntType == 0)
                         {
                             //inserir nas entity... é preciso obter o ent_type_id
@@ -428,7 +440,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                             $entity = new Entity;
                             $entity->ent_type_id = $ent_type->id;
                             $entity->state = "active";
-                            $entity->transaction_id = $transaction->id;
+                            $entity->transaction_id = !isset($col->transaction_id) ? $transaction->id : $col->transaction_id;
                             $entity->save();
 
                             $entityName = new EntityName;
@@ -441,6 +453,15 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                     }
                     else if ($valueTab->relTypeExist == true && $valueTab->entTypeExist == false)
                     {
+                        if (isset($col->transaction_id))
+                        {
+                            $rels = Relation::where('transaction_id', $col->transaction_id)->get();
+                            if ($rels->isNotEmpty())
+                            {
+                                $counterRelType=1;
+                            }
+                        }
+
                         if ($counterRelType == 0)
                         {
                             $rel_type = RelType::with(['language' => function ($query) use ($url_text) {
@@ -454,7 +475,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                             $relation->entity1_id = $valueTab->entity1->selected->id;
                             $relation->entity2_id = $valueTab->entity2->selected->id;
                             $relation->state = "active";
-                            $relation->transaction_id = $transaction->id; //adicionar este campo na tabela relation
+                            $relation->transaction_id = !isset($col->transaction_id) ? $transaction->id : $col->transaction_id; //adicionar este campo na tabela relation
                             $relation->save();
 
                             $relationName = new RelationName;
@@ -482,9 +503,39 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                                     {
                                         $value = new Value;
                                         if ($valueTab->relTypeExist == false) {
-                                            $value->entity_id = $entity->id;
+                                            //$value->entity_id = $entity->id;
+                                            if (isset($col->transaction_id))
+                                            {
+                                                if ($ents->isNotEmpty())
+                                                {
+                                                    $value->entity_id = $ents->first()->id;
+                                                }
+                                                else
+                                                {
+                                                    $value->entity_id = $entity->id;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                $value->entity_id = $entity->id;
+                                            }
                                         } else {
-                                            $value->relation_id = $relation->id;
+                                            //$value->relation_id = $relation->id;
+                                            if (isset($col->transaction_id))
+                                            {
+                                                if ($rels->isNotEmpty())
+                                                {
+                                                    $value->entity_id = $rels->first()->id;
+                                                }
+                                                else
+                                                {
+                                                    $value->relation_id = $relation->id;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                $value->relation_id = $relation->id;
+                                            }
                                         }
                                         $value->property_id = $valueField->id;
 
@@ -496,13 +547,40 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                                 else
                                 {
                                     $value = new Value;
-                                    if ($valueTab->relTypeExist == false)
-                                    {
-                                        $value->entity_id = $entity->id;
-                                    }
-                                    else
-                                    {
-                                        $value->relation_id = $relation->id;
+                                    if ($valueTab->relTypeExist == false) {
+                                        //$value->entity_id = $entity->id;
+                                        if (isset($col->transaction_id))
+                                        {
+                                            if ($ents->isNotEmpty())
+                                            {
+                                                $value->entity_id = $ents->first()->id;
+                                            }
+                                            else
+                                            {
+                                                $value->entity_id = $entity->id;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            $value->entity_id = $entity->id;
+                                        }
+                                    } else {
+                                        //$value->relation_id = $relation->id;
+                                        if (isset($col->transaction_id))
+                                        {
+                                            if ($rels->isNotEmpty())
+                                            {
+                                                $value->entity_id = $rels->first()->id;
+                                            }
+                                            else
+                                            {
+                                                $value->relation_id = $relation->id;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            $value->relation_id = $relation->id;
+                                        }
                                     }
                                     $value->property_id = $valueField->id;
                                     //$value->id_producer = 1;
@@ -686,7 +764,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         }])->whereHas('iniciatorActor.role.user', function ($query) use ($user_id){
             return $query->where('user_id', $user_id);
         })->get();
-        //->doesntHave('causedTransaction')->get();
+        //->doesntHave('causedTransaction')
         return response()->json($transactions);
     }
 
@@ -1326,8 +1404,8 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                 ->join('property', 'property.ent_type_id', '=', 'ent_type.id')
                 ->join('property_can_read_ent_type', 'property_can_read_ent_type.reading_property', '=', 'property.id')
                 ->join('ent_type as prov_ent_type', 'property_can_read_ent_type.providing_ent_type', '=', 'prov_ent_type.id')
-                ->join('property as prov_props', 'prov_props.ent_type_id', '=', 'prov_ent_type.id')
-                ->leftJoin('value', 'value.property_id', '=', 'prov_props.id')
+                ->join('property as prov_prop', 'prov_prop.ent_type_id', '=', 'prov_ent_type.id')
+                ->leftJoin('value', 'value.property_id', '=', 'prov_prop.id')
                 ->join('t_state', 't_state.id', '=', 'transaction_state.t_state_id')
                 ->select('transaction.id as transaction_id', 'transaction_type.id as transaction_type_id', 't_state.id as t_state_id',
                     'transaction_state.created_at', 'property.id as property_id',
@@ -1703,7 +1781,8 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         }
         else
         {
-
+            $lacksEntity = true;
+            $lacksRelation = true;
         }
 
         return array('lacksEntity' => $lacksEntity, 'lacksRelation' => $lacksRelation);
@@ -1724,8 +1803,9 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
 
         //\Log::debug($arrayResult);
         $canAdvance = false;
-        $nextState=null;
-        if ($arrayResult['lacksEntity'] === false && $arrayResult['lacksRelation'] === false) {
+        $nextState=0;
+        if (($arrayResult['lacksEntity'] === false && $arrayResult['lacksRelation'] === false)
+            || ($arrayResult['lacksEntity'] === true && $arrayResult['lacksRelation'] === true)) {
             if (($actorCan == 'Executer' && ($t_state_id == 1 || $t_state_id == 2 || $t_state_id == 3)) || ($actorCan == 'Iniciator' && $t_state_id == 4)) {
                 $nextState = $this->get_next($States, $t_state_id);
                 $canAdvance = true;
@@ -2323,7 +2403,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         }, 'transactionTypes' => function($query) use ($url_text) {
             $query->orderBy('field_order', 'asc');
         }, 'transactionTypes.entType.properties' => function($query) use ($costum_form_state) {
-            $query->where('t_state_id', $costum_form_state);
+            $query->where('t_state_id', $costum_form_state)->orderBy('form_field_order', 'asc');
         }, 'transactionTypes.entType.properties.language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }, 'transactionTypes.entType.language' => function($query) use ($url_text) {

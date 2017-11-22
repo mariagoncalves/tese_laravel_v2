@@ -10,12 +10,12 @@
                         <uib-tabset active="activeTabIndex" type="tabs">
                             <uib-tab ng-repeat="tab in tabs" index="$index" heading="[[tab.title]]">
                                 <br>
-                                <div ng-include="tab.templateUrl" onload="index=myindex;indexTab=myindexTab;propsform=myPropsform;relTypeExist=myRelTypeExist;type=mytype;"></div>
+                                <div ng-include="tab.templateUrl" onload="index=myindex;indexTab=myindexTab;propsform=myPropsform;relTypeExist=myRelTypeExist;type=mytype;message=myMessage"></div>
                             </uib-tab>
                         </uib-tabset>
                         </form>
                     </div>
                     <div class="modal-footer"><!-- ng-disabled="frmProcessTypes.$invalid" -->
-                        <button type="button" ng-disabled="frmTaskForm.$invalid || (tabs.length===1 && tabs[0].title==='Transaction State')" class="btn btn-lg btn-light-green" id="btn-save" ng-click="art(modal_formTab)" >{{trans("processTypes/modalFormTask.BTN1FORM")}}</button>
+                        <button type="button" ng-disabled="frmTaskForm.$invalid || (tabs.length===1 && tabs[0].title==='Transaction State' && modal_formTab.tab.length===0)" class="btn btn-lg btn-light-green" id="btn-save" ng-click="save(modal_formTab, modalInstance)" >{{trans("processTypes/modalFormTask.BTN1FORM")}}</button>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
 
 <div class="alert alert-danger">
-    <strong>Danger!</strong> [[taberror[indexTab].message]].
+    <strong>Info!</strong> [[message]].
 </div>
