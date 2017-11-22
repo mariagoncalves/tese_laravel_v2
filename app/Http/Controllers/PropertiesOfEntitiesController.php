@@ -129,7 +129,7 @@ class PropertiesOfEntitiesController extends Controller {
 
             $data1 = array(
                 'ent_type_id'      => $data['entity_type'             ],
-                't_state_id'       => $data['transactionsState'      ],
+                't_state_id'       => $data['transactionsState'       ],
                 'value_type'       => $data['property_valueType'      ],
                 'form_field_type'  => $data['property_fieldType'      ],
                 'unit_type_id'     => $data['unites_names'            ],

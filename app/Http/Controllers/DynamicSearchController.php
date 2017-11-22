@@ -617,7 +617,7 @@ class DynamicSearchController extends Controller
                     \Log::debug($dataProp);
 
                     $result[$key]['values'][$key1]['value'] = $dataProp['value'];
-                }
+                } 
             }
         }
 
@@ -884,10 +884,12 @@ class DynamicSearchController extends Controller
             // Formar a frase 
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         } else  if ($valueType == "bool") {
-            if(!isset($data['radio'.$type.$position]) || (!isset($data['radio'.$type.$position]) && $data['radio'.$type.$position] == undefined)) {
+            if(!isset($data['radio'.$type.$position])) {
                 $valueQuery = '';
             } else {
                 $valueQuery = $data['radio'.$type.$position];
+                \Log::debug("Valor do radio ");
+                \Log::debug($valueQuery);
             }
             // Formar a frase 
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
@@ -928,6 +930,8 @@ class DynamicSearchController extends Controller
             if(!isset($data['radio'.$type.$position]) || (!isset($data['radio'.$type.$position]) && $data['radio'.$type.$position] == undefined)) {
                 $valueQuery = '';
             } else {
+                \Log::debug("VALOR DO RADIO NA QUERY");
+                \Log::debug($valueQuery);
                 $valueQuery = $data['radio'.$type.$position];
             }
         } else if ($valueType == "prop_ref") {

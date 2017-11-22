@@ -685,8 +685,8 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
             $query->where('slug', $url_text);
         }])->whereHas('iniciatorActor.role.user', function ($query) use ($user_id){
             return $query->where('user_id', $user_id);
-        })
-        ->doesntHave('causedTransaction')->get();
+        })->get();
+        //->doesntHave('causedTransaction')->get();
         return response()->json($transactions);
     }
 
