@@ -36,25 +36,26 @@ class DatabaseSeeder extends Seeder
         $this->call(EntTypeTableSeeder::class);
         $this->call(EntTypeNameTableSeeder::class); // (Remover)
 
-        $this->call(TransactionTableSeeder::class);
-        $this->call(TransactionStateTableSeeder::class);
-        $this->call(TransactionAckTableSeeder::class);
+        //$this->call(TransactionTableSeeder::class);
+        //$this->call(TransactionStateTableSeeder::class);
+        //$this->call(TransactionAckTableSeeder::class);
 
-        $this->call(EntityTableSeeder::class);
-        $this->call(EntityNameTableSeeder::class); //(Remover)
+        //$this->call(EntityTableSeeder::class);
+        //$this->call(EntityNameTableSeeder::class); //(Remover)
 
-        $this->call(RelTypeTableSeeder::class);
-        $this->call(RelTypeNameTableSeeder::class); // (Remover)
+        //$this->call(RelTypeTableSeeder::class);
+        //$this->call(RelTypeNameTableSeeder::class); // (Remover)
         
-        $this->call(RelationTableSeeder::class);
-        $this->call(RelationNameTableSeeder::class); //(Remover)
+        //$this->call(RelationTableSeeder::class);
+        //$this->call(RelationNameTableSeeder::class); //(Remover)
 
         $this->call(ActorIniciatesTTableSeeder::class); 
         
         $this->call(PropertyTableSeeder::class);
-       $this->call(PropertyNameTableSeeder::class); //(Remover)
+        $this->call(PropertyNameTableSeeder::class); //(Remover)
 
-        $this->call(ValueTableSeeder::class);
+        //$this->call(ValueTableSeeder::class);
+
         //$this->call(ValueNameTableSeeder::class); //(Remover)
 
         $this->call(PropAllowedValueTableSeeder::class);

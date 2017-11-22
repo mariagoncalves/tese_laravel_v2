@@ -126,7 +126,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                     $query->select('users.id')->from('users')->where('users.entity_id', '=', $entity_id);
                 });
             }
-            $iniciatorTransactions =  $iniciatorTransactions->groupBy('transaction_type_id','transaction_id','process_id','process_type_id')
+            $iniciatorTransactions =  $iniciatorTransactions->groupBy('transaction_type.id','transaction.id','process.id','process_type.id')
                 ->get();
 
             foreach($iniciatorTransactions as $iniciatorTransaction)
@@ -205,7 +205,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                     $query->select('users.id')->from('users')->where('users.entity_id', '=', $entity_id);
                 });
             }
-            $executerTransactions =  $executerTransactions->groupBy('transaction_type_id','transaction_id','process_id','process_type_id')
+            $executerTransactions =  $executerTransactions->groupBy('transaction_type.id','transaction.id','process.id','process_type.id')
                 ->get();
 
             foreach($executerTransactions as $executerTransaction)

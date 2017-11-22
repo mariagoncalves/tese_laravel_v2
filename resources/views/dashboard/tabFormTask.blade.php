@@ -37,7 +37,7 @@
                                                 <div class="form-group" ng-switch-when="text|double|int" ng-switch-when-separator="|" ng-switch="prop.form_field_type">
                                                     <label for="inputName" class="col-sm-3 control-label">[[prop.language[0].pivot.name]]</label>
                                                     <div class="col-sm-9" ng-switch-when="text">
-                                                        <input type="text" uib-popover-template="dynamicPopover.templateUrl" popover-class="popover" popover-placement="top" popover-title="[[dynamicPopover.title]]" popover-trigger="'focus'" class="form-control" id="[[prop.language[0].pivot.form_field_name]]" name="[[prop.language[0].pivot.form_field_name]]" placeholder=""
+                                                        <input type="text" class="form-control" id="[[prop.language[0].pivot.form_field_name]]" name="[[prop.language[0].pivot.form_field_name]]" placeholder=""
                                                                ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" maxlength="[[prop.form_field_size]]" ng-required="prop.mandatory">
                                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
                                                             <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">[[prop.language[0].pivot.name]] is required.</span>
@@ -148,7 +148,7 @@
                                                     <label for="inputName" class="col-sm-3 control-label">[[prop.language[0].pivot.name]]</label>
                                                     <div class="col-sm-9">
                                                         <select class="form-control" name="[[prop.language[0].pivot.form_field_name]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" ng-options="item.id as item.value for item in prop.fk_property.values" ng-required="prop.mandatory">
-                                                            <option value=""></option>
+                                                            <option value="">[[prop.language[0].pivot.name]]</option>
                                                         </select>
                                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
                                                             <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">[[prop.language[0].pivot.name]] is required.</span>

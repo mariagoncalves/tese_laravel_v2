@@ -238,7 +238,7 @@
 											<select name = "propRefRL[[ prop.key ]]" disabled>
 								        		<option></option>
 								        		<option ng-repeat = "value in prop.fk_property.values" value = "[[value.id]]">
-								        			[[ value.value ]] 
+													[[value.value]]
 								        		</option>
 								        	</select>
 										</div>

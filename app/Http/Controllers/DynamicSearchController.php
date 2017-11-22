@@ -71,11 +71,15 @@ class DynamicSearchController extends Controller
                                 $query->where('slug', $url_text);
                             }])
                         ->with('properties.fkProperty.values')
+                        ->with(['properties.fkProperty.propAllowedValues.language' => function ($query) use ($url_text){
+                            $query->where('slug', $url_text);
+                        }])
         				->with(['properties.language' => function($query) use ($url_text) {
         						$query->where('slug', $url_text);
         					}])->find($id);
 
-        //\Log::debug($ents);
+        \Log::debug("Dados das entidades properties");
+        \Log::debug($ents);
 
         return response()->json($ents);
     }
@@ -604,7 +608,10 @@ class DynamicSearchController extends Controller
 
                 } else if ($value['property']['value_type'] == 'prop_ref') {
 
-                    $dataProp = Value::find($value['value'])->toArray();
+                    \Log::debug("VALORERRRR do valueeeeeeeeee");
+                    \Log::debug($value['value']);
+
+                    $dataProp = Value::find($value['value']);
 
                     \Log::debug("Dados do valueeeeeeeeee");
                     \Log::debug($dataProp);
