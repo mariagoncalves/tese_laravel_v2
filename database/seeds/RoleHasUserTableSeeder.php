@@ -32,6 +32,11 @@ class RoleHasUserTableSeeder extends Seeder
                 'updated_by' => '1',
                 'deleted_by' => NULL
             ],
+            [   'role_id'    => '4',
+                'user_id'    => '4',
+                'updated_by' => '1',
+                'deleted_by' => NULL
+            ]
         ];
 
         foreach ($dados as $value) {

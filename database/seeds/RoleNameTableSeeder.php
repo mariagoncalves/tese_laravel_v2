@@ -34,6 +34,13 @@ class RoleNameTableSeeder extends Seeder
                 'name'        => 'Munícipe',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
+            ],
+            [
+                'role_id'     => '4',
+                'language_id' => '1',
+                'name'        => 'Juri',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
             ]
         ];
 

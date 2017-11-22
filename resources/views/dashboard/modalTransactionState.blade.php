@@ -1,4 +1,5 @@
 
+                <div growl reference="[[index]]"></div>
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" ng-click="cancel()" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -15,6 +16,6 @@
                         </form>
                     </div>
                     <div class="modal-footer"><!-- ng-disabled="frmProcessTypes.$invalid" -->
-                        <button type="button" ng-disabled="frmTaskForm.$invalid || tabs.length===1" class="btn btn-lg btn-light-green" id="btn-save" ng-click="save(modal_formTab[index])" >{{trans("processTypes/modalFormTask.BTN1FORM")}}</button>
+                        <button type="button" ng-disabled="frmTaskForm.$invalid || (tabs.length===1 && tabs[0].title==='Transaction State')" class="btn btn-lg btn-light-green" id="btn-save" ng-click="art(modal_formTab)" >{{trans("processTypes/modalFormTask.BTN1FORM")}}</button>
                     </div>
                 </div>

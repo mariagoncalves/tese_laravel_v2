@@ -126,7 +126,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                     $query->select('users.id')->from('users')->where('users.entity_id', '=', $entity_id);
                 });
             }
-            $iniciatorTransactions =  $iniciatorTransactions->groupBy('transaction_type.id','transaction.id','process.id','process_type.id')
+            $iniciatorTransactions =  $iniciatorTransactions->groupBy('transaction_type_id','transaction_id','process_id','process_type_id')
                 ->get();
 
             foreach($iniciatorTransactions as $iniciatorTransaction)
@@ -205,7 +205,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                     $query->select('users.id')->from('users')->where('users.entity_id', '=', $entity_id);
                 });
             }
-            $executerTransactions =  $executerTransactions->groupBy('transaction_type.id','transaction.id','process.id','process_type.id')
+            $executerTransactions =  $executerTransactions->groupBy('transaction_type_id','transaction_id','process_id','process_type_id')
                 ->get();
 
             foreach($executerTransactions as $executerTransaction)
@@ -685,8 +685,8 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
             $query->where('slug', $url_text);
         }])->whereHas('iniciatorActor.role.user', function ($query) use ($user_id){
             return $query->where('user_id', $user_id);
-        })->doesntHave('causedTransaction')->get();
-
+        })
+        ->doesntHave('causedTransaction')->get();
         return response()->json($transactions);
     }
 
@@ -720,6 +720,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         $dataArray = array();
 
         $sameActor = $this->isUserInicAndExecOfTrans($trans_type_id, 1);
+        //\Log::debug($sameActor);
 
         if ($sameActor === true)
         {
@@ -734,6 +735,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         for ($i = 1; $i <= $numberOfTStates; $i++)
         {
             $dataResult = $this->isTrAndStWaitingForAnotherTr(new Request, $i, $trans_type_id, $process_id, 1);
+            //\Log::debug($i);
             if ($dataResult['empty'] === false)
             {
                 break;
@@ -743,6 +745,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                 $dataResultProps = $this->getProps($trans_type_id, $i, 1);
 
                 array_push($dataArray, $dataResultProps);
+                //\Log::debug($dataArray);
             }
         }
 
@@ -867,8 +870,8 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
 
         $existsAllTransactions = true;
         $transactionsLacking = array();
-        if ($proc_id != null) {
-            if ($waitinglinks != null) {
+        if ($proc_id !== null) {
+            if ($waitinglinks !== null) {
                 /*$waitinglinks = WaitingLink::whereHas('waitedT.processType.processes.transactions.transactionStates')
                     ->where('waiting_transaction', $trans_id)->where('waiting_fact', $t_state_id)->get();*/
 
@@ -921,6 +924,14 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                 }
                 //$sameActor = $transactions->isEmpty() ? false : true;
             }
+        }
+
+        foreach ($transactionsLacking as $transactionLacking)
+        {
+            //\Log::debug($transactionLacking->transaction_type_id);
+            //$transactionLacking['transaction_type_name'] = "";
+            //$transactionLacking->transaction_type_name = TransactionTypeName::where('transaction_type_id','=',$transactionLacking->transaction_type_id)->where('language_id','=',1)->first()->t_name;
+            //$transactionLacking->t_state_name = TStateName::where('t_state_id','=',$transactionLacking->t_state_id)->where('language_id','=',1)->first()->name;
         }
 
         $data = array(
@@ -1014,8 +1025,6 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         }])->whereHas('relType', function ($query) use ($transtype_id, $type) {
             return $query->where('transaction_type_id', $transtype_id);
         })->where('t_state_id', $type)->orderBy('form_field_order', 'asc')->get();
-
-        
 
         return $propsRel;
     }
@@ -1215,7 +1224,6 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         {
             $propsRel = $this->getPropsRel($transtype_id, $type); //obter as propriedades associadas a esse rel type
 
-
             //se nao existirem propriedades nesse rel type e não existirem rel types então o id do rel type é nulo
             if ($existRelTypeWithProps->isEmpty())
             {
@@ -1342,6 +1350,10 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
     public function getProps($transtype_id, $type, $option = null)
     {
         $url_text = $this->url_text;
+        $user_id = $this->user_id;
+
+        //verificar se o utilizador é externo ou interno
+        $getUser = User::find($user_id);
 
         //verificar se com o transaction_type_id e o t_state_id existe um ent type ou rel type
         $existEntTypeWithProps = EntType::whereHas('properties', function ($query) use ($type) {
@@ -1351,39 +1363,43 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
             return $query->where('t_state_id', $type);
         })->where('transaction_type_id', $transtype_id)->get();
 
-        \Log::debug($existRelTypeWithProps);
-
         //inicializar as variaveis de estado a falso e as colecções a null
         $props = null;
         $propsRel = null;
         $rel_type_id=null;
 
+        //\Log::debug($type);
+        //\Log::debug($existEntTypeWithProps);
         //se com o transaction type id e o t_state_id existem tipos de entidade entao procura propriedades associadas a esse ent type
         if ($existEntTypeWithProps->isNotEmpty()) {
-            //obter propriedades através do transaction type id e o t_state_id
-            $props = Property::with(['entType' => function ($query) use ($transtype_id, $type) {
-                $query->where('transaction_type_id', $transtype_id)->where('par_ent_type_id', NULL);
-            }, 'entType.language' => function ($query) use ($url_text) {
-                $query->where('slug', $url_text);
-            }, 'language' => function ($query) use ($url_text) {
-                $query->where('slug', $url_text);
-            }, 'propAllowedValues.language' => function ($query) use ($url_text) {
-                $query->where('slug', $url_text);
-            }, 'propertiesReading.language' => function ($query) use ($url_text) {
-                $query->where('slug', $url_text);
-            },/* 'propertiesReading.values.entity.language' => function ($query) use ($url_text) {
-                $query->where('slug', $url_text);
-            }, 'propertiesReading.values.entity.transactionState.transaction.transactionType.language' => function ($query) use ($url_text) {
-                $query->where('slug', $url_text);
-            }, 'propertiesReading.values.entity.transactionState.transaction' => function ($query) use ($url_text) {
-                $query->where('process_id', 1);
-            },*/
-                'propAllowedValues.entType', 'fkEntType.entity.language' => function ($query) use ($url_text) {
-                    $query->where('slug', $url_text)->orderBy('name', 'asc');
+            //if ($getUser->user_type == "external") {
+                //obter propriedades através do transaction type id e o t_state_id
+                $props = Property::with(['entType' => function ($query) use ($transtype_id, $type) {
+                    $query->where('transaction_type_id', $transtype_id)->where('par_ent_type_id', NULL);
+                }, 'entType.language' => function ($query) use ($url_text) {
+                    $query->where('slug', $url_text);
+                }, 'language' => function ($query) use ($url_text) {
+                    $query->where('slug', $url_text);
+                }, 'propAllowedValues.language' => function ($query) use ($url_text) {
+                    $query->where('slug', $url_text);
+                }, 'propertiesReading.language' => function ($query) use ($url_text) {
+                    $query->where('slug', $url_text);
+                }, 'propAllowedValues.entType', 'fkEntType.entity.language' => function ($query) use ($url_text) {
+                        $query->where('slug', $url_text)->orderBy('name', 'asc');
+                }, 'fkProperty.language' => function ($query) use ($url_text) {
+                        $query->where('slug', $url_text)->orderBy('name', 'asc');
+                }, 'fkProperty.values' => function ($query) use ($getUser) {
+                       //$query->where('entity_id', $getUser->entity_id);
+                        if ($getUser->user_type == "external") {
+                            $query->whereHas('updatedBy', function ($query) use ($getUser) {
+                                return $query->where('entity_id', $getUser->entity_id);
+                            });
+                        }
                 }])->whereHas('entType', function ($query) use ($transtype_id, $type) {
-                return $query->where('transaction_type_id', $transtype_id)->where('par_ent_type_id', NULL);
-            })->where('t_state_id', $type)
-                ->orderBy('form_field_order', 'asc')->get();
+                    return $query->where('transaction_type_id', $transtype_id)->where('par_ent_type_id', NULL);
+                })->where('t_state_id', $type)
+                    ->orderBy('form_field_order', 'asc')->get();
+            //}
 
             $props->map(function ($prop, $keyprop) use ($url_text)
             {
@@ -1440,6 +1456,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         else if ($existRelTypeWithProps->isNotEmpty()) //se não existirem ent types mas existir rel type entao procura pelas propriedades desse rel type
         {
             $propsRel = $this->getPropsRel($transtype_id, $type); //obter as propriedades associadas a esse rel type
+
             //se nao existirem propriedades nesse rel type e não existirem rel types então o id do rel type é nulo
             if ($existRelTypeWithProps->isEmpty())
             {
@@ -1561,10 +1578,9 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         //verificar se o utilizador é externo ou interno
         $getUser = User::find($user_id);
 
+        $getTransType = TransactionType::find($trans_id);
         if ($getUser->user_type == "external") //se é externo é necessário
         {
-            $getTransType = TransactionType::find($trans_id);
-
             $processes = Process::with(['language' => function ($query) use ($url_text) {
                 $query->where('slug', $url_text);
             }])->whereHas('language', function ($query) use ($url_text) {
@@ -1580,12 +1596,13 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                 $query->where('slug', $url_text);
             }])->whereHas('language', function ($query) use ($url_text) {
                 $query->where('slug', $url_text);
-            })->whereHas('transactions.transactionType.iniciatorActor.role.user', function ($query) use ($user_id) {
+            })/*->whereHas('transactions.transactionType.iniciatorActor.role.user', function ($query) use ($user_id) {
                 $query->where('user_id', $user_id);
-            })->whereHas('processType.transactionsTypes', function ($query) use ($trans_id) {
+            })*/->whereHas('processType.transactionsTypes.iniciatorActor.role.user', function ($query) use ($user_id) {
+                $query->where('user_id', $user_id);
+            })/*->whereHas('processType.transactionsTypes', function ($query) use ($trans_id) {
                 $query->where('id', $trans_id);
-            })->where('proc_state', 'execution')->get(); //->where('flag','execution') adicionar depois de mudar a base de dados
-            \Log::debug($processes);
+            })*/->where('process_type_id', $getTransType->process_type_id)->where('proc_state', 'execution')->get(); //->where('flag','execution') adicionar depois de mudar a base de dados
         }
 
         $processesAlt = $processes->filter(function ($process_item, $process_key) use ($trans_id) {
@@ -1614,7 +1631,6 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         //dd($processes);
 
         //chamar o método values para reorganizar os indices da colecçao
-
         return $processesAlt->values();
     }
 
@@ -1656,9 +1672,11 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         $lacksRelation = false;
         if ($existEntType->isNotEmpty())
         {
-            $ents = Transaction::whereHas('entities.values.property', function ($query) use ($t_state_id) {
+            $ents = Transaction::whereHas('entities')
+                ->whereHas('transactionStates', function ($query) use ($t_state_id) {
                 $query->where('t_state_id', $t_state_id);
             })->where('id', $id)->get();
+            //\Log::debug($ents);
             if ($ents->isEmpty())
             {
                 $lacksEntity = true;
@@ -1670,7 +1688,8 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         }
         else if ($existRelType->isNotEmpty())
         {
-            $rels = Transaction::whereHas('relations.values.property', function ($query) use ($t_state_id) {
+            $rels = Transaction::whereHas('relations')
+                ->whereHas('transactionStates', function ($query) use ($t_state_id) {
                 $query->where('t_state_id', $t_state_id);
             })->where('id', $id)->get();
             if ($rels->isEmpty())
@@ -1698,20 +1717,21 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         $actorCan = $request->input('actorCan');
         $transaction_type_id = $request->input('transaction_type_id');
 
-        $arrayResult = $this->transactionStateMissesEntityOrRelation($id, $t_state_id, $transaction_type_id);
+        if ($t_state_id == 1)
+            $arrayResult = $this->transactionStateMissesEntityOrRelation($id, $t_state_id, $transaction_type_id);
+        else
+            $arrayResult = array('lacksEntity' => false, 'lacksRelation' => false);
 
-
+        //\Log::debug($arrayResult);
         $canAdvance = false;
         $nextState=null;
-        if ($arrayResult['lacksEntity'] === false && $arrayResult['lacksRelation'] === false)
-        {
+        if ($arrayResult['lacksEntity'] === false && $arrayResult['lacksRelation'] === false) {
             if (($actorCan == 'Executer' && ($t_state_id == 1 || $t_state_id == 2 || $t_state_id == 3)) || ($actorCan == 'Iniciator' && $t_state_id == 4)) {
                 $nextState = $this->get_next($States, $t_state_id);
                 $canAdvance = true;
             } else {
                 $canAdvance = false;
             }
-
         }
         else
         {
@@ -1829,10 +1849,8 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         return $transAck;
     }
 
-    private function insertTransactionAck($trans_state_id)
+    private function insertTransactionAck($trans_state_id, $user_id)
     {
-        $user_id = $this->user_id;
-
         $transaction_ack = new TransactionAck;
 
         DB::beginTransaction();

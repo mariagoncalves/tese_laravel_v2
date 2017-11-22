@@ -1,8 +1,8 @@
                                 indextab:[[indexTab]]
                                 <div class="panel panel-info">
                                     <div class="panel-heading">
-                                        <h3 class="panel-title" ng-if="::modal_formTab.tab[indexTab].relTypeExist==false">[[::modal_formTab.tab[indexTab].propsform[0].ent_type.language[0].pivot.name]] [[type-1]]</h3>
-                                        <h3 class="panel-title" ng-if="::modal_formTab.tab[indexTab].relTypeExist==true">[[::modal_formTab.tab[indexTab].propsform[0].rel_type.language[0].pivot.name]] [[type-1]]</h3>
+                                        <h3 class="panel-title" ng-if="::modal_formTab.tab[indexTab].relTypeExist==false">[[::modal_formTab.tab[indexTab].propsform[0].ent_type.language[0].pivot.name]] [[type]]</h3>
+                                        <h3 class="panel-title" ng-if="::modal_formTab.tab[indexTab].relTypeExist==true">[[::modal_formTab.tab[indexTab].propsform[0].rel_type.language[0].pivot.name]] [[type]]</h3>
                                     </div>
                                     <div class="panel-body">
                                             <div ng-if="::modal_formTab.tab[indexTab].relTypeExist==true">
@@ -37,7 +37,7 @@
                                                 <div class="form-group" ng-switch-when="text|double|int" ng-switch-when-separator="|" ng-switch="prop.form_field_type">
                                                     <label for="inputName" class="col-sm-3 control-label">[[prop.language[0].pivot.name]]</label>
                                                     <div class="col-sm-9" ng-switch-when="text">
-                                                        <input type="text" class="form-control" id="[[prop.language[0].pivot.form_field_name]]" name="[[prop.language[0].pivot.form_field_name]]" placeholder=""
+                                                        <input type="text" uib-popover-template="dynamicPopover.templateUrl" popover-class="popover" popover-placement="top" popover-title="[[dynamicPopover.title]]" popover-trigger="'focus'" class="form-control" id="[[prop.language[0].pivot.form_field_name]]" name="[[prop.language[0].pivot.form_field_name]]" placeholder=""
                                                                ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" maxlength="[[prop.form_field_size]]" ng-required="prop.mandatory">
                                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
                                                             <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">[[prop.language[0].pivot.name]] is required.</span>
@@ -135,7 +135,7 @@
                                                 <div class="form-group" ng-switch-when="ent_ref">
                                                     <label for="inputName" class="col-sm-3 control-label">[[prop.language[0].pivot.name]]</label>
                                                     <div class="col-sm-9">
-                                                        <select class="form-control" name="[[prop.language[0].pivot.form_field_name]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" ng-options="item.id as item.language[0].pivot.name for item in prop.fk_ent_type" ng-required="prop.mandatory">
+                                                        <select class="form-control" name="[[prop.language[0].pivot.form_field_name]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" ng-options="item.id as item.language[0].pivot.name for item in prop.fk_ent_type.entity" ng-required="prop.mandatory">
                                                             <option value=""></option>
                                                         </select>
                                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
@@ -147,7 +147,7 @@
                                                 <div class="form-group" ng-switch-when="prop_ref">
                                                     <label for="inputName" class="col-sm-3 control-label">[[prop.language[0].pivot.name]]</label>
                                                     <div class="col-sm-9">
-                                                        <select class="form-control" name="[[prop.language[0].pivot.form_field_name]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" ng-options="item.id as item.language[0].pivot.name for item in prop.fk_property.values" ng-required="prop.mandatory">
+                                                        <select class="form-control" name="[[prop.language[0].pivot.form_field_name]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" ng-options="item.id as item.value for item in prop.fk_property.values" ng-required="prop.mandatory">
                                                             <option value=""></option>
                                                         </select>
                                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
@@ -232,5 +232,5 @@
                                     {{--<button type="button" class="btn btn-default btn-blue" ng-click="changeTabBoot(trans_id, 'Task Form', 'tabFormTask', tabnumber, type)">Next</button>--}}
                                 </div>
                                 <div ng-if="::modal_formTab.tab[indexTab].showBtnType==false">
-                                    <button type="button" class="btn btn-default btn-blue" ng-click="changeTabBoot('Task Form', 'tabFormTask', tabnumber, type)">Next</button>
+                                    <button type="button" class="btn btn-default btn-blue" ng-click="changeTabBoot('Task Form', 'tabFormTask', indexTab, type)">Next</button>
                                 </div>

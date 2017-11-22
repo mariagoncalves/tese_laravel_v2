@@ -602,17 +602,20 @@ class DynamicSearchController extends Controller
 
                     $result[$key]['values'][$key1]['value'] = $dataProp['language'][0]['pivot']['name'];
 
-                } //else if ($value['property']['value_type'] == 'prop_ref') {
+                } else if ($value['property']['value_type'] == 'prop_ref') {
 
+                    $dataProp = Value::find($value['value'])->toArray();
 
+                    \Log::debug("Dados do valueeeeeeeeee");
+                    \Log::debug($dataProp);
 
-                //}
+                    $result[$key]['values'][$key1]['value'] = $dataProp['value'];
+                }
             }
         }
 
         return $result;
     }
-
 
     public function getValuesRelationTables($properties, $relations) {
         $url_text = 'PT';
@@ -879,11 +882,13 @@ class DynamicSearchController extends Controller
             } else {
                 $valueQuery = $data['radio'.$type.$position];
             }
-            
             // Formar a frase 
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         } else if ($valueType == "prop_ref") {
-            $valueQuery = $data['propRef'.$type.$position];
+
+            $idValue = $data['propRef'.$type.$position];
+            $dataVal = Value::find($idValue);
+            $valueQuery = $dataVal['value'];
             // Formar a frase 
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         }

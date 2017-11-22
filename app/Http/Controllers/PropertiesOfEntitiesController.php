@@ -30,6 +30,9 @@ class PropertiesOfEntitiesController extends Controller {
             \Log::debug("Dados do data: ");
             \Log::debug($data);
 
+            \Log::debug("Valor do unit type");
+            \Log::debug($data['unites_names']);
+
             $propertyFieldSize = '';
             if(isset($data["property_fieldType"])) {
                 if ($data["property_fieldType"] === "text") {

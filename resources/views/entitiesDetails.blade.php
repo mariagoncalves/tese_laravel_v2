@@ -73,7 +73,7 @@
 										<div ng-switch-when="prop_ref">
 											<select name = "propRefET[[ key1 ]]">
 												<option></option>
-								        		<option ng-repeat = "value in property.fk_property.values" value = "[[value.value]]"> 
+								        		<option ng-repeat = "value in property.fk_property.values" value = "[[value.id]]"> 
 								        			[[ value.value ]] 
 								        		</option>
 								        	</select>
@@ -237,7 +237,7 @@
 										<div ng-switch-when="prop_ref"> 
 											<select name = "propRefRL[[ prop.key ]]" disabled>
 								        		<option></option>
-								        		<option ng-repeat = "value in prop.fk_property.values" value = "[[value.value]]">
+								        		<option ng-repeat = "value in prop.fk_property.values" value = "[[value.id]]">
 								        			[[ value.value ]] 
 								        		</option>
 								        	</select>
@@ -336,7 +336,7 @@
 										<div ng-switch-when="prop_ref">
 											<select name = "propRefER[[ property.key ]]" disabled>
 												<option></option>
-								        		<option ng-repeat = "value in property.fk_property.values" value = "[[value.value]]"> 
+								        		<option ng-repeat = "value in property.fk_property.values" value = "[[value.id]]"> 
 								        			[[ value.value ]] 
 								        		</option>
 								        	</select>

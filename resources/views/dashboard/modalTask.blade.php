@@ -17,6 +17,6 @@
                         </form>
                     </div>
                     <div class="modal-footer"><!-- ng-disabled="frmTaskForm.$invalid || tabs.length==1" -->
-                        <button type="button" ng-disabled="frmTaskForm.$invalid && tabs.length===1" class="btn btn-lg btn-light-green" id="btn-save" ng-click="save(modal_formTab[index])" >{{trans("processTypes/modalFormTask.BTN1FORM")}}</button>
+                        <button type="button" ng-disabled="frmTaskForm.$invalid || (tabs.length===1 && tabs[0].title==='Process')" class="btn btn-lg btn-light-green" id="btn-save" ng-click="save(modal_formTab[index])" >{{trans("processTypes/modalFormTask.BTN1FORM")}}</button>
                     </div>
                 </div>

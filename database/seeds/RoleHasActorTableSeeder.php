@@ -36,6 +36,11 @@ class RoleHasActorTableSeeder extends Seeder
                 'actor_id'   => '3',
                 'updated_by' => '1',
                 'deleted_by' => NULL
+            ],
+            [   'role_id'    => '4',
+                'actor_id'   => '5',
+                'updated_by' => '1',
+                'deleted_by' => NULL
             ]
         ];
 

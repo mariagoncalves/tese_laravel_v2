@@ -50,6 +50,11 @@ class RoleTableSeeder extends Seeder
                 'id'         => '3',
                 'updated_by' => '1',
                 'deleted_by' => NULL
+            ],
+            [
+                'id'         => '4',
+                'updated_by' => '1',
+                'deleted_by' => NULL
             ]
         ];
 

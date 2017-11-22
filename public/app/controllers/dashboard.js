@@ -77,6 +77,14 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
     $scope.ModalInstanceCtrlDialog = function ($scope, $uibModalInstance, $timeout, trans_id, trans_min, trans_max, trans_type_name) {
         ArrModalDialogOpened.push($uibModalInstance);
 
+        if (trans_min === 1 && trans_max === 1)
+        {
+            $scope.modalDialogForm = {};
+            $scope.modalDialogForm.number = 1;
+            $scope.modalDialogForm.id = trans_id;
+            $uibModalInstance.close($scope.modalDialogForm);
+        }
+
         $scope.transTypeName = trans_type_name;
         $scope.transTypeMin = trans_min;
         $scope.transTypeMax = trans_max;
@@ -129,6 +137,7 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             $scope.modal_formTab.length = 0;
             if ($scope.modal_processTab !== undefined)
                 $scope.modal_processTab.length = 0;
+            $scope.getAllInicExecTrans();
             alert("entrou closed");
         }, function(reason){
             //gets triggers when modal is dismissed.
@@ -973,10 +982,19 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
 
         $scope.changeTabBoot = function ($title, $templateurl, $tabnumber, $type) {
             $scope.tabs.splice(($scope.activeTabIndex + 1), ($scope.tabs.length - 1));
+            alert($scope.activeTabIndex);
+            if ($scope.activeTabIndex === 0)
+                $scope.modal_formTab.tab.splice(0, ($scope.modal_formTab.tab.length - 1));
+            else
+                $scope.modal_formTab.tab.splice(($scope.activeTabIndex + 1), ($scope.tabs.length - 1));
+            /*if ($tabnumber === 1)
+            {
+                indexTabLocal = 1;
+            }*/
 
             $scope.verifyCanDoNextTransState(trans_id, $type, actor_Can, transaction_type_id).then(function (response) {
-                alert("The next transaction state is: " + type);
                 var type = response.data.nextState;
+                //alert("The next transaction state is: " + type);
 
                     //a guarda da recursividade
                     if (type > 5)
@@ -1040,8 +1058,9 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                                         growl.success('Loading done successfully.', {title: 'Success!', referenceId: index_m});
                                         $scope.showBtnType = false;
                                         $scope.types.push(type);
-                                        $scope.mytype = ++$type; //tem de ser ++type senao nao coloca o valor incrementado na variable $scope.mytype
-                                        $scope.myindexTab = indexTabLocal++;
+                                        $scope.mytype = type; //tem de ser ++type senao nao coloca o valor incrementado na variable $scope.mytype
+                                        //$scope.myindexTab = indexTabLocal++;
+                                        $scope.myindexTab = ++$tabnumber;
 
                                         console.log($scope.modal_formTab);
 
@@ -1058,11 +1077,13 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                                     });
 
                                     if (response.status == 400) {
-                                        indexTabLocal++;
+                                        //indexTabLocal++;
+                                        ++$tabnumber;
                                         counterTStatesCan = 0;
                                         $timeout(function () {
-                                            $scope.verifyCanDoNextTransState(trans_id, type, actor_Can, transaction_type_id);
+                                            //$scope.verifyCanDoNextTransState(trans_id, type, actor_Can, transaction_type_id);
                                             //$scope.changeTabBoot($id, $title, $templateurl, ++$tabnumber, ++$type, $process_id); //nao pode ser $tabnumber++
+                                            $scope.changeTabBoot($title, $templateurl, $tabnumber, type);
                                         },100);
                                     }
                                     else if (response.status == 401)
@@ -1078,9 +1099,10 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                         }).catch(function (response) {
                             //debugger;
                             if (response.status == 400) {
-                                growl.error('Can´t advance to the next transaction state, there are some transactions needeed to do it first.', {
+                                growl.error('Can´t advance to the next transaction state, there are some transactions needeed to do it first.' + + response.data.dataTransactionsLacking, {
                                     title: 'Erro!',
-                                    referenceId: index_m
+                                    referenceId: index_m,
+                                    ttl: -1
                                 });
                             }
                 });
@@ -1142,6 +1164,10 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             });
 
             return deferred.promise;
+        };
+
+        $scope.art = function ($data) {
+            console.log($data);
         };
 
         $scope.cancel = function () {
