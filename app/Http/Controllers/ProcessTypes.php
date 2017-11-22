@@ -11,16 +11,25 @@ use Illuminate\Http\JsonResponse;
 use Response;
 use DB;
 use File;
+use Config;
 
 class ProcessTypes extends Controller
 {
     //
+    private $url_text;
+    private $user_id;
+
+    public function __construct()
+    {
+        $this->url_text = Config::get('config_app.url_text');
+        $this->user_id = Config::get('config_app.user_id');
+    }
 
     public function getAll($id = null)
     {
         if ($id == null)
         {
-            $url_text = 'PT';
+            $url_text = $this->url_text;
             $procs = DB::table('process_type')
                 ->join('process_type_name', 'process_type.id', '=', 'process_type_name.process_type_id')
                 ->join('language as l1', 'process_type_name.language_id', '=', 'l1.id')
@@ -80,7 +89,7 @@ class ProcessTypes extends Controller
 
     public function update(Request $request, $id)
     {
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $processtype = ProcessType::with(['language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }])->find($id);
@@ -117,7 +126,7 @@ class ProcessTypes extends Controller
 
     public function delete(Request $request, $id)
     {
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $processtype = ProcessType::with(['language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }])->find($id);
@@ -153,7 +162,7 @@ class ProcessTypes extends Controller
     {
         //return ProcessType::find($id);
         //$procs = ProcessType::with('language')->find($id);
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $procs = ProcessType::with(['language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }])->find($id);

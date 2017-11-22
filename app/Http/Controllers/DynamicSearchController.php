@@ -304,6 +304,30 @@ class DynamicSearchController extends Controller
         return response()->json($entsRelated);
     }
 
+
+    /*public function registarQueryPesquisa ($data, $idEntityType) {
+
+        \Log::debug("NOMEEEEEEEEER QUERYYY");
+        \Log::debug($data['query_name']);
+         \Log::debug("iddddddddddddddddd  QUERYYY");
+        \Log::debug($idEntityType);
+
+        $data1 = array(
+                'name'      => $data['query_name'],
+                'ent_type_id' => $idEntityType
+            );
+
+        $dataQuery = Query::create($data1);
+        $idQuery   = $dataQuery->id;
+
+        for ($i=0; $i < $data['numTableET']; $i++) { 
+            if (isset($data['checkET'.$i])) {
+                $this->createCondicion($idQuery, $data['checkET'.$i], 'ET', $i, $data);
+            }
+        }
+
+    }*/
+
     public function createCondition($idQuery, $idProperty, $type, $position, $data) {
 
         $property = $this->getPropertyData($idProperty);
@@ -359,7 +383,10 @@ class DynamicSearchController extends Controller
 
     public function saveSearch (Request $request, $idEntityType) {
 
+        \Log::debug("Tá a chegar ao método");
         $data = $request->all();
+        \Log::debug("Teste ao salvar pesquisa");
+        \Log::debug($data);
 
         $data1 = array(
                 'name'      => $data['query_name'],
@@ -394,6 +421,7 @@ class DynamicSearchController extends Controller
         }
     }
 
+
     public function search(Request $request, $idEntityType) {
         $data        = $request->all();
         $generalData = [
@@ -405,6 +433,10 @@ class DynamicSearchController extends Controller
         $url_text    = 'PT';
         $result      = [];
         $query       = [];
+
+        /*if (isset($data['query_name']) && $data['query_name'] != "") {
+            $this->registarQueryPesquisa($data, $idEntityType);
+        }*/
 
         //Formar a frase e realizar pesquisa de acordo com a pesquisa..
         $phrase = $this->formPhraseAndQuery($idEntityType, $data, $generalData);
@@ -444,6 +476,7 @@ class DynamicSearchController extends Controller
             // Percorrer as entidades da tabela 1
             foreach ($resultsTables['result1'] as $entity) {
 
+                //$relations = $generalData['table1']['relTable4'][$entity['id']] ?? [];
                 $relations = isset($generalData['table1']['relTable4'][$entity['id']]) ? $generalData['table1']['relTable4'][$entity['id']] : [];
                 foreach ($relations as $idRelation) {
                     $valuesDataResult = [];
@@ -455,7 +488,7 @@ class DynamicSearchController extends Controller
                     // Percorrer as relacoes da tabela 4
                     foreach ($resultsTables['result4'] as $dataRelation) {
                         if ($dataRelation['id'] == $idRelation) {
-                            // Cada value da relação da tabela 4
+                            // Cada value da relação da tabela 3
                             foreach ($dataRelation['values'] as $valueData2) {
                                 $valuesDataResult[] = $valueData2;
                             }
@@ -469,6 +502,7 @@ class DynamicSearchController extends Controller
             // Percorrer as entidades da tabela 1
             foreach ($resultsTables['result1'] as $entity) {
 
+                //$relations = $generalData['table1']['relTable3'][$entity['id']] ?? [];
                 $relations = isset($generalData['table1']['relTable3'][$entity['id']]) ? $generalData['table1']['relTable3'][$entity['id']] : [];
                 foreach ($relations as $idRelation) {
                     $valuesDataResult = [];
@@ -494,6 +528,7 @@ class DynamicSearchController extends Controller
             // Percorrer as entidades da tabela 1
             foreach ($resultsTables['result1'] as $entity) {
 
+                //$relations = $generalData['table1']['relTable2'][$entity['id']] ?? [];
                 $relations = isset($generalData['table1']['relTable2'][$entity['id']]) ? $generalData['table1']['relTable2'][$entity['id']] : [];
                 foreach ($relations as $idEntityRelation) {
                     $valuesDataResult = [];
@@ -527,9 +562,6 @@ class DynamicSearchController extends Controller
             }
         }
 
-        \Log::debug("RESULTADO FINAL");
-        \Log::debug($resultFinal);
-
         return $resultFinal;
     }
 
@@ -547,8 +579,40 @@ class DynamicSearchController extends Controller
 
         \Log::debug("RESULTADO METODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
         \Log::debug($result);
+
+        $resultFinal = $this->getNames($result);
+
+        return $resultFinal;
+    }
+
+    //Para aparecer o nome em vez do id
+    public function getNames($result) {
+
+        $url_text = 'PT';
+
+        foreach ($result as $key => $entity) {
+            foreach ($entity['values'] as $key1 => $value) {
+
+                if ($value['property']['value_type'] == 'enum') {
+
+                    $dataProp = PropAllowedValue::with(['language' => function($query) use ($url_text) {
+                                                    $query->where('slug', $url_text);
+                                                }])
+                                                ->find($value['value']);
+
+                    $result[$key]['values'][$key1]['value'] = $dataProp['language'][0]['pivot']['name'];
+
+                } //else if ($value['property']['value_type'] == 'prop_ref') {
+
+
+
+                //}
+            }
+        }
+
         return $result;
     }
+
 
     public function getValuesRelationTables($properties, $relations) {
         $url_text = 'PT';
@@ -562,7 +626,9 @@ class DynamicSearchController extends Controller
                             $q3->whereIn('id', $relations);
                         })->get()->toArray();
 
-        return $result;
+        $resultFinal = $this->getNames($result);
+
+        return $resultFinal;
     }
 
     public function formPhraseAndQuery($idEntityType, $data, &$generalData) {
@@ -610,6 +676,7 @@ class DynamicSearchController extends Controller
         if ($generalData['table2']['select']) {
             $propertiesTable1 = $this->getPropertiesEntities($generalData['table1']['resultEntities']);
 
+            $relacaoEntreTable1e2 = [];
             $resultTable2 = $queryTable2->distinct('id')->get(['id'])->toArray();
 
             $entitiesIdsTable2 = $this->formatArrayData($resultTable2, 'id');
@@ -617,6 +684,9 @@ class DynamicSearchController extends Controller
             foreach ($entitiesIdsTable2 as $key => $id_entity2) {
 
                 $values = Value::with('property')->where('entity_id', $id_entity2)->get();
+
+                \Log::debug("VALORESSSSSS TESTEEEEEEEEEEEEEEEEEEE");
+                \Log::debug($values);
 
                 foreach ($values as $valueData) {
                     if (in_array($valueData->property->fk_property_id, $propertiesTable1)) {
@@ -704,6 +774,9 @@ class DynamicSearchController extends Controller
             $resultTable4     = $queryTable4->distinct('id')->get(['id'])->toArray();
             $entitiesIdsTable4 = $this->formatArrayData($resultTable4, 'id');
 
+            //\Log::debug("TESTEE FINAL 1122: ");
+            //\Log::debug($entitiesIdsTable4);
+
             $newIdsTable1 = [];
             $newIdsTable4 = [];
             foreach ($generalData['table1']['resultEntities'] as $entity1) {
@@ -785,15 +858,28 @@ class DynamicSearchController extends Controller
             // Formar a frase 
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         } else  if ($valueType == "enum") {
-            $valueQuery = $data['select'.$type.$position];
+            //$valueQuery = $data['select'.$type.$position];
+
+            $idPropAllowedValue = $data['select'.$type.$position];
+
+            $url_text = 'PT';
+
+            $propAllowed = PropAllowedValue::with(['language' => function($query) use ($url_text) {
+                                                    $query->where('slug', $url_text);
+                                                }])
+                                                ->find($idPropAllowedValue);
+
+            $valueQuery = $propAllowed['language'][0]['pivot']['name'];
+
             // Formar a frase 
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         } else  if ($valueType == "bool") {
-            if(!isset($data['radio'.$type.$position])) {
+            if(!isset($data['radio'.$type.$position]) || (!isset($data['radio'.$type.$position]) && $data['radio'.$type.$position] == undefined)) {
                 $valueQuery = '';
             } else {
                 $valueQuery = $data['radio'.$type.$position];
             }
+            
             // Formar a frase 
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         } else if ($valueType == "prop_ref") {
@@ -824,8 +910,10 @@ class DynamicSearchController extends Controller
             $valueQuery = '%'.$data['text'.$type.$position].'%';
         } else  if ($valueType == "enum") {
             $valueQuery = $data['select'.$type.$position];
+            \Log::debug("Valor colocado no enum");
+            \Log::debug($valueQuery);
         } else  if ($valueType == "bool") {
-            if(!isset($data['radio'.$type.$position])) {
+            if(!isset($data['radio'.$type.$position]) || (!isset($data['radio'.$type.$position]) && $data['radio'.$type.$position] == undefined)) {
                 $valueQuery = '';
             } else {
                 $valueQuery = $data['radio'.$type.$position];
@@ -845,6 +933,22 @@ class DynamicSearchController extends Controller
                                     });
         }
     }
+
+    /*public function getPropAllowedValueName($idPropAllowed) {
+
+        $url_text = 'PT';
+
+        $namePropAllowed = PropAllowedValue::with(['language' => function($query) use ($url_text) {
+                                                $query->where('slug', $url_text);
+                                            }])
+                                            ->find($idPropAllowed)
+                                            ->toArray();
+
+        \Log::debug("VALOR DO propAllowedValue");
+        \Log::debug($namePropAllowed);
+
+        return $namePropAllowed;
+    }*/
 
     public function getOperatorSymbol($idOperator) {
         $operatorSymbol = Operator::where('id', $idOperator)

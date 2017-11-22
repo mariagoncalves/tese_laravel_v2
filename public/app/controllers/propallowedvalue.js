@@ -5,7 +5,7 @@
 app.controller('propAllowedValueController', function($scope, $http, API_URL, growl,$translatePartialLoader, NgTableParams, $translate, $uibModal ) {
 
     //Translate Function
-    $translatePartialLoader.addPart('propAllowedValue');
+    /*$translatePartialLoader.addPart('propAllowedValue');
     setTimeout(function() { $translate.refresh(); }, 0);
 
     $scope.dotranslate = function() {
@@ -14,7 +14,7 @@ app.controller('propAllowedValueController', function($scope, $http, API_URL, gr
             $translate.use('pt');
         else
             $translate.use('en');
-    };
+    };*/
 
     $scope.getPropAllowedValues = function() {
         $http.get('/prop_allowed_value/get_unit', [{cache : true}]).then(function(response) {
@@ -110,7 +110,7 @@ app.controller('propAllowedValueController', function($scope, $http, API_URL, gr
                     growl.success('SAVE_SUCCESS_MESSAGE');
 
                 $scope.getPropAllowedValues();
-                $scope.cancel;
+                $scope.cancel();
             },  function errorCallback(response) {
                 if (response.status == 400)
                 {
@@ -127,6 +127,32 @@ app.controller('propAllowedValueController', function($scope, $http, API_URL, gr
         $scope.cancel = function () {
             $uibModalInstance.close('cancel');
         };
+    };
+
+    //SoftDelete da Prop Allowed Value
+    $scope.remove = function (prop_allowed_value_id)
+    {
+        var url = API_URL + "prop_allowed_value/remove";
+        $http({
+            method: 'POST',
+            url: url,
+            data: $.param({'id' : prop_allowed_value_id,
+            }),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(function (response) {
+            growl.success('Delete Success');
+            $scope.getPropAllowedValues();
+        },  function errorCallback(response) {
+            if (response.status == 400)
+            {
+                growl.error('This is error message.',{title: 'error!'});
+            }
+            else
+            {
+                $scope.errors = response.data;
+            }
+            //alert('This is embarassing. An error has occured. Please check the log for details');
+        });
     };
 
     //Funções Uteis

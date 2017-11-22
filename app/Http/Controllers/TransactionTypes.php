@@ -10,15 +10,25 @@ use App\Actor;
 use DB;
 use Response;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Config;
 
 class TransactionTypes extends Controller
 {
     //
+    private $url_text;
+    private $user_id;
+
+    public function __construct()
+    {
+        $this->url_text = Config::get('config_app.url_text');
+        $this->user_id = Config::get('config_app.user_id');
+    }
+
     public function getAll($id = null)
     {
         if ($id == null)
         {
-            $url_text = 'PT';
+            $url_text = $this->url_text;
             $transacs = DB::table('transaction_type')
                 ->join('process_type', 'transaction_type.process_type_id', '=', 'process_type.id')
                 ->join('transaction_type_name', 'transaction_type.id', '=', 'transaction_type_name.transaction_type_id')
@@ -101,7 +111,7 @@ class TransactionTypes extends Controller
 
     public function update(Request $request, $id)
     {
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $transactiontype = TransactionType::with(['language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }, 'processType.language' => function($query) use ($url_text) {
@@ -174,7 +184,7 @@ class TransactionTypes extends Controller
 
     public function delete(Request $request, $id)
     {
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $transactiontype = TransactionType::with(['language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }, 'processType.language' => function($query) use ($url_text) {
@@ -213,7 +223,7 @@ class TransactionTypes extends Controller
     {
         //return ProcessType::find($id);
         //$procs = ProcessType::with('language')->find($id);
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $transacs = TransactionType::with(['language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }, 'processType.language' => function($query) use ($url_text) {
@@ -231,7 +241,7 @@ class TransactionTypes extends Controller
 
     public function getAllExecuters()
     {
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $executers = Actor::with(['language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }])->whereHas('language', function ($query) use ($url_text){

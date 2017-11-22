@@ -1,7 +1,7 @@
-app.controller('customformController', function($scope, $http, growl, API_URL, $translatePartialLoader, $translate, NgTableParams, $uibModal) {
+app.controller('customformController', function($scope, $http, growl, API_URL, $translatePartialLoader, $translate, NgTableParams, $uibModal, $q) {
 
     //Translate Functions
-    $translatePartialLoader.addPart('customForm');
+    /*$translatePartialLoader.addPart('customForm');
 
     setTimeout(function() { $translate.refresh(); }, 0);
 
@@ -11,7 +11,7 @@ app.controller('customformController', function($scope, $http, growl, API_URL, $
             $translate.use('pt');
         else
             $translate.use('en');
-    };
+    };*/
 
     //Arrays initialization
     $scope.customForms = [];
@@ -180,24 +180,70 @@ app.controller('customformController', function($scope, $http, growl, API_URL, $
 
         var modalstate = modal_state;
         var id = custom_form_id;
+        $scope.checkProcessType = true;
 
         $scope.custom_Form = [];
         $scope.seltransactiontypes = [];
         $scope.seltransactiontypes.sel = [];
 
         $scope.form_title = "ADD_FORM_ENT_TYPE";
-        $http.get(API_URL + 'custom_form/get_custom_form/' + id)
-            .then(function(response) {
-                $scope.customForm = response.data;
+
+        //Buscar a informação para construção do modal
+        $scope.getCustomFormInfo = function () {
+            var deferred = $q.defer();
+
+            $http.get(API_URL + 'custom_form/add_transaction_types/' + id)
+                .then(function (response) {
+                deferred.resolve(response);
+            }, function errorCalback(response) {
+                deferred.reject(response);
+            }).finally(function () {
+                // called no matter success or failure
             });
-        $http.get(API_URL + 'custom_form/get_transaction_types/')
-            .then(function(response) {
-                $scope.transaction_types = response.data;
-            });
-        $http.get(API_URL + '/custom_form/get_sel_transaction_types/' + id)
-            .then(function(response) {
-                $scope.seltransactiontypes.sel = response.data;
-            });
+            return deferred.promise;
+        };
+
+        //Preencher as informações ao abrir o Modal
+        $scope.getCustomFormInfo().then(function (data) {
+
+
+            $scope.process_types = data.data.process_types;
+            $scope.customForm = data.data.custom_form;
+            $scope.seltransactiontypes.sel = data.data.transaction_types_sel;
+            $scope.process_type_id = data.data.process_type_id;
+
+
+            //Caso não exista nenhum processo associado e nenhum tipo de transação neste custom form
+            if($scope.process_type_id !== null &&  $scope.seltransactiontypes.sel !== null)
+            {
+                //Desactivar o select para escolher os tipos de transações
+                $scope.checkProcessType = false;
+                //Não mostrar nenhum tipo de transção para ser escolhida
+                $scope.transaction_types = [];
+            }
+
+        }).catch(function (response) {
+
+        });
+
+
+        $scope.updateTransactionTypes = function (inic) {
+            //Buscar todos os transações de acordo com o tipo de processo
+            $http.get(API_URL + 'custom_form/get_transaction_types_by_process/' + $scope.process_type_id)
+                .then(function(response) {
+                    $scope.transaction_types = response.data
+                });
+
+            //Actualizar o Input Select
+            if($scope.process_type_id !== undefined)
+                $scope.checkProcessType = false;
+            else
+                $scope.checkProcessType = true;
+
+            //Limpar os tipos de transações escolhidos
+            if(inic === 0)
+                $scope.seltransactiontypes.sel = [];
+        };
 
         //save new record / update existing record
         $scope.saveEnt = function() {
@@ -215,13 +261,14 @@ app.controller('customformController', function($scope, $http, growl, API_URL, $
                 $scope.getCustomForms();
                 $scope.cancel();
             },  function errorCallback(response) {
+
                 if (response.status == 400)
                 {
-                    growl.error('Transaction Types with different Iniciators or Executers.',{title: 'error!'});
-                }
-                else
-                {
-                    $scope.errors = response.data;
+                    if(!response.data.sameActor)
+                        growl.error('Transaction Types with different Iniciators or Executers.',{title: 'error!'});
+
+                    if(!response.data.sameProcess)
+                        growl.error('Transaction Types with different Process type.',{title: 'error!'});
                 }
             });
         };
@@ -378,6 +425,32 @@ app.controller('customformController', function($scope, $http, growl, API_URL, $
         };
     };
 
+    //SoftDelete da Prop Allowed Value
+    $scope.remove = function (prop_allowed_value_id)
+    {
+        var url = API_URL + "custom_form/remove";
+        $http({
+            method: 'POST',
+            url: url,
+            data: $.param({'id' : prop_allowed_value_id,
+            }),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(function (response) {
+            growl.success('Delete Success');
+            $scope.getCustomForms();
+        },  function errorCallback(response) {
+            if (response.status == 400)
+            {
+                growl.error('This is error message.',{title: 'error!'});
+            }
+            else
+            {
+                $scope.errors = response.data;
+            }
+            //alert('This is embarassing. An error has occured. Please check the log for details');
+        });
+    };
+
     //Funções Uteis
     $scope.getCustomForm = function (customForm_id) {
         $http.get(API_URL + 'custom_form/get_custom_form/' + customForm_id)
@@ -386,7 +459,6 @@ app.controller('customformController', function($scope, $http, growl, API_URL, $
             });
     };
 
-    //Funções Uteis
     $scope.getAllTStates= function() {
         $http.get(API_URL + '/custom_form/get_t_states')
             .then(function(response) {

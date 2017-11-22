@@ -1,7 +1,7 @@
 /**
  * Created by ASUS on 26/05/2017.
  */
-var app = angular.module('umaeeteam', ['angular-growl','smart-table','ui.sortable','pascalprecht.translate','ngTable','ui.select','ngSanitize','ui.bootstrap','ngAnimate','angular-loading-bar','angularFileUpload'], function($interpolateProvider) {
+var app = angular.module('umaeeteam', ['angular-growl','ui.sortable','pascalprecht.translate','ngTable','ui.select','ngSanitize','ui.bootstrap','ngAnimate','angular-loading-bar','angularFileUpload', 'ngMessages'], function($interpolateProvider) {
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
 })

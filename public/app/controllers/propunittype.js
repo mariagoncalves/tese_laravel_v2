@@ -8,13 +8,13 @@ app.controller('propUnitTypeController', function($scope, $http, growl, API_URL,
     $translatePartialLoader.addPart('propUnitType');
     setTimeout(function() { $translate.refresh(); }, 0);
 
-    $scope.dotranslate = function() {
+    /*$scope.dotranslate = function() {
         var currentLang = $translate.proposedLanguage() || $translate.use();
         if (currentLang == "en")
             $translate.use('pt');
         else
             $translate.use('en');
-    };
+    };*/
 
     //MODAL FUNCTIONS
     $scope.openModalForm = function (size, id, type) {
@@ -116,6 +116,35 @@ app.controller('propUnitTypeController', function($scope, $http, growl, API_URL,
                 paginationMinBlocks: 4,
                 dataset: response.data
             });
+
+        });
+
+        //console.log($scope.tableParams);
+    };
+
+    //SoftDelete da Prop Unit
+    $scope.remove = function (prop_unit_id)
+    {
+        var url = API_URL + "prop_unit_types/remove";
+        $http({
+            method: 'POST',
+            url: url,
+            data: $.param({'id' : prop_unit_id,
+            }),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(function (response) {
+            growl.success('Delete Success');
+            $scope.getPropUnitTypes();
+        },  function errorCallback(response) {
+            if (response.status == 400)
+            {
+                growl.error('This is error message.',{title: 'error!'});
+            }
+            else
+            {
+                $scope.errors = response.data;
+            }
+            //alert('This is embarassing. An error has occured. Please check the log for details');
         });
     };
 

@@ -46,10 +46,6 @@
                     [[::entitytype.p_a_v_name]]
                 </td>
 
-                <td sortable="'t_state_name'" data-title="'THEADER6' | translate" groupable="'t_state_name'"> <!--State-->
-                    [[::entitytype.t_state_name]]
-                </td>
-
                 <td sortable="'state'" data-title="'THEADER7' | translate" groupable="'state'"> <!--State-->
                     [[::entitytype.state]]
                 </td>

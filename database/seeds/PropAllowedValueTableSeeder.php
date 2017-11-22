@@ -156,6 +156,54 @@ class PropAllowedValueTableSeeder extends Seeder
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],
+
+
+
+            //Prop allowed values para a prop prémio da entidade avaliação de candidatura
+
+            [
+                'id'          => '19',
+                'property_id' => '64',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '20',
+                'property_id' => '64',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '21',
+                'property_id' => '64',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '22',
+                'property_id' => '64',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '23',
+                'property_id' => '64',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '24',
+                'property_id' => '64',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
+            ]
+
         ];
 
         foreach ($dados as $value) {

@@ -42,7 +42,8 @@ class PropAllowedValueController extends Controller {
                     'property.id as prop_id',
                     'property_name.name as prop_name',
                     'prop_allowed_value.id as prop_all_value_id',
-                    'prop_allowed_value.id as prop_all_value_name')
+                    'prop_allowed_value.id as prop_all_value_name',
+                    'prop_allowed_value.id as prop_all_value_deleted_at')
                 ->where('l1.slug','=',$url_text)
                 ->where('l2.slug','=',$url_text)
                 ->get();
@@ -51,18 +52,28 @@ class PropAllowedValueController extends Controller {
             {
                 if ($valueProcess->prop_all_value_name != "")
                 {
-                    $valueProcess->prop_all_value_name = DB::table('prop_allowed_value')
+                    $valueProcessAux = DB::table('prop_allowed_value')
                         ->join('prop_allowed_value_name','prop_allowed_value.id','=','prop_allowed_value_name.p_a_v_id')
                         ->join('language as l1', 'prop_allowed_value_name.language_id', '=', 'l1.id')
-                        ->select('prop_allowed_value_name.name as prop_all_value_name')
+                        ->select('prop_allowed_value_name.name as prop_all_value_name',
+                            'prop_allowed_value.deleted_at as prop_all_value_deleted_at')
                         ->where('l1.slug','=',$url_text)
                         ->where('prop_allowed_value.id', '=', $valueProcess->prop_all_value_name)
-                        ->whereNull('prop_allowed_value.deleted_at')
-                        ->first()->prop_all_value_name;
+                        ->first();
+
+                    $valueProcess->prop_all_value_name = $valueProcessAux->prop_all_value_name;
+                    $valueProcess->prop_all_value_deleted_at = $valueProcessAux->prop_all_value_deleted_at;
+
+                    //Apagar os prop_Allow_Value quando o deleted_at está preenchido
+                    if(!empty($valueProcess->prop_all_value_deleted_at))
+                        $prop_allowed_values->forget($keyProcess);
+
                 }
             }
 
-            return response()->json($prop_allowed_values);
+            //Arranjar os Index do array
+            //$prop_allowed_values->values();
+            return response()->json($prop_allowed_values->values());
         }
         else
         {
@@ -105,24 +116,15 @@ class PropAllowedValueController extends Controller {
             $prop_allowed_value_name->save();
             DB::commit();
             // all good
-            $success = true;
         } catch (\Exception $e) {
-            DB::rollback();
-            $success = false;
             // something went wrong
+            DB::rollback();
+            return Response::json( $e->getMessage(),400);
         }
 
-        $returnData = array(
-            'message' => 'An error occurred!'
-        );
+        // all good
+        return Response::json(null,200);
 
-        if ($success) {
-            return Response::json(null,200);
-        }
-        else
-        {
-            return Response::json($returnData, 400);
-        }
     }
 
     public function getProp()
@@ -150,5 +152,25 @@ class PropAllowedValueController extends Controller {
         $prop_allowed_value->update([
             'state' => $request->input('state')
         ]);
+    }
+
+    public function remove(Request $request)
+    {
+        try {
+
+            $prop_allowed_value = PropAllowedValue::find($request->input('id'))->delete();
+
+            //Apagar os Nomes do $prop_allowed_value
+
+            DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            DB::rollback();
+            // something went wrong
+            return Response::json(null,400);
+        }
+
+        //Sucesso
+        return Response::json(null,200);
     }
 }

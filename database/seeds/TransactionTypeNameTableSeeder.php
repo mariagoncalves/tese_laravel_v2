@@ -35,16 +35,16 @@ class TransactionTypeNameTableSeeder extends Seeder
         	[
         		'transaction_type_id' => '3',
         		'language_id'         => '1',
-        		't_name'              => 'Candidatura ao concurso FCF',
-        		'rt_name'             => 'Candidatura ao concurso FCF foi efetuada',
+        		't_name'              => 'Admissão da candidatura ao concurso FCF',
+        		'rt_name'             => 'Admissão da candidatura ao concurso FCF foi efetuada',
                 'updated_by'          => '1',
                 'deleted_by'          => NULL
         	],
             [
                 'transaction_type_id' => '4',
                 'language_id'         => '1',
-                't_name'              => 'Decisão de candidatura ao FCF',
-                'rt_name'             => 'Decisão de candidatura ao concurso FCF foi efetuada',
+                't_name'              => 'Avaliação de candidatura ao FCF',
+                'rt_name'             => 'Avaliação de candidatura ao concurso FCF foi efetuada',
                 'updated_by'          => '1',
                 'deleted_by'          => NULL
             ],

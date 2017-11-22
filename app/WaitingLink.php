@@ -26,7 +26,7 @@ class WaitingLink extends Model
 
     protected $guarded = [];
 
-    public function waitingTransaction() {
+    public function waitingT() {
         return $this->belongsTo('App\TransactionType', 'waiting_t', 'id');
     }
 

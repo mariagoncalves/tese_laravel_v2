@@ -5,14 +5,10 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-
-<!-- Testes -->
-<meta name="csrf-token" content="{{csrf_token()}}"
-
 <title>SB Admin - Bootstrap Admin Template</title>
 
 <!-- Bootstrap Core CSS -->
-<link href="<?= asset('../css/bootstrap.min.css') ?>" rel="stylesheet">
+<link href="<?= asset('../css/bootstrap.css') ?>" rel="stylesheet">
 
 <link href="<?= asset('../js/metisMenu/metisMenu.min.css') ?>" rel="stylesheet">
 

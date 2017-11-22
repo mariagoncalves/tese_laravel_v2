@@ -5,10 +5,10 @@
 <script src="<?= asset('../app/lib/angular.min.js') ?>"></script>
 <script src="<?= asset('../app/lib/angular-route.min.js') ?>"></script>
 <script src="<?= asset('../app/lib/angular-animate.min.js') ?>"></script>
-<script src="<?= asset('../app/lib/angular-sanitize.js') ?>"></script>
+<script src="<?= asset('../app/lib/angular-sanitize.min.js') ?>"></script>
 
-<script src="<?= asset('../app/lib/angular-aria.js') ?>"></script>
-<script src="<?= asset('../app/lib/angular-messages.js') ?>"></script>
+<script src="<?= asset('../app/lib/angular-aria.min.js') ?>"></script>
+<script src="<?= asset('../app/lib/angular-messages.min.js') ?>"></script>
 
 <script src="<?= asset('../app/lib/select.js') ?>"></script>
 <script src="<?= asset('../app/lib/angular-growl.min.js') ?>"></script>
@@ -17,9 +17,7 @@
 <script src="<?= asset('../app/lib/angular-translate.min.js') ?>"></script>
 <script src="<?= asset('../app/lib/angular-translate-loader-partial.min.js') ?>"></script>
 <script src="<?= asset('../app/lib/ui-bootstrap-tpls-2.5.0.min.js') ?>"></script>
-<script src="<?= asset('../js/smart-table.js') ?>"></script>
-<script src="<?= asset('../js/smart-table.min.js.map') ?>"></script>
-<script src="<?= asset('../app/lib/angular-file-upload.js') ?>"></script>
+<script src="<?= asset('../app/lib/angular-file-upload.min.js') ?>"></script>
 
 <script type="text/javascript" src="<?= asset('../app/lib/loading-bar.min.js') ?>"></script>
 
@@ -34,13 +32,4 @@
 
 <!-- AngularJS Application Scripts -->
 <script src="<?= asset('app/app.js') ?>"></script>
-
-<!-- Testes -->
-<script type="text/javascript">
-    $.ajaxSetup({
-      headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }
-    });
-</script>
 @yield('footerContent')

@@ -1,10 +1,10 @@
-                        [[index]] [[indexTab]]
+                        [] [[indexTab]]
                             <div class="panel-heading">
-                                <h3 class="panel-title" ng-if="modal_formTab[index].tab[indexTab].relTypeExist_==false">[[modal_formTab[index].tab[indexTab].propsform_[0].ent_type.language[0].pivot.name]] [[type-1]]</h3>
-                                <h3 class="panel-title" ng-if="modal_formTab[index].tab[indexTab].relTypeExist_==true">[[modal_formTab[index].tab[indexTab].propsform_[0].rel_type.language[0].pivot.name]] [[type-1]]</h3>
+                                <h3 class="panel-title" ng-if="modal_formTab.tab[indexTab].relTypeExist_==false">[[modal_formTab.tab[indexTab].propsform_[0].ent_type.language[0].pivot.name]] [[type-1]]</h3>
+                                <h3 class="panel-title" ng-if="modal_formTab.tab[indexTab].relTypeExist_==true">[[modal_formTab.tab[indexTab].propsform_[0].rel_type.language[0].pivot.name]] [[type-1]]</h3>
                             </div>
                                 <form name="frmTaskForm" class="form-horizontal" novalidate="">
-                                    <div ng-if="modal_formTab[index].tab[indexTab].relTypeExist_==true">
+                                    <div ng-if="modal_formTab.tab[indexTab].relTypeExist_==true">
                                         <div class="form-group">
                                             <label for="inputTransactionType" class="col-sm-3 control-label">Entity 1:</label>
                                             <div class="col-sm-9">
@@ -32,7 +32,7 @@
 
 
 
-                                    <div ng-repeat="prop in modal_formTab[index].tab[indexTab].propsform_" ng-switch="prop.value_type" emit-last-repeater-element>
+                                    <div ng-repeat="prop in modal_formTab.tab[indexTab].propsform_" ng-switch="prop.value_type" emit-last-repeater-element>
                                         <div class="form-group" ng-switch-when="text|double|int" ng-switch-when-separator="|" ng-switch="prop.form_field_type">
                                             <label for="inputName" class="col-sm-3 control-label">[[prop.language[0].pivot.name]]</label>
                                             <div class="col-sm-9" ng-switch-when="text">
@@ -109,5 +109,15 @@
                                                                                 </span>
                                             </div>
                                         </div>
+
+                                        {{-- Inicio alterações Guilherme --}}
+                                        <div class="form-group" ng-switch-when="file">
+                                            <label for="inputName" class="col-sm-3 control-label">[[prop.language[0].pivot.name]]</label>
+                                            <div class="col-sm-9" >
+                                                <input type="file" class="form-control" id="[[prop.language[0].pivot.form_field_name]]" ng-model="files[prop.language[0].pivot.form_field_name]" nv-file-select="" ng-disabled="files[prop.language[0].pivot.form_field_name]!=null" ng-required="prop.mandatory" uploader="uploader" valid-file />
+                                            </div>
+                                        </div>
+
+                                        {{-- Fim alterações Guilherme --}}
                                     </div>
                                 </form>

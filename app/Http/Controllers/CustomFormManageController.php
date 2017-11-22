@@ -8,6 +8,7 @@ use App\TransactionType;
 use App\EntType;
 use App\CustomFormName;
 use App\TState;
+use App\ProcessType;
 use DB;
 use Response;
 
@@ -41,10 +42,12 @@ class CustomFormManageController extends Controller
                     'custom_form_has_transaction_type.transaction_type_id as transaction_type_state',
                     'custom_form_has_transaction_type.updated_at as transaction_type_updated_at',
                     'custom_form_has_transaction_type.mandatory_form as mandatory',
-                    'custom_form_has_transaction_type.field_order as field_order'
+                    'custom_form_has_transaction_type.field_order as field_order',
+                    'custom_form.deleted_at'
                 )
                 ->where('l2.slug','=',$url_text)
                 ->where('l1.slug','=',$url_text)
+                ->whereNull('custom_form.deleted_at')
                 ->orderBy('field_order', 'asc')
                 ->get();
 
@@ -142,7 +145,6 @@ class CustomFormManageController extends Controller
     public function getTransactionTypes()
     {
         $langid = 1;
-
         $cTransactionTypes = collect();
         $TransactionTypes = TransactionType::all();
         foreach ($TransactionTypes as $TransactionType) {
@@ -167,7 +169,8 @@ class CustomFormManageController extends Controller
 
         }
 
-        return response()->json($cTransactionTypes);
+        return $cTransactionTypes;
+        //return response()->json($cTransactionTypes);
     }
 
     public function getSelTransactionTypes($id)
@@ -175,7 +178,6 @@ class CustomFormManageController extends Controller
         $langid = 1;
 
         $cTransactionTypes = collect();
-
         $transactionTypes = TransactionType::has('customForm')->get();
 
         foreach ($transactionTypes as $transactionType) {
@@ -201,103 +203,152 @@ class CustomFormManageController extends Controller
                 $cTransactionTypes->push($sTransactionType);
             }
         }
-        return response()->json($cTransactionTypes);
+
+        return $cTransactionTypes;
+        //return response()->json($cTransactionTypes);
     }
 
     public function updateTransactionTypes(Request $request, $id)
     {
-        $url_text = 'PT';
+
+        $sameActor = true;
+        $sameProcessType = true;
 
         //Apagar todos os registos na tabela CustomFormHasEnt, de acordo um custom form
         $costum_form = CustomForm::find($id);
         $costum_form->transactionTypes()->detach();
 
-        //Inserir os novos registos
         //Verificar se o request é null
-        if($request->input('selectedTransactionTypes')){
+        if(!empty($request->input('selectedTransactionTypes'))) {
 
-            //Verificar se Transaction_Types são iniciados ou executados pelo mesmo Actor, no certo T_State
             //Buscar todos os valores do request selectedTransactionTypes
             $input = $request->input('selectedTransactionTypes');
 
-            //Criar um array com todos os Ids das Transaction_Types
-            $array_Trans_types_ids = array_column($input, 'id');
+            //Verificar se Transaction_Types são iniciados ou executados pelo mesmo Actor, no certo T_State
+            $sameActor = $this->sameActor($input, $id);
 
-            //Buscar todas as Transaction_Types de acordo com os ids do $array_Trans_types_ids
-            $transaction_Types = TransactionType::with(['language' => function($query) use ($url_text) {
-                $query->where('slug', $url_text);
-            }, 'iniciatorActor' => function($query) use ($url_text) {
-            }])->whereHas('language', function ($query) use ($url_text){
-                return $query->where('slug', $url_text);
-            })->whereIn('id', $array_Trans_types_ids)
-                ->get();
+            //Verificar se os tipos de transações são do mesmo tipo de processo
+            $sameProcessType = $this->sameProcessType($input);
 
-            //Variaveis de actores iguais
-            $sameActor = true;
-
-            switch($costum_form->t_state_id)
+            //Verificar se possui o mesmo tipo de processo e o mesmo Actor (Iniciator ou Executor)
+            if($sameActor && $sameProcessType)
             {
-                //Verificar pelo iniciator (Pedido, Aceitação)
-                case 1:
-                case 5:
-                    //Buscar de iniciatesActors da primeira transação
-                    //Criar um array só com os ids dos actores
-                    $firstActors = $transaction_Types->first();
-                    $array_actor_id = [];
-                    foreach ($firstActors->iniciatorActor as $actor) {
-                        array_push($array_actor_id, $actor->pivot->actor_id);
-                    }
-
-                    foreach($transaction_Types as $transaction_type)
-                    {
-                        $sameActor_Aux = false;
-                        foreach ($transaction_type->iniciatorActor as $actor) {
-                           if(in_array($actor->pivot->actor_id, $array_actor_id))
-                           {
-                               $sameActor_Aux = true;
-                               break;
-                           }
-                        }
-
-                        //Caso não possui um actor iniciator comun em todas as Transaction_Types, actualizar a variavel  $sameActor = false
-                        if(!$sameActor_Aux)
-                        {
-                            $sameActor = false;
-                        }
-                    }
-                    break;
-
-                //Verificar pelo iniciator executor (Promesa, Execução, Estado)
-                case 2:
-                case 3:
-                case 4:
-
-                    foreach($transaction_Types as $transaction_type)
-                    {
-                        if($transaction_type->executer !=  $transaction_Types->first()->executer)
-                        {
-                            $sameActor = false;
-                            break;
-                        }
-                    }
-                    break;
-            }
-
-            //Inserção dos Tuplos
-            if($sameActor)
-            {
-                //Adicionar varios tuplo na tabela Custom_Form_Has_Transaction_Types
+                //Inserção na tabela Custom_Form_Has_Transaction_Types
                 //Incrementar o field_order
                 $field_order_number = 0;
                 foreach($request->input('selectedTransactionTypes') as $stransactionTypes){
                     $field_order_number++;
                     $costum_form->transactionTypes()->attach($stransactionTypes['id'], ['field_order' =>  $field_order_number, 'mandatory_form' => 1]);
                 }
+
+                return Response::json(null, 200);
             }
             else
-                //Caso seja actores diferentes, enviar uma mensagem de erro
-                return Response::json(null, 400);
+            {
+                $returnDataError = array(
+                    'sameActor' => $sameActor,
+                    'sameProcess' => $sameProcessType
+                );
+
+                return Response::json($returnDataError, 400);
+            }
         }
+    }
+
+    public function sameProcessType($input)
+    {
+        $url_text = 'PT';
+        $sameProcessType = true;
+
+        //Criar um array com todos os Ids das Transaction_Types
+        $array_Trans_types_ids = array_column($input, 'id');
+
+        //Buscar todas as Transaction_Types de acordo com os ids do $array_Trans_types_ids
+        $transaction_Types = TransactionType::with(['language' => function ($query) use ($url_text) {
+            $query->where('slug', $url_text);
+        }, 'iniciatorActor' => function ($query) use ($url_text) {
+        }])->whereHas('language', function ($query) use ($url_text) {
+            return $query->where('slug', $url_text);
+        })->whereIn('id', $array_Trans_types_ids)
+            ->get();
+
+        foreach ($transaction_Types as $transaction_type) {
+            //Verificar o tipo de transação sempre pelo primeiro tipo de transação da coleção
+            if ($transaction_type->process_type_id != $transaction_Types->first()->process_type_id) {
+                $sameProcessType = false;
+                break;
+            }
+        }
+
+        return $sameProcessType;
+    }
+
+    public function sameActor($input, $id)
+    {
+        $url_text = 'PT';
+
+        //Variaveis de actores iguais
+        $sameActor = true;
+
+        //Buscar o custom form
+        $costum_form = CustomForm::find($id);
+
+        //Criar um array com todos os Ids das Transaction_Types
+        $array_Trans_types_ids = array_column($input, 'id');
+
+        //Buscar todas as Transaction_Types de acordo com os ids do $array_Trans_types_ids
+        $transaction_Types = TransactionType::with(['language' => function ($query) use ($url_text) {
+            $query->where('slug', $url_text);
+        }, 'iniciatorActor' => function ($query) use ($url_text) {
+        }])->whereHas('language', function ($query) use ($url_text) {
+            return $query->where('slug', $url_text);
+        })->whereIn('id', $array_Trans_types_ids)
+            ->get();
+
+        switch ($costum_form->t_state_id) {
+            //Verificar pelo iniciator (Pedido, Aceitação)
+            case 1:
+            case 5:
+                //Buscar de iniciatesActors da primeira transação
+                //Criar um array só com os ids dos actores
+                $firstActors = $transaction_Types->first();
+                $array_actor_id = [];
+                foreach ($firstActors->iniciatorActor as $actor) {
+                    array_push($array_actor_id, $actor->pivot->actor_id);
+                }
+
+                foreach ($transaction_Types as $transaction_type) {
+                    $sameActor_Aux = false;
+                    foreach ($transaction_type->iniciatorActor as $actor) {
+                        //Verifica se o id do iniciator existe no array $array_actor_id
+                        if (in_array($actor->pivot->actor_id, $array_actor_id)) {
+                            $sameActor_Aux = true;
+                            break;
+                        }
+                    }
+
+                    //Caso não possui um actor iniciator comun em todas as Transaction_Types, actualizar a variavel  $sameActor = false
+                    if (!$sameActor_Aux) {
+                        $sameActor = false;
+                    }
+                }
+                break;
+
+            //Verificar pelo iniciator executor (Promesa, Execução, Estado)
+            case 2:
+            case 3:
+            case 4:
+
+                foreach ($transaction_Types as $transaction_type) {
+                    if ($transaction_type->executer != $transaction_Types->first()->executer) {
+                        $sameActor = false;
+                        break;
+                    }
+                }
+                break;
+        }
+
+        return $sameActor;
     }
 
     public function insert(Request $request)
@@ -347,7 +398,6 @@ class CustomFormManageController extends Controller
         $field_order_number = 0;
 
         try {
-
             //Apagar o registo
             $costum_forms = CustomForm::find($custom_form_id);
             $costum_forms->transactionTypes()->detach($request->input('transaction_type_id'));
@@ -386,16 +436,152 @@ class CustomFormManageController extends Controller
     {
         $t_id = $request->input('transaction_type_id');
         $c_id = $request->input('custom_form_id');
-        //buscar o valor anterior do mandatory
 
-        $custom_forms = CustomForm::find($c_id);
-        $mandatoryUpdate = 0;
-        foreach ($custom_forms->transactionTypes as $custom_form_t)
-        {
-            if($custom_form_t->pivot->transaction_type_id == $t_id)
-                $mandatoryUpdate =  $custom_form_t->pivot->mandatory_form ? 0 : 1;
+        try {
+
+            //buscar o valor anterior do mandatory
+            $custom_forms = CustomForm::find($c_id);
+            $mandatoryUpdate = 0;
+            foreach ($custom_forms->transactionTypes as $custom_form_t)
+            {
+                if($custom_form_t->pivot->transaction_type_id == $t_id)
+                    $mandatoryUpdate =  $custom_form_t->pivot->mandatory_form ? 0 : 1;
+            }
+
+            $custom_forms->transactionTypes()->updateExistingPivot($t_id, ['mandatory_form' => $mandatoryUpdate]);
+
+            DB::commit();
+            // all good
+            $success = true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            // something went wrong
+            $success = false;
+        }
+    }
+
+    public function addTransactioType($id)
+    {
+        //Buscar todos os tipos de Processo
+        $process_types = $this->getAllProcessType();
+
+        //Buscar o custom Form
+        $costum_form = $this->getCustomForm($id);
+
+        //Buscar Todos os Tipos de transações
+        $transaction_types = $this->getTransactionTypes();
+
+        //Buscar os Tipos de transações selecionados
+        $transaction_types_sel = $this->getSelTransactionTypes($id);
+
+        //Criar o array dos dados para enviar
+        $returnData = array(
+            'process_types' => $process_types,
+            'custom_form' => $costum_form,
+            'transactio_types' => $transaction_types,
+            'transaction_types_sel' => $transaction_types_sel,
+            'process_type_id' => $this->getProcessTypeId($transaction_types_sel->first())
+        );
+
+        return response()->json($returnData);
+    }
+
+    public function getProcessTypeId($transaction_type)
+    {
+        $process_type_id = null;
+
+        //Verificar se tem transaction_type
+        if(!empty($transaction_type))
+            //Buscar o id da Process pelo 1º tipo de transação selecionado
+            $process_type_id = TransactionType::find($transaction_type['id'])->process_type_id;
+
+        //Retornar o id do tipo de processo
+        //Caso não existe nenhum tipo de transação, $process_type_id = NULL
+        return $process_type_id;
+    }
+
+    public function getAllProcessType()
+    {
+        $url_text = 'PT';
+
+        $process_type = ProcessType::with(['language' => function($query) use ($url_text) {
+            $query->where('slug', $url_text);
+        }])->whereHas('language', function ($query) use ($url_text){
+            return $query->where('slug', $url_text);
+        })->get();
+
+        return $process_type;
+    }
+
+    public function getCustomForm($id)
+    {
+        $url_text = 'PT';
+
+        $costum_form = CustomForm::with(['language' => function($query) use ($url_text) {
+            $query->where('slug', $url_text);
+        }, 'transactionTypes.language' => function($query) use ($url_text) {
+            $query->where('slug', $url_text);
+        }, 'transactionTypes' => function($query) use ($url_text) {
+            $query->orderBy('field_order', 'asc');
+        }, 'transactionTypes.entType.properties.language' => function($query) use ($url_text) {
+            $query->where('slug', $url_text);
+        }, 'transactionTypes.entType.language' => function($query) use ($url_text) {
+            $query->where('slug', $url_text);
+        }])->whereHas('language', function ($query) use ($url_text){
+            return $query->where('slug', $url_text);
+        })->find($id);
+
+
+        return $costum_form;
+    }
+
+    public function getTransactionTypesByProcessType($id)
+    {
+        $langid = 1;
+
+        $cTransactionTypes = collect();
+        $TransactionTypes = TransactionType::all()->where('process_type_id',$id);
+
+        foreach ($TransactionTypes as $TransactionType) {
+            if ($TransactionType->language) {
+                if ($TransactionType->language->where('language_id', $langid)->first() != null) {
+                    $TransactionType->name = $TransactionType->language->where('language_id', $langid)->first()->pivot->t_name;
+                } else {
+                    $TransactionType->name = $TransactionType->language->first()->pivot->t_name;
+                }
+            }
+            if (!$TransactionType->name) {
+                $TransactionType->name = "Undefined";
+            }
+
+            $sTransactionType =  array(
+                "id" => $TransactionType->id,
+                "name" => $TransactionType->name,
+            );
+
+            $cTransactionTypes->push($sTransactionType);
         }
 
-        $custom_forms->transactionTypes()->updateExistingPivot($t_id, ['mandatory_form' => $mandatoryUpdate]);
+        return $cTransactionTypes;
+    }
+
+    public function remove(Request $request)
+    {
+        try {
+
+            $custom_form = CustomForm::find($request->input('id'))->delete();
+
+            //Apagar os Nomes do $prop_allowed_value
+
+            DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            DB::rollback();
+            // something went wrong
+            return Response::json(null,400);
+        }
+
+        //Sucesso
+        return Response::json(null,200);
     }
 }

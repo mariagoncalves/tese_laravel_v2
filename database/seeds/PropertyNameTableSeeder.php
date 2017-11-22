@@ -140,7 +140,7 @@ class PropertyNameTableSeeder extends Seeder
                 'deleted_by'      => NULL
             ],
 
-            //Propriedades de concurso (2)
+            //Propriedades de concurso (admissão da candidatura) (2)
             [
                 'property_id'     => '16',
                 'language_id'     => '1',
@@ -511,7 +511,7 @@ class PropertyNameTableSeeder extends Seeder
             [
                 'property_id'     => '60',
                 'language_id'     => '1',
-                'name'            => 'Nome do concurso',
+                'name'            => 'Data início',
                 'form_field_name' => NULL,
                 'updated_by'      => '1',
                 'deleted_by'      => NULL
@@ -519,7 +519,35 @@ class PropertyNameTableSeeder extends Seeder
             [
                 'property_id'     => '61',
                 'language_id'     => '1',
-                'name'            => 'Prazo de candidatura',
+                'name'            => 'Data de fim',
+                'form_field_name' => NULL,
+                'updated_by'      => '1',
+                'deleted_by'      => NULL
+            ],
+
+
+
+            //Propriedades de concurso (avaliação de candidatura)
+            [
+                'property_id'     => '62',
+                'language_id'     => '1',
+                'name'            => 'Premiado',
+                'form_field_name' => NULL,
+                'updated_by'      => '1',
+                'deleted_by'      => NULL
+            ],
+            [
+                'property_id'     => '63',
+                'language_id'     => '1',
+                'name'            => 'Nota',
+                'form_field_name' => NULL,
+                'updated_by'      => '1',
+                'deleted_by'      => NULL
+            ],
+            [
+                'property_id'     => '64',
+                'language_id'     => '1',
+                'name'            => 'Prémio',
                 'form_field_name' => NULL,
                 'updated_by'      => '1',
                 'deleted_by'      => NULL

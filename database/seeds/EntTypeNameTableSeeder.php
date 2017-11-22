@@ -24,7 +24,7 @@ class EntTypeNameTableSeeder extends Seeder
         	[
         		'ent_type_id' => '2',
                 'language_id' => '1',
-                'name'        => 'Candidatua ao concurso',
+                'name'        => 'Admissão da candidatura ao concurso',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
         	],
@@ -72,7 +72,7 @@ class EntTypeNameTableSeeder extends Seeder
             [
                 'ent_type_id' => '9',
                 'language_id' => '1',
-                'name'        => 'Decisão sobre candidatura ao concurso',
+                'name'        => 'Avaliação de candidatura ao concurso',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ],

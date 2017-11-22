@@ -14,4 +14,4 @@
                                     </div>
                                 {{--</form>--}}
 
-                                <button type="button" class="btn btn-default btn-blue" ng-disabled="cantAdvance" ng-click="changeTabBoot(trans_id, 'Task', 'tabFormTask', 1, 1, modal_processTab.process.selected)">Next</button>
+                               <button type="button" class="btn btn-default btn-blue" ng-disabled="cantAdvance" ng-click="all('Task', 'tabFormTask', 1, modal_processTab.process.selected)">Next</button>

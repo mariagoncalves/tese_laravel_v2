@@ -89,8 +89,7 @@ app.controller('entityTypesController', function($scope, $http, growl, API_URL, 
                         'state': $scope.entitytype.state,
                         'transaction_type_id': $scope.entitytype.transaction_type_id,
                         'par_ent_type_id': $scope.entitytype.par_ent_type_id,
-                        'par_prop_type_val': $scope.entitytype.par_prop_type_val,
-                        't_state_id' : $scope.entitytype.t_state_id
+                        'par_prop_type_val': $scope.entitytype.par_prop_type_val
                     }
                 ),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
@@ -194,7 +193,6 @@ app.controller('entityTypesController', function($scope, $http, growl, API_URL, 
             //headers: {'Content-Type': 'json'}
         }).then(function (response) {
             growl.success('This is success message.',{title: 'Success!'});
-            $('#myModal').modal('hide');
             $scope.getEntityTypes();
         }, function errorCallback(response) {
             if (response.status == 400)

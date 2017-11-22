@@ -1240,6 +1240,70 @@ class PropertyTableSeeder extends Seeder
                 'updated_by'       => '1',
                 'deleted_by'       => NULL
 
+            ],
+
+
+
+            //Propriedades de concurso (avaliação)
+            [
+
+                'id'               => '62',
+                'ent_type_id'      => '9',
+                'rel_type_id'      => NULL,
+                't_state_id'       => '3',
+                'value_type'       => 'bool',
+                'form_field_type'  => 'radio',
+                'unit_type_id'     => NULL,
+                'form_field_order' => '2',
+                'mandatory'        => '1',
+                'state'            => 'active',
+                'fk_ent_type_id'   => NULL,
+                'fk_property_id'   => NULL,
+                'form_field_size'  => NULL,
+                'can_edit'         => '1',
+                'updated_by'       => '1',
+                'deleted_by'       => NULL
+
+            ],
+            [
+
+                'id'               => '63',
+                'ent_type_id'      => '9',
+                'rel_type_id'      => NULL,
+                't_state_id'       => '3',
+                'value_type'       => 'int',
+                'form_field_type'  => 'number',
+                'unit_type_id'     => NULL,
+                'form_field_order' => '1',
+                'mandatory'        => '1',
+                'state'            => 'active',
+                'fk_ent_type_id'   => NULL,
+                'fk_property_id'   => NULL,
+                'form_field_size'  => '1',
+                'can_edit'         => '1',
+                'updated_by'       => '1',
+                'deleted_by'       => NULL
+
+            ],
+            [
+
+                'id'               => '64',
+                'ent_type_id'      => '9',
+                'rel_type_id'      => NULL,
+                't_state_id'       => '3',
+                'value_type'       => 'enum',
+                'form_field_type'  => 'selectbox',
+                'unit_type_id'     => NULL,
+                'form_field_order' => '3',
+                'mandatory'        => '1',
+                'state'            => 'active',
+                'fk_ent_type_id'   => NULL,
+                'fk_property_id'   => NULL,
+                'form_field_size'  => NULL,
+                'can_edit'         => '1',
+                'updated_by'       => '1',
+                'deleted_by'       => NULL
+
             ]
         ];
 

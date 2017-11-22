@@ -80,6 +80,9 @@ Route::get('/ents_types/get_all_http', 'EntTypes@getAllHttp');
 
 
 //CASUAL LINKS
+Route::get('/modalCausalLinks', function () {
+    return view('causalLinks/modalCausalLinks');
+});
 Route::get('/CausalLinksManage', 'CausalLinksController@index');
 Route::get('/causal_links/get_causal_links/{id?}','CausalLinksController@getAll');
 Route::post('/Causal_Link', 'CausalLinksController@insert');
@@ -88,6 +91,9 @@ Route::post('/Causal_Link_del/{id}', 'CausalLinksController@delete');
 
 
 //WAITING LINKS
+Route::get('/modalWaitingLinks', function () {
+    return view('waitingLinks/modalWaitingLinks');
+});
 Route::get('/WaitingLinksManage', 'WaitingLinksController@index');
 Route::get('/waiting_links/get_waiting_links/{id?}','WaitingLinksController@getAll');
 Route::post('/Waiting_Link', 'WaitingLinksController@insert');
@@ -104,12 +110,14 @@ Route::post('/T_State/{id}', 'TStatesController@update');
 Route::post('/T_State_del/{id}', 'TStatesController@delete');
 
 //Dashboard
+Route::post('/dashboard/get_todo', 'DashboardController@all');
+
+
 Route::get('/transaction_types/get_trans_type_name/{id}', 'DashboardController@getTransTypeName');
 
 Route::get('/dashboardManage', 'DashboardController@index');
-Route::get('/dashboard/get_transtypeusercaninit/{id}', 'DashboardController@getTransTypeUserCanInit');
 
-Route::get('/dashboard/get_transtypeusercaninit_', 'DashboardController@getTransTypeUserCanInit_');
+Route::get('/dashboard/get_transtypeusercaninit_', 'DashboardController@getTransTypeUserCanInit');
 
 Route::get('/dashboard/get_props_form/{id}/{id1}', 'DashboardController@getProps');
 Route::get('/dashboard/get_props_form_child/{id}', 'DashboardController@getPropsfromChild');
@@ -182,6 +190,8 @@ Route::get('/tabProcessTransactions', function () {
 });
 
 Route::post('/dashboard/send_data', 'DashboardController@insertData');
+
+Route::post('/dashboard/trans_ack', 'DashboardController@transactionAckAll');
 
 
 Route::get('/proc_types/get_langs', 'ProcessTypes@getAllLanguage');
@@ -371,7 +381,6 @@ Route::post('/roles/update_users/{id}', 'RoleController@updateUsers');
 Route::get('/roles/view_users', 'RoleController@viewUsers');
 Route::post('/remove_user_role/', 'RoleController@removeUsers');
 
-
 //*********************************************Guilherme*************************************************//
 //Prop_unit_type
 Route::get('/propUnitTypeManage/', 'PropUnitTypes@index');
@@ -382,6 +391,7 @@ Route::post('/Prop_Unit_Type/{id?}', 'PropUnitTypes@update');
 Route::get('/modalPropUnitTypes', function () {
     return view('PropUnitTypes/modalPropUnitTypes');
 });
+Route::post('/prop_unit_types/remove', 'PropUnitTypes@remove');
 //FIM
 
 //Prop_allowed_value
@@ -394,6 +404,8 @@ Route::post('/Prop_Allowed_Value/{id?}', 'PropAllowedValueController@update');
 Route::get('/modalPropAllowedValues', function () {
     return view('propAllowedValues/modalPropAllowedValues');
 });
+
+Route::post('/prop_allowed_value/remove', 'PropAllowedValueController@remove');
 //FIM
 
 //CostumForm_Has_Ent_Type
@@ -423,6 +435,11 @@ Route::get('/modalCustomForms_DragDrop', function () {
 Route::get('/modalCustomForms_ViewTransactionTypes', function () {
     return view('customForms/modalCustomForm_ViewTransactionTypes');
 });
+
+Route::get('/custom_form/add_transaction_types/{id?}', 'CustomFormManageController@addTransactioType');
+Route::get('/custom_form/get_transaction_types_by_process/{id?}', 'CustomFormManageController@getTransactionTypesByProcessType');
+Route::post('/custom_form/remove', 'CustomFormManageController@remove');
+
 //FIM
 
 //Transation_Type - ActorIniciatesT
@@ -445,8 +462,10 @@ Route::post('/InsertValues', 'FileUploaderController@insert');
 //FIM
 //Dashboard
 Route::get('/dashboard/get_customformusercaninit_/', 'DashboardController@customFormUserCanInit_');
-Route::post('/dashboard/savecustomform', 'DashboardController@saveCustomForm');
-Route::post('/dashboard/getprocesscustomform', 'DashboardController@getProcessCustomForm');
+Route::post('/dashboard/savecustomform', 'DashboardController@insertCustomForm');
+Route::get('/dashboard/get_process_custom_form/{id?}', 'DashboardController@getProcessCustomForm');
+Route::post('/dashboard/verify_custom_form/', 'DashboardController@customFormNotInitProcess');
+
 
 Route::get('/modalTaskCustomForm', function () {
     return view('dashboard/modalTaskCustomForm');
@@ -455,4 +474,12 @@ Route::get('/modalTaskCustomForm', function () {
 Route::get('/tabFormCustomForm', function () {
     return view('dashboard/tabFormCustomForm');
 });
+
+Route::get('/dashboard/get_custom_form/{id?}', 'DashboardController@getCustomFormProperties');
+
+Route::get('/accordition', function () {
+    return view('dashboard/accordion');
+});
+
 //FIM
+

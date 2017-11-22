@@ -11,12 +11,12 @@
                 <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i>{{trans("dashboard/messages.TransactionsPanelName")}}</h3>
             </div>
             <div class="panel-body" ng-cloak>
-                <div class="col-lg-2 col-md-6" ng-repeat="transactiontype in transactiontypes_">
+                <div class="col-lg-2 col-md-6" ng-repeat="transactiontype in ::transactiontypes_">
                 <div class="panel panel-green">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-lg-12 text-center">
-                                <h4>[[::transactiontype.language[0].pivot.t_name]]</h4>
+                                <h4>[[transactiontype.language[0].pivot.t_name]]</h4>
                             </div>
                         </div>
                     </div>
@@ -34,21 +34,21 @@
                 <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i>{{trans("dashboard/messages.CustomFormsPanelName")}}</h3>
             </div>
             <div class="panel-body">
-                {{--<div class="col-lg-2 col-md-6" ng-repeat="transactiontype in transactiontypes_">
+                <div class="col-lg-2 col-md-6" ng-repeat="customform in customforms_">
                     <div class="panel panel-green">
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-lg-12 text-center">
-                                    <h4>[[::transactiontype.language[0].pivot.t_name]]</h4>
+                                    <h4>[[::customform.language[0].pivot.name]]</h4>
                                 </div>
                             </div>
                         </div>
                         <div class="panel-footer text-center">
-                            <button type="button" class="btn btn-md btn-default" ng-click="openModalTask('xl',transactiontype.id)">Start <span><i class="fa fa-arrow-circle-right"></i></span></button>
+                            <button type="button" class="btn btn-md btn-default" ng-click="openModalCustomFormTask('xl',customform.id, customform.init_proc)">Start <span><i class="fa fa-arrow-circle-right"></i></span></button>
                             <div class="clearfix"></div>
                         </div>
                     </div>
-                </div>--}}
+                </div>
             </div>
         </div>
 
@@ -67,7 +67,7 @@
                             <td colspan="1">
                                 <a href="" ng-click="group.$hideRows = !group.$hideRows">
                                     <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
-                                    <strong>[[ group.value ]]</strong>
+                                    <strong>[[ ::group.value ]]</strong>
                                 </a>
                             </td>
                         </tr>
@@ -90,27 +90,27 @@
 
                             <td sortable="'t_state_name'" filter="{t_state_name: 'text'}" data-title="'Transaction State'" groupable="'t_state_name'"> <!--Transaction State-->
                                 [[::transaction.t_state_name]]
-                                <div class="progress progress-sm active">
+                                {{--<div class="progress progress-sm active">
                                     <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="[[20*(transaction.t_state_name.split('->').length)]]" aria-valuemin="0" aria-valuemax="100" ng-style="{ 'width' : (20*(transaction.t_state_name.split('->').length))+'%'}">
                                         <span class="sr-only">20% Complete</span>
                                     </div>
-                                </div>
+                                </div>--}}
                             </td>
 
                             <td sortable="'created_at'" data-title="'Created_at' | translate">
-                                [[ ::transaction.created_at ]]
+                                [[::transaction.created_at ]]
                             </td>
 
-                            <td sortable="'updated_at'" data-title="'Updated_at' | translate">
-                                [[ ::transaction.updated_at ]]
-                            </td>
+                            {{--<td sortable="'updated_at'" data-title="'Updated_at' | translate">
+                                [[::transaction.updated_at ]]
+                            </td>--}}
 
                             <td data-title="'Actor CAN'"> <!--Transaction State-->
                                 [[::transaction.Type]]
                             </td>
 
                             <td>
-                                <button type="button" class="btn btn-sm btn-success" ng-click="openModalTransactionState('lg',transaction.transaction_id,transaction.Type)">See Process</button>
+                                <button type="button" class="btn btn-sm btn-success" ng-click="openModalTransactionState('lg',transaction.transaction_id,transaction.Type, transaction.process_id, transaction.transaction_type_id)">See Process</button>
                             </td>
                         </tr>
                     </table>
@@ -136,7 +136,7 @@
                             <td colspan="1">
                                 <a href="" ng-click="group.$hideRows = !group.$hideRows">
                                     <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
-                                    <strong>[[ group.value ]]</strong>
+                                    <strong>[[ ::group.value ]]</strong>
                                 </a>
                             </td>
                         </tr>
@@ -165,16 +165,16 @@
                                 [[ ::transaction.created_at ]]
                             </td>
 
-                            <td sortable="'updated_at'" data-title="'Updated_at' | translate">
+                            {{--<td sortable="'updated_at'" data-title="'Updated_at' | translate">
                                 [[ ::transaction.updated_at ]]
-                            </td>
+                            </td>--}}
 
                             <td data-title="'Actor CAN'"> <!--Transaction State-->
                                 [[::transaction.Type]]
                             </td>
 
                             <td>
-                                <button type="button" class="btn btn-sm btn-success" ng-click="openModalTransactionState('lg',transaction.transaction_id,transaction.Type)">See Process</button>
+                                <button type="button" class="btn btn-sm btn-success" ng-click="openModalTransactionState('lg',transaction.transaction_id,transaction.Type, transaction.process_id, transaction.transaction_type_id)">See Process</button>
                             </td>
                         </tr>
                     </table>

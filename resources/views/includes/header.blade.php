@@ -37,7 +37,7 @@
                 <li>
                     <a href="/entityTypesManage">Entity Kinds</a>
                 </li>
-                <li>
+				<li>
                     <a href="/dynamicSearch">Dynamic Search</a>
                 </li>
                 <li>

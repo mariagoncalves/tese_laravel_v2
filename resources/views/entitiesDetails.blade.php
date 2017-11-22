@@ -43,8 +43,8 @@
 										<div ng-switch-when="enum">
 											<select name = "selectET[[ key1 ]]">
 												<option></option>
-								        		<option ng-repeat = "propAllowedValue in property.prop_allowed_values" value="[[propAllowedValue.language[0].pivot.name ]]"> 
-								        			[[ propAllowedValue.language[0].pivot.name ]] 
+								        		<option ng-repeat = "propAllowedValue in property.prop_allowed_values" value="[[propAllowedValue.id ]]"> 
+								        			[[ propAllowedValue.language[0].pivot.name]] 
 								        		</option>
 								        	</select>
 										</div>
@@ -131,7 +131,7 @@
 												<div ng-switch-when="enum">
 													<select name = "selectVT[[ propOfEnt.key  ]]" disabled>
 														<option></option>
-										        		<option ng-repeat = "propAllowedValue in propOfEnt.prop_allowed_values" value="[[propAllowedValue.language[0].pivot.name ]]"> 
+										        		<option ng-repeat = "propAllowedValue in propOfEnt.prop_allowed_values" value="[[propAllowedValue.id ]]"> 
 										        			[[ propAllowedValue.language[0].pivot.name ]] 
 										        		</option>
 										        	</select>
@@ -206,7 +206,7 @@
 										<div ng-switch-when="enum">
 											<select name = "selectRL[[ prop.key ]]" disabled>
 												<option></option>
-								        		<option ng-repeat = "propAllowedValue in prop.prop_allowed_values" value="[[propAllowedValue.language[0].pivot.name ]]"> 
+								        		<option ng-repeat = "propAllowedValue in prop.prop_allowed_values" value="[[propAllowedValue.id ]]"> 
 								        			[[ propAllowedValue.language[0].pivot.name ]] 
 								        		</option>
 								        	</select>
@@ -304,7 +304,7 @@
 										<div ng-switch-when="enum">
 											<select name = "selectER[[ property.key ]]" disabled>
 												<option></option>
-								        		<option ng-repeat = "propAllowedValue in property.prop_allowed_values" value="[[propAllowedValue.language[0].pivot.name ]]"> 
+								        		<option ng-repeat = "propAllowedValue in property.prop_allowed_values" value="[[propAllowedValue.id ]]"> 
 								        			[[ propAllowedValue.language[0].pivot.name ]] 
 								        		</option>
 								        	</select>

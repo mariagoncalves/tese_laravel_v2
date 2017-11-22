@@ -164,14 +164,14 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
         });
     };
 
-    /*$scope.getEntRefs = function (id) {
+    $scope.getEntRefs = function (id) {
 
         $http.get(API_URL + '/dynamicSearch/getEntRefs/' + id).then(function(response) {
             $scope.entRefs = response.data;
             console.log("Dados das ent refs");
             console.log($scope.entRefs);
         });
-    };*/
+    };
 
     $scope.getPropRefs = function (id) {
 

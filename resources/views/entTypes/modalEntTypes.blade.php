@@ -1,7 +1,7 @@
 
 <div class="modal-content">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()"><span aria-hidden="true">×</span></button>
         <h4 class="modal-title" id="myModalLabel">[[ form_title | translate]]</h4>
     </div>
     <div class="modal-body">
@@ -77,22 +77,6 @@
                     <span class="help-inline"
                           ng-show="frmTransactionTypes.process_state.$invalid && frmTransactionTypes.process_state.$touched">State field is required</span>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label for="Gender" class="col-sm-3 control-label">[[ "INPUT_TRANSACTION_STATE" | translate]]</label>
-                <div class="col-sm-9">
-                    <select class="form-control" ng-model="entitytype.t_state_id" ng-options="item.language[0].pivot.t_state_id as item.language[0].pivot.name for item in tstates">
-                        <option value="">[[ "INPUT_transaction_state_id" | translate]]</option>
-                    </select>
-                    <span class="help-inline"
-                          ng-show="frmTransactionTypes.language_id.$invalid && frmTransactionTypes.language_id.$touched">State field is required</span>
-                </div>
-                <br>
-                <ul ng-repeat="error in errors">
-                    <li>[[ error[0] ]]</li>
-                </ul>
-
             </div>
 
             <div class="form-group">

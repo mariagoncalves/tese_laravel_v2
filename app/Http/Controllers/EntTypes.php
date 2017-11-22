@@ -11,15 +11,25 @@ use App\ProcessType;
 use Illuminate\Http\Request;
 use DB;
 use Response;
+use Config;
 
 class EntTypes extends Controller
 {
     //
+    private $url_text;
+    private $user_id;
+
+    public function __construct()
+    {
+        $this->url_text = Config::get('config_app.url_text');
+        $this->user_id = Config::get('config_app.user_id');
+    }
+
     public function getAll(Request $request,$id = null)
     {
         if ($id == null)
         {
-            $url_text = 'PT';
+            $url_text = $this->url_text;
 
             $ents = DB::table('ent_type')
                 ->join('ent_type_name', 'ent_type.id', '=', 'ent_type_name.ent_type_id')
@@ -27,7 +37,6 @@ class EntTypes extends Controller
                 ->join('transaction_type_name','transaction_type.id','=','transaction_type_name.transaction_type_id')
                 ->join('process_type','process_type.id','=','transaction_type.process_type_id')
                 ->join('process_type_name','process_type.id','=','process_type_name.process_type_id')
-                ->leftJoin('t_state','ent_type.t_state_id','=','t_state.id') //o t_state_id pode ser nulo, usar o leftJoin
                 //->join('t_state_name','t_state.id','=','t_state_name.t_state_id')
                 ->leftJoin('ent_type as et1','ent_type.par_ent_type_id','=','et1.id')
                 //->join('ent_type_name as etn1','et1.id', '=', 'etn1.ent_type_id')
@@ -44,7 +53,7 @@ class EntTypes extends Controller
                     'et1.id as etn1_name', 'prop_allowed_value.id as p_a_v_name',
                     //'etn1.name as etn1_name', 'prop_allowed_value_name.name as p_a_v_name',
                     //'t_state_name.name as t_state_name',
-                    't_state.id as t_state_name','ent_type.state as ent_type_state', 'ent_type.created_at', 'ent_type.updated_at', 'ent_type.state')
+                    'ent_type.state as ent_type_state', 'ent_type.created_at', 'ent_type.updated_at', 'ent_type.state')
                 ->where('l1.slug','=',$url_text)->where('l2.slug','=',$url_text)->where('l3.slug','=',$url_text)
                 //->where('l4.slug','=',$url_text)->where('l5.slug','=',$url_text)
                 //->where('l6.slug','=',$url_text)
@@ -76,18 +85,6 @@ class EntTypes extends Controller
                         ->whereNull('prop_allowed_value.deleted_at')
                         ->first()->p_a_v_name;
                 }
-
-                if ($valueProcess->t_state_name != "")
-                {
-                    $valueProcess->t_state_name = DB::table('t_state')
-                        ->join('t_state_name','t_state.id','=','t_state_name.t_state_id')
-                        ->join('language as l1', 't_state_name.language_id', '=', 'l1.id')
-                        ->select('t_state_name.name as t_state_name')
-                        ->where('l1.slug','=',$url_text)
-                        ->where('t_state.id', '=', $valueProcess->t_state_name)
-                        ->whereNull('t_state.deleted_at')
-                        ->first()->t_state_name;
-                }
             }
 
             return response()->json($ents);
@@ -115,7 +112,7 @@ class EntTypes extends Controller
 
             if ($request->input('par_ent_type_id') != "")
             {
-                $entitytype->par_ent_type_id = $request->input('ent_type_id');
+                $entitytype->par_ent_type_id = $request->input('par_ent_type_id');
             }
 
             if ($request->input('par_prop_type_val') != "")
@@ -123,10 +120,6 @@ class EntTypes extends Controller
                 $entitytype->par_prop_type_val = $request->input('par_prop_type_val');
             }
 
-            if ($request->input('t_state_id') != "")
-            {
-                $entitytype->t_state_id = $request->input('t_state_id');
-            }
             $entitytype->save();
 
             $entitytypename->name = $request->input('name');
@@ -156,12 +149,10 @@ class EntTypes extends Controller
 
     public function update(Request $request, $id)
     {
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $entitytype = EntType::with(['language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }, 'transactionsType.language' => function($query) use ($url_text) {
-            $query->where('slug', $url_text);
-        }, 'tStates.language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }, 'entType.language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
@@ -190,15 +181,6 @@ class EntTypes extends Controller
             else
             {
                 $entitytype->par_prop_type_val = null;
-            }
-
-            if ($request->input('t_state_id') != "")
-            {
-                $entitytype->t_state_id = $request->input('t_state_id');
-            }
-            else
-            {
-                $entitytype->t_state_id = null;
             }
 
             $entitytype->save();
@@ -231,12 +213,10 @@ class EntTypes extends Controller
 
     public function delete(Request $request, $id)
     {
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $entitytype = EntType::with(['language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }, 'transactionsType.language' => function($query) use ($url_text) {
-            $query->where('slug', $url_text);
-        }, 'tStates.language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }, 'entType.language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
@@ -247,6 +227,7 @@ class EntTypes extends Controller
         DB::beginTransaction();
         try {
             $entitytype->language()->detach($id);
+            $entitytype->delete();
 
             DB::commit();
             $success = true;
@@ -270,12 +251,10 @@ class EntTypes extends Controller
 
     public function getSpec($id)
     {
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $ents = EntType::with(['language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }, 'transactionsType.language' => function($query) use ($url_text) {
-            $query->where('slug', $url_text);
-        }, 'tStates.language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }, 'entType.language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
@@ -301,7 +280,7 @@ class EntTypes extends Controller
 
     public function getAllTransactionTypes()
     {
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $transactiontypes = TransactionType::with(['language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }])->whereHas('language', function ($query) use ($url_text){
@@ -313,7 +292,7 @@ class EntTypes extends Controller
 
     public function getAllTStates()
     {
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $tstates = TState::with(['language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }])->whereHas('language', function ($query) use ($url_text){
@@ -325,7 +304,7 @@ class EntTypes extends Controller
 
     public function getAllEntTypes()
     {
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $enttypes = EntType::with(['language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }])->whereHas('language', function ($query) use ($url_text){
@@ -337,7 +316,7 @@ class EntTypes extends Controller
 
     public function getAllPropAllowedValues()
     {
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $propallowedvalues = PropAllowedValue::with(['language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }])->whereHas('language', function ($query) use ($url_text){

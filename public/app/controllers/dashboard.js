@@ -29,7 +29,7 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
         title: 'Title'
     };
 
-    $scope.openModalDialog = function (size, id, min, max, $transtypename) {
+    $scope.openModalDialog = function (size, id, min, max, transtypename) {
         /*var parentElem = parentSelector ?
          angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;*/
         var deferred = $q.defer();
@@ -56,7 +56,7 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                     return max
                 },
                 trans_type_name: function() {
-                    return $transtypename
+                    return transtypename
                 }
             }
         });
@@ -93,7 +93,7 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
 
 
     $scope.modal = [];
-    $scope.modal_formTab = [];
+    $scope.modal_formTab = {};
     //https://stackoverflow.com/questions/36844064/dismiss-uibmodal-from-within
     $scope.openModalTask = function (size, id, flag, proc_type_id) {
         /*var parentElem = parentSelector ?
@@ -129,8 +129,6 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             $scope.modal_formTab.length = 0;
             if ($scope.modal_processTab !== undefined)
                 $scope.modal_processTab.length = 0;
-            modal_i = 0;
-            index1 = 0;
             alert("entrou closed");
         }, function(reason){
             //gets triggers when modal is dismissed.
@@ -138,24 +136,46 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             $scope.modal_formTab.length = 0;
             if ($scope.modal_processTab !== undefined)
                 $scope.modal_processTab.length = 0;
-            modal_i = 0;
-            index1 = 0;
             alert("entrou dismissed");
         });
     };
 
     $scope.modalsArrData = [];
-    var modal_i = 0;
-    var index1 = 0;
     $scope.ModalInstanceCtrl = function ($scope, $uibModalInstance, $timeout, trans_id, flag_inic_process, process_type_id) {
-        $scope.modal_formTab.relTypeExist = false;
-        $scope.modal_processTab = [];
-        $scope.modal_formTab.push({ tab :[], causalinks :[], types : []});
-        //debugger;
-        $scope.myTransID = trans_id;
-        //$scope.index = index1++;
         var index_m = 0;
         var indexTabLocal = 0;
+
+        $scope.index = index_m;
+
+        $scope.modal_processTab = [];
+        /*$scope.modal_formTab.push({ tab :[], causalinks :[]});
+        $scope.modal_formTab[index_m].relTypeExist = false;*/
+        $scope.modal_formTab.relTypeExist = false;
+        $scope.modal_formTab.tab = [];
+        $scope.modal_formTab.causalinks = [];
+
+        $scope.updateValue = function(choice, i, indexTab){
+            console.log($scope.modal_formTab);
+            console.log(choice);
+            console.log(i);
+            var index = $scope.modal_formTab.tab[indexTab].propsform[i].fields[choice];
+            console.log(index);
+            if (index === false)
+            {
+                delete $scope.modal_formTab.tab[indexTab].propsform[i].fields[choice];
+            }
+
+            if (isEmpty($scope.modal_formTab.tab[indexTab].propsform[i].fields))
+            {
+                delete $scope.modal_formTab.tab[indexTab].propsform[i].fields;
+            }
+
+            //console.log($scope.modal_formTab.tab[indexTab].propsform[i].fields);
+        };
+
+        function isEmpty(obj) {
+            return Object.keys(obj).length === 0;
+        }
 
         $scope.processes = function() {
             $http.get(API_URL + "/dashboard/get_processes_of_tr/" + trans_id, {
@@ -163,16 +183,14 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             })
                 .then(function (response) {
                     $scope.process = response.data;
-                    console.log($scope.process);
                 });
         };
 
-
-        $scope.verParEntType = function ($id, $index, $indexTab) {
+        $scope.verParEntType = function ($id, $indexTab) {
             $scope.showMessage = false;
-            $scope.formChild($id, $index, $indexTab);
+            $scope.formChild($id, $indexTab);
         };
-        $scope.formChild = function($id, $index, $indexTab) {
+        $scope.formChild = function($id, $indexTab) {
             if ($id == null)
             {
 
@@ -189,18 +207,18 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                         $scope.myPropsform_ = $scope.modal_formTab.propsform;
                         $scope.myRelTypeExist_ = $scope.modal_formTab.relTypeExist;*/
 
-                        $scope.modal_formTab[$index].tab[$indexTab].showMessage = true;
-                        $scope.modal_formTab[$index].tab[$indexTab].relTypeExist_ = false;
-                        $scope.modal_formTab[$index].tab[$indexTab].propsform_ = response.data;
-                        $scope.modal_formTab[$index].tab[$indexTab].showBtnType_ = true;
+                        $scope.modal_formTab[index_m].tab[$indexTab].showMessage = true;
+                        $scope.modal_formTab[index_m].tab[$indexTab].relTypeExist_ = false;
+                        $scope.modal_formTab[index_m].tab[$indexTab].propsform_ = response.data;
+                        $scope.modal_formTab[index_m].tab[$indexTab].showBtnType_ = true;
 
-                        console.log($scope.modal_formTab[$index].tab[$indexTab]);
+                        console.log($scope.modal_formTab[index_m].tab[$indexTab]);
 
                     }, function errorCalback(response) {
-                        $scope.modal_formTab[$index].tab[$indexTab].showMessage = false;
-                        $scope.modal_formTab[$index].tab[$indexTab].relTypeExist_ = null;
-                        $scope.modal_formTab[$index].tab[$indexTab].propsform_ = null;
-                        $scope.modal_formTab[$index].tab[$indexTab].showBtnType_ = null;
+                        $scope.modal_formTab[index_m].tab[$indexTab].showMessage = false;
+                        $scope.modal_formTab[index_m].tab[$indexTab].relTypeExist_ = null;
+                        $scope.modal_formTab[index_m].tab[$indexTab].propsform_ = null;
+                        $scope.modal_formTab[index_m].tab[$indexTab].showBtnType_ = null;
                     }).finally(function () {
                     // called no matter success or failure
                 });
@@ -232,30 +250,6 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             }
 
             counter++;
-
-            return deferred.promise;
-        };
-
-        $scope.isTrAndStWaitingForAnotherTr = function ($trans_type_id, $t_state_id, $process_id) {
-            var deferred = $q.defer();
-
-            $http({
-                method: 'POST',
-                url: API_URL + "/dashboard/isTrAndStWaitingForAnotherTr",
-                data: $.param({ 't_state_id' : $t_state_id,
-                        'transaction_type_id': $trans_type_id,
-                        'process_id' : $process_id
-                    }
-                ),
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                ignoreLoadingBar: false
-            }).then(function (response) {
-                deferred.resolve(response);
-            }, function errorCalback(response) {
-                deferred.reject(response);
-            }).finally(function () {
-                // called no matter success or failure
-            });
 
             return deferred.promise;
         };
@@ -308,16 +302,13 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
         $scope.showMessage = false;
         $scope.templatePath = 'tabChildFormTask';
 
-        //$scope.modal.transaction.transaction_type_id;
-
         var fileExist = false;
 
         $scope.process_id=0;
-        $scope.types = [];
-        $scope.changeTabBoot = function ($id, $title, $templateurl, $tabnumber, $type, $process_id) {
-            $scope.modal_formTab[index_m].process = $process_id; //se não for selecionado nenhum valor na selectbox o valor vem undefined, se selecionado vem null
-            $scope.modal_formTab[index_m].transaction_type_id = $id;
-            $scope.modal_formTab[index_m].process_type_id = process_type_id;
+        $scope.changeTabBoot = function ($title, $templateurl, $tabnumber, $type, $process_id) {
+            $scope.modal_formTab.process = $process_id; //se não for selecionado nenhum valor na selectbox o valor vem undefined, se selecionado vem null
+            $scope.modal_formTab.transaction_type_id = trans_id;
+            $scope.modal_formTab.process_type_id = process_type_id;
             //console.log($process_id.id);
             //alert("$id=" + $id);
             //debugger;
@@ -326,7 +317,6 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                 counter = 0;
             }
 
-            $scope.myTransID = $id;
             $scope.myTabNumber = $tabnumber + 1;
 
             //guarda da recursividade
@@ -337,23 +327,24 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
 
             $scope.tabs.splice($scope.activeTabIndex + 1);
 
-            $scope.modal.transaction_type_id = $id;
+            $scope.modal.transaction_type_id = trans_id;
 
-            $scope.isTrAndStWaitingForAnotherTr($id, $type, $process_id != null ? $process_id.id : null).then(function (data) {
-                $scope.isUserInicExecOfTrans($id, counter).then(function (data) {
-                        //debugger;
-                        if (data.data == true) {
-                            isUserInicExec = data.data;
-                            counterTStatesCan = 0;
-                        }
+            $scope.isTrAndStWaitingForAnotherTr(trans_id, $type, $process_id != null ? $process_id.id : null).then(function (data) {
+                $scope.isUserInicExecOfTrans(trans_id, counter).then(function (data) {
+                        //se o valor devolvido for true então o utilizador é iniciador e executor desse tipo de transacção
+                        /*if (data.data === true) {
+                            counterTStatesCan = 0; //logo guardamos um valor para controlar o número de vezes que iremos
+                        }*/
 
-                        if (counterTStatesCan == 0) {
-                            counterTStatesCan++;
+                        /*if (counterTStatesCan === 0) {
+                            counterTStatesCan++;*/
+                        if (data.data === true) //se o valor devolvido for true então o utilizador é iniciador e executor desse tipo de transacção
+                        {
 
-                            $scope.propsForm($id, $type, index_m).then(function (response) {
+                            $scope.propsForm(trans_id, $type).then(function (response) {
                                     //emptyRelTypeProp se for false entao existem propriedades para aquele tipo de relação ou
                                     //é do tipo reltype entao é necessario carregar as selectboxes das instancias das entidades
-                                    if (response.data.emptyRelTypeProp === false || response.data.emptyRelType === false)
+                                    if (response.data.emptyRelTypeProp === false)
                                     {
                                         //$scope.modal_formTab.relTypeExist = true;
                                         reltype = true;
@@ -368,13 +359,13 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                                         //$scope.modal_formTab.relTypeExist = false;
                                     }
 
-                                    if (response.data.emptyEntTypeProp === false || response.data.emptyEntType === false)
+                                    if (response.data.emptyEntTypeProp)
                                     {
-                                        enttype = true;
+                                        enttype = false;
                                     }
                                     else
                                     {
-                                        enttype = false;
+                                        enttype = true;
                                     }
 
                                     //File verification
@@ -391,10 +382,7 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                                         }
                                     }
 
-                                    //$scope.modal_formTab.push({ tab :[], causalinks :[]}); se forem varios modais é preciso fazer assim
-                                    $scope.modal_formTab[index_m].tab.push({
-                                        isEmptyEntTypeProp : response.data.emptyEntTypeProp,
-                                        isEmptyRelTypeProp : response.data.emptyRelTypeProp,
+                                    $scope.modal_formTab.tab.push({
                                         entTypeExist: enttype,
                                         relTypeExist: reltype,
                                         propsform: response.data.data,
@@ -403,46 +391,46 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                                         type:$type
                                     });
 
+                                    if (response.data.par_prop_type_val !== null)
+                                    {
+                                        $scope.verParEntType(response.data.par_prop_type_val, indexTabLocal);
+                                    }
+
                                     growl.success('Loading done successfully.', {title: 'Success!', referenceId: index_m});
-                                    $scope.showBtnType = true;
+                                    //$scope.showBtnType = true;
                                     $scope.types.push($type);
                                     $scope.mytype = ++$type; //tem de ser ++type senao nao coloca o valor incrementado na variable $scope.mytype
                                     $scope.myindexTab = indexTabLocal++;
-                                    $scope.myindex = index_m;
 
                                     console.log($scope.modal_formTab);
 
                                     $scope.addTab($title, $templateurl);
+
                                     $timeout(function () {
-                                        $scope.changeTabBoot($id, $title, $templateurl, ++$tabnumber, $scope.mytype, $process_id);
+                                        $scope.changeTabBoot($title, $templateurl, ++$tabnumber, $scope.mytype, $process_id);
                                     }, 100);
                                 }
                             ).catch(function (response) {
                                 //debugger;
-                                $scope.modal_formTab[index_m].tab.push({
-                                    isEmptyEntTypeProp : response.data.emptyEntTypeProp,
-                                    isEmptyRelTypeProp : response.data.emptyRelTypeProp,
-                                    entTypeExist: response.data.emptyEntType != true,
-                                    relTypeExist: response.data.emptyRelType != true,
+                                $scope.modal_formTab.tab.push({
+                                    entTypeExist: response.data.emptyEntType !== true,
+                                    relTypeExist: response.data.emptyRelType !== true,
                                     propsform: null,
                                     showBtnType: null,
                                     type:$type
                                 });
 
-                                if (response.status == 400) {
+                                if (response.status === 400) {
                                     indexTabLocal++;
                                     counterTStatesCan = 0;
                                     $scope.types.push($type);
                                     $scope.taberror.message = "Não existe formulário associado a este tipo de transacção";
                                     //$scope.addTab($title + " " + $type, "tabError");
                                     $timeout(function () {
-                                        $scope.changeTabBoot($id, $title, $templateurl, ++$tabnumber, ++$type, $process_id); //nao pode ser $tabnumber++
+                                        $scope.changeTabBoot($title, $templateurl, ++$tabnumber, ++$type, $process_id); //nao pode ser $tabnumber++
                                     },100);
-                                    /*$scope.taberror = [];
-                                     $scope.taberror.message = "Não existe formulário associado a este tipo de transacção";
-                                     $scope.addTab("Error","tabError");*/
                                 }
-                                else if (response.status == 401)
+                                else if (response.status === 401)
                                 {
                                     growl.error('There is no properties linked to Ent Type or Rel Type!', {
                                         title: 'Erro!',
@@ -463,14 +451,14 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                         }
                     }
                 ).catch(function (response) {
-                    if (response.status == 400) {
+                    if (response.status === 400) {
 
                     }
                 });
                 //}
             }).catch(function (response) {
                 //debugger;
-                if (response.status == 400) {
+                if (response.status === 400) {
                     growl.error('Can´t advance to the next transaction state, there are some transactions needeed to do it first.', {
                         title: 'Erro!',
                         referenceId: index_m
@@ -479,12 +467,149 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             });
         };
 
+        $scope.all = function ($title, $templateurl, $tabnumber, $process_id) {
+            $scope.modal_formTab.process = $process_id; //se não for selecionado nenhum valor na selectbox o valor vem undefined, se selecionado vem null
+            $scope.modal_formTab.transaction_type_id = trans_id;
+            $scope.modal_formTab.process_type_id = process_type_id;
+
+            $scope.tabs.splice($scope.activeTabIndex + 1);
+            indexTabLocal = 0;
+
+            $scope.getTodo($process_id != null ? $process_id.id : null).then(function (response) {
+                console.log(response.data);
+                //emptyRelTypeProp se for false entao existem propriedades para aquele tipo de relação ou
+                //é do tipo reltype entao é necessario carregar as selectboxes das instancias das entidades
+                //var promise = $timeout();
+                var promiseStack = [];
+                angular.forEach(response.data, function(value, key) {
+                    //promise = promise.then(function() {
+                    var deferred = $q.defer();
+                    var promise = deferred.promise;
+                    if (key === 0)
+                    {
+                        deferred.resolve();
+                    }
+                    else
+                    {
+                        promiseStack.push(deferred);
+                    }
+                    promise.then(function() {
+                        if (value.emptyRelTypeProp === false) {
+                            //$scope.modal_formTab.relTypeExist = true;
+                            reltype = true;
+                            //carregar as duas selectboxes
+                            var id = value.rel_type_id;
+                            $scope.loadEntities1(id);
+                            $scope.loadEntities2(id);
+                        }
+                        else {
+                            reltype = false;
+                            //$scope.modal_formTab.relTypeExist = false;
+                        }
+
+                        if (value.emptyEntTypeProp) {
+                            enttype = false;
+                        }
+                        else {
+                            enttype = true;
+                        }
+
+                        //File verification
+                        if (value.data !== null)
+                        {
+                            for (var i = 0; i < value.data.length; i++) {
+                                if (value.data[i].value_type === "file") {
+                                    fileExist = true;
+                                    break;
+                                }
+                                else {
+                                    fileExist = false;
+                                }
+                            }
+                        }
+
+                        $scope.modal_formTab.tab.push({
+                            entTypeExist: enttype,
+                            relTypeExist: reltype,
+                            propsform: value.data,
+                            showBtnType: true,
+                            fileExist: fileExist,
+                            type: key + 1
+                        });
+
+                        if (value.par_prop_type_val !== null) {
+                            $scope.verParEntType(value.par_prop_type_val, indexTabLocal);
+                        }
+
+                        growl.success('Loading done successfully.', {title: 'Success!', referenceId: index_m});
+                        //$scope.showBtnType = true;
+                        $scope.mytype = key + 1; //tem de ser ++type senao nao coloca o valor incrementado na variable $scope.mytype
+                        $scope.myindexTab = indexTabLocal++;
+
+                        $scope.myPromise = promiseStack[key];
+
+                        console.log($scope.modal_formTab);
+
+                        if (value.data !== null)
+                        {
+                            $scope.addTab($title, $templateurl);
+                        }
+                        else
+                        {
+                            if ((response.data.length - 1) !== key)
+                                promiseStack[key].resolve();
+                        }
+                        /*else
+                            return $timeout();
+
+                        return $timeout(500);*/
+                    });
+                });
+            });
+        };
+
+        $scope.log = function(m){
+            //console.log(m);
+            try {
+                m.resolve();
+            }
+            catch(err)
+            {
+
+            }
+        };
+
+        $scope.getTodo = function($proc_id)
+        {
+            var deferred = $q.defer();
+
+            $http({
+                method: 'POST',
+                url: API_URL + "dashboard/get_todo",
+                data: $.param({ 'process_id': $proc_id,
+                        'trans_type_id':trans_id
+                    }
+                ),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                ignoreLoadingBar: false
+            }).then(function (response) {
+                deferred.resolve(response);
+            }, function errorCalback(response) {
+                deferred.reject(response);
+            }).finally(function () {
+                // called no matter success or failure
+            });
+
+            return deferred.promise;
+        };
+
         //inicializar o array das tabs
         $scope.tabs = [];
         //verificar se o tipo de transacção inicia um novo processo
         if (flag_inic_process === 1) //se sim então não aparece a tab para escolher um processo já existente
         {
-            $scope.changeTabBoot(trans_id, 'Task', 'tabFormTask', 1, 1, null);
+            //$scope.changeTabBoot('Task', 'tabFormTask', 1, 1, null);
+            $scope.all('Task', 'tabFormTask', 1, null);
         }
         else //se não então aparece a tab para escolher um processo já existente
         {
@@ -540,12 +665,16 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
 
         $scope.save = function ($form_Tab) {
             //$scope.modal_formTab.push({ causalinks :[]});
-            $scope.modal_formTab[index_m].types.push($scope.types);
-                $scope.getCausalLinksOfTr(trans_id, $scope.types).then(function (response) {
+            var types = [];
+            var typesOnFormTabs = $scope.modal_formTab.tab;
+            typesOnFormTabs.forEach(function (item, i) {
+                types.push(item.type);
+            });
+                $scope.getCausalLinksOfTr(trans_id, types).then(function (response) {
                     var causallinks = response.data;
                     causallinks.forEach(function (item, i) {
                         $scope.openModalDialog('sm', causallinks[i].caused_t, causallinks[i].min, causallinks[i].max, item.caused_transaction.language[0].pivot.t_name).then(function (data) {
-                                $scope.modal_formTab[index_m].causalinks.push({
+                                $scope.modal_formTab.causalinks.push({
                                     transaction_type_id: causallinks[i].caused_t,
                                     t_state_id: 1,
                                     numberofTrs: data.number
@@ -572,10 +701,13 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
         $scope.sendData = function ($data) {
             var deferred = $q.defer();
 
+            var data = [];
+            data.push($data);
+
             $http({
                 method: 'POST',
                 url: API_URL + "/dashboard/send_data",
-                data: $data,
+                data: data,
                 headers: {'Content-Type': 'application/json'},
                 ignoreLoadingBar: false
             }).then(function (response) {
@@ -598,7 +730,7 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
 
     var reltype = false;
     var enttype = false;
-    $scope.propsForm = function($id, $type, $index)
+    $scope.propsForm = function($id, $type)
     {
         var deferred = $q.defer();
         //$scope.modal_formTab = [];
@@ -613,6 +745,30 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             ).finally(function() {
             // called no matter success or failure
             //$scope.modal_formTab.loading = false;
+        });
+
+        return deferred.promise;
+    };
+
+    $scope.isTrAndStWaitingForAnotherTr = function ($trans_type_id, $t_state_id, $process_id) {
+        var deferred = $q.defer();
+
+        $http({
+            method: 'POST',
+            url: API_URL + "/dashboard/isTrAndStWaitingForAnotherTr",
+            data: $.param({ 't_state_id' : $t_state_id,
+                    'transaction_type_id': $trans_type_id,
+                    'process_id' : $process_id
+                }
+            ),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            ignoreLoadingBar: false
+        }).then(function (response) {
+            deferred.resolve(response);
+        }, function errorCalback(response) {
+            deferred.reject(response);
+        }).finally(function () {
+            // called no matter success or failure
         });
 
         return deferred.promise;
@@ -665,15 +821,6 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
         };
     };
 
-
-    $scope.procstypes = function() {
-        $http.get(API_URL + "/proc_types/get_procs_types")
-            .then(function (response) {
-                $scope.processtypes = response.data;
-            });
-    };
-    $scope.procstypes();
-
     $scope.langs = function() {
         $http.get(API_URL + "/proc_types/get_langs")
             .then(function (response) {
@@ -695,6 +842,14 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             });
     };
     $scope.transacsTypesUserCanInit_();
+
+    $scope.customFormUserCanInit_ = function() {
+        $http.get(API_URL + "/dashboard/get_customformusercaninit_")
+            .then(function (response) {
+                $scope.customforms_ = response.data;
+            });
+    };
+    $scope.customFormUserCanInit_();
 
 
     $scope.getAllInicExecTrans = function() {
@@ -722,41 +877,11 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
     };
     $scope.getAllInicExecTrans();
 
-    $scope.getInicTrans = function() {
-        $http.get('/dashboard/get_all_inic_trans', [{cache : true}]).then(function(response) {
-            $scope.tableParamsInicTrans = new NgTableParams({
-                count: 5,
-                group: "process_type_name",
-                sorting: { id: "desc" }
-            }, {
-                paginationMaxBlocks: 13,
-                paginationMinBlocks: 2,
-                dataset: response.data
-            });
-        });
-    };
-    //$scope.getInicTrans();
-
-    $scope.getExecTrans = function() {
-        $http.get('/dashboard/get_all_exec_trans', [{cache : true}]).then(function(response) {
-            $scope.tableParamsExecTrans = new NgTableParams({
-                count: 5,
-                group: "process_type_name",
-                sorting: { id: "desc" }
-            }, {
-                paginationMaxBlocks: 13,
-                paginationMinBlocks: 2,
-                dataset: response.data
-            });
-        });
-    };
-    //$scope.getExecTrans();
 
 
 
 
-
-    $scope.openModalTransactionState = function (size, id, actorCan) {
+    $scope.openModalTransactionState = function (size, id, actorCan, processid, trans_type_id) {
         //parentSelector,
         /*var parentElem = parentSelector ?
          angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;*/
@@ -775,6 +900,12 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                 },
                 actor_Can: function() {
                     return actorCan
+                },
+                process_id: function() {
+                    return processid
+                },
+                transaction_type_id: function() {
+                    return trans_type_id
                 }
             }
         }).closed.then(function() {
@@ -790,8 +921,15 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
          });*/
     };
 
-    $scope.ModalInstanceCtrl_trans_state = function ($scope, $uibModalInstance, trans_id, actor_Can) {
-
+    $scope.ModalInstanceCtrl_trans_state = function ($scope, $uibModalInstance, trans_id, actor_Can, process_id, transaction_type_id) {
+        var indexTabLocal = 0;
+        var index_m = 0;
+        $scope.types = [];
+        //$scope.modal_formTab.push({ tab :[], causalinks :[], types : []});
+        $scope.modal_formTab.tab = [];
+        $scope.modal_formTab.causalinks = [];
+        $scope.modal_formTab.types = [];
+        $scope.myindex = index_m;
 
         $scope.tabs = [{
             title: 'Transaction State',
@@ -800,28 +938,6 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
 
         $scope.actorCan = actor_Can;
         $scope.myTransID = trans_id;
-
-        $scope.changeTabBoot_ = function ($id, $title, $templateurl, $tabnumber, $trans_type_id, $t_state_id) {
-            $scope.tabs.splice(($scope.activeTabIndex + 1), ($scope.tabs.length - 1));
-
-            alert($id + "," + $trans_type_id + "," + $t_state_id);
-
-            if ($id !== undefined) {
-                //$scope.addTab($title,$templateurl);
-                switch ($tabnumber) {
-                    case 1:
-                        alert("Selected Case Number is 1");
-                        $scope.verifyIfCanDoNextTransactionState($id, $t_state_id, $scope.actorCan, $title, $templateurl, $trans_type_id);
-                        break;
-                    case 2:
-                        alert("Selected Case Number is 2");
-
-                        break;
-                    default:
-
-                }
-            }
-        };
 
         $scope.addTab = function($title, $templateurl) {
             $scope.tabs.push({
@@ -834,11 +950,33 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             });
         };
 
-        $scope.verifyIfCanDoNextTransactionState = function($id, $t_state, $actorCan, $title, $templateurl, $trans_type_id) {
-            MyService.verifyCanDoNextTransState($id, $t_state, $actorCan, $title, $templateurl, $trans_type_id).then(function (response) {
-                //if (data.canAdvance === true) {
-                    //$scope.modal_formTab = [];
-                    var type = response.data.nextState;
+        $scope.verifyCanDoNextTransState = function($id, $t_state_id, $actorCan, $trans_type_id) {
+            var deferred = $q.defer();
+            $http({
+                method: 'POST',
+                url: API_URL + "/dashboard/verify_can_do_next_trans_state/" + $id,
+                data: $.param({ 't_state_id' : $t_state_id,
+                        'actorCan': $actorCan,
+                        'transaction_type_id' : $trans_type_id
+                    }
+                ),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                //headers: {'Content-Type': 'json'}
+            }).then(function (response) {
+                deferred.resolve(response);
+            }).catch(function(response){
+                deferred.reject(response);
+            });
+
+            return deferred.promise;
+        };
+
+        $scope.changeTabBoot = function ($title, $templateurl, $tabnumber, $type) {
+            $scope.tabs.splice(($scope.activeTabIndex + 1), ($scope.tabs.length - 1));
+
+            $scope.verifyCanDoNextTransState(trans_id, $type, actor_Can, transaction_type_id).then(function (response) {
+                alert("The next transaction state is: " + type);
+                var type = response.data.nextState;
 
                     //a guarda da recursividade
                     if (type > 5)
@@ -848,40 +986,109 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
 
                     alert("The next transaction state is: " + type);
                     //$t_state++;
-                    $scope.propsForm($id,type).then(function(data) {
-                            $scope.showBtnType = false;
-                            $scope.mytype = type;
-                            $scope.addTab($title,$templateurl);
-                        }
-                    ).catch(function(response){
-                        if (response === 400)
-                        {
-                            //recursividade
-                            $scope.verifyIfCanDoNextTransactionState($id, $t_state+1, $actorCan, $title, $templateurl);
-                        }
-                        else
-                        {
-                            $scope.taberror = [];
-                            $scope.taberror.message = "Não existe formulário associado a este tipo de transacção";
-                            $scope.addTab("Error","tabError");
-                        }
-                    });
+                $scope.isTrAndStWaitingForAnotherTr(transaction_type_id, type, process_id).then(function (data) {
+                                $scope.propsForm(transaction_type_id, type).then(function (response) {
+                                        //emptyRelTypeProp se for false entao existem propriedades para aquele tipo de relação ou
+                                        //é do tipo reltype entao é necessario carregar as selectboxes das instancias das entidades
+                                        if (response.data.emptyRelTypeProp === false)
+                                        {
+                                            //$scope.modal_formTab.relTypeExist = true;
+                                            reltype = true;
+                                            //carregar as duas selectboxes
+                                            var id = response.data.rel_type_id;
+                                            $scope.loadEntities1(id);
+                                            $scope.loadEntities2(id);
+                                        }
+                                        else
+                                        {
+                                            reltype = false;
+                                            //$scope.modal_formTab.relTypeExist = false;
+                                        }
 
-                /*}
-                else
-                {
-                    alert("Não pode seguir para o proximo passo");
-                }*/
+                                        if (response.data.emptyEntTypeProp === false)
+                                        {
+                                            enttype = true;
+                                        }
+                                        else
+                                        {
+                                            enttype = false;
+                                        }
+
+                                        //File verification
+                                        for (var i=0; i < response.data.data.length; i++)
+                                        {
+                                            if (response.data.data[i].value_type === "file")
+                                            {
+                                                fileExist = true;
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                fileExist = false;
+                                            }
+                                        }
+
+                                        $scope.modal_formTab.tab.push({
+                                            entTypeExist: enttype,
+                                            relTypeExist: reltype,
+                                            propsform: response.data.data,
+                                            showBtnType: false,
+                                            fileExist: fileExist,
+                                            type:type
+                                        });
+
+                                        growl.success('Loading done successfully.', {title: 'Success!', referenceId: index_m});
+                                        $scope.showBtnType = false;
+                                        $scope.types.push(type);
+                                        $scope.mytype = ++$type; //tem de ser ++type senao nao coloca o valor incrementado na variable $scope.mytype
+                                        $scope.myindexTab = indexTabLocal++;
+
+                                        console.log($scope.modal_formTab);
+
+                                        $scope.addTab($title, $templateurl);
+                                    }
+                                ).catch(function (response) {
+                                    //debugger;
+                                    $scope.modal_formTab.tab.push({
+                                        entTypeExist: response.data.emptyEntTypeProp != true,
+                                        relTypeExist: response.data.emptyRelTypeProp != true,
+                                        propsform: null,
+                                        showBtnType: null,
+                                        type:type
+                                    });
+
+                                    if (response.status == 400) {
+                                        indexTabLocal++;
+                                        counterTStatesCan = 0;
+                                        $timeout(function () {
+                                            $scope.verifyCanDoNextTransState(trans_id, type, actor_Can, transaction_type_id);
+                                            //$scope.changeTabBoot($id, $title, $templateurl, ++$tabnumber, ++$type, $process_id); //nao pode ser $tabnumber++
+                                        },100);
+                                    }
+                                    else if (response.status == 401)
+                                    {
+                                        growl.error('There is no properties linked to Ent Type or Rel Type!', {
+                                            title: 'Erro!',
+                                            referenceId: 80
+                                        });
+
+                                        $uibModalInstance.close();
+                                    }
+                                });
+                        }).catch(function (response) {
+                            //debugger;
+                            if (response.status == 400) {
+                                growl.error('Can´t advance to the next transaction state, there are some transactions needeed to do it first.', {
+                                    title: 'Erro!',
+                                    referenceId: index_m
+                                });
+                            }
+                });
             }).catch(function (response) {
                     if (response.status === 400)
                     {
                         alert("Não pode seguir para o proximo passo");
                     }
-                    else if (response.status === 401)
-                    {
-                        alert("Não existe entidade associada a transacção");
-                    }
-                    alert("erro");
                     console.log(response);
                 });
         };
@@ -891,44 +1098,50 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
                 .then(function (response) {
                     $scope.transactionstates = response.data.data;
                     //$scope.t_state_id = response.data.t_state_id;
-
-                    var lastTransactionState = response.data.data[response.data.data.length-1];
-                    if ((actor_Can === 'Iniciator') && (lastTransactionState.t_state_id === 2 || lastTransactionState.t_state_id === 3 || lastTransactionState.t_state_id === 4))
-                    {
-                        //verifica e insere na base de dados
-                    }
-                    else if ((actor_Can === 'Executer') && (lastTransactionState.t_state_id === 1 || lastTransactionState.t_state_id === 5))
-                    {
-                        //verifica e insere na base de dados
-                    }
                 });
         };
         $scope.trans_states(trans_id);
 
+        $scope.trans_ack = function($lastTransactionState) {
+            if ((actor_Can === 'Iniciator' && ($lastTransactionState.t_state_id === 2 || $lastTransactionState.t_state_id === 3 || $lastTransactionState.t_state_id === 4))
+            || (actor_Can === 'Executer' && ($lastTransactionState.t_state_id === 1 || $lastTransactionState.t_state_id === 5)))
+            {
+                //verifica e insere na base de dados
+                $scope.insertTransactionAck($lastTransactionState.id).then(function (response) {
+                    alert("sucesso");
+                    $scope.trans_states(trans_id);
+
+                }).catch(function (response) {
+                    if (response.status === 400)
+                    {
+                        alert("Ocorreu um erro");
+                    }
+                    else if (response.status === 401)
+                    {
+                        alert("O acknowledge da transacção já existe");
+                    }
+                });
+            }
+        };
+
         $scope.insertTransactionAck = function($trans_state_id) {
+            var deferred = $q.defer();
+
             $http({
                 method: 'POST',
-                url: API_URL + "dashboard/verify_can_use_proc/",
-                data: $.param({ 'process_id': $proc_id,
-                        'transaction_type_id':trans_id,
+                url: API_URL + "dashboard/trans_ack/",
+                data: $.param({
                         'trans_state_id' : $trans_state_id
                     }
                 ),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).then(function (response) {
-                if (response.data === false)
-                {
-                    $scope.cantAdvance = true;
-                    growl.error('It is not possible to use this process because the requirements are already met!!! Choose another process', {
-                        title: 'Erro!',
-                        referenceId: index_m
-                    });
-                }
-                else
-                {
-                    $scope.cantAdvance = false;
-                }
+                deferred.resolve(response);
+            }).catch(function (response) {
+                deferred.reject(response);
             });
+
+            return deferred.promise;
         };
 
         $scope.cancel = function () {
@@ -979,192 +1192,260 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
     };
 
 
+    //Inicio - Guilherme
+    //Modal CustomForm
+    //Verificar se é custoForm para gestão do file
+    var customFormfileUpload = false;
 
+    $scope.modal_formTab1 = [];
 
+    $scope.openModalCustomFormTask = function (size, customformid, customforminitproc) {
 
-
-
-
-
-
-
-
-
-    $scope.processtypes = [];
-    $scope.totalPages = 0;
-    $scope.currentPage = 1;
-    $scope.range = [];
-
-    var fil = false;
-    $scope.filter = function()
-    {
-        var x = [ this.search_process_type, this.search_id, this.search_name, this.search_result_type, this.search_state, this.search_executer ];
-        fil = MyService.filter(x);
-        $scope.getTransacsTypes();
-    };
-
-    $scope.getTransacsTypes = function(pageNumber) {
-
-        if (pageNumber === undefined) {
-            pageNumber = '1';
-        }
-
-        var url='';
-        if (fil === true)
-        {
-            if ($scope.search_process_type)
-                url += '&s_process_type=' + $scope.search_process_type;
-
-            if ($scope.search_id)
-                url += '&s_id=' + $scope.search_id;
-
-            if ($scope.search_name)
-                url += '&s_name=' + $scope.search_name;
-
-            if ($scope.search_result_type)
-                url += '&s_result_type=' + $scope.search_result_type;
-
-            if ($scope.search_state)
-                url += '&s_state=' + $scope.search_state;
-
-            if ($scope.search_executer)
-                url += '&s_executer=' + $scope.search_executer;
-        }
-
-        if (fil_sort === true)
-        {
-            url += '&input_sort=' + $scope.input + '&type=' + $scope.type;
-        }
-        //Process_Type
-
-        $http.get('/transacs_types/get_transacs_types?page='+pageNumber+url).then(function(response) {
-            $scope.transactiontypes = response.data.data; //quando é procurado do processtypes para a linguagem
-
-            $scope.totalPages = response.data.last_page;
-            $scope.currentPage = response.data.current_page;
-
-            // Pagination Range
-            var pages = [];
-
-            for (var i = 1; i <= response.data.last_page; i++) {
-                pages.push(i);
+        var modalInstance = $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: 'modalTaskCustomForm',
+            controller: 'ModalInstanceCtrlCustomForm',
+            scope: $scope,
+            size: size,
+            resolve: {
+                custom_form_id: function() {
+                    return customformid
+                },
+                custom_form_init_proc: function() {
+                    return customforminitproc
+                }
             }
+        }).result.then(function(reason) {
+            //Get triggers when modal is closed
+            uploader.clearQueue();
+            $scope.files = [];
+            $scope.process = null;
+            $scope.tabs = null;
+            $scope.modal_processTab = null;
+            $scope.modal_formTab1 = [];
+            var index_m = 0;
+            var indexTabLocal = 0;
+            customFormfileUpload = false;
 
-            $scope.range = pages;
+
+        }, function(){
+            //Get triggers when modal is dimissed
+            uploader.clearQueue();
+            $scope.files = [];
+            $scope.process = null;
+            $scope.tabs = null;
+            $scope.modal_processTab = null;
+            $scope.modal_formTab1 = [];
+            var index_m = 0;
+            var indexTabLocal = 0;
+            customFormfileUpload = false;
         });
     };
 
-    //show modal form
-    $scope.togglemyModalNewProcess = function(modalstate, id) {
-        switch (modalstate) {
-            case 'add':
-                /*$scope.id = id;
-                 $scope.form_title = "ADD_FORM_NAME";*/
-                break;
-            case 'edit':
-                /*$scope.form_title = "EDIT_FORM_NAME";
-                 $scope.id = id;
-                 $http.get(API_URL + 'transacs_types/get_transacs_types/' + id)
-                 .then(function(response) {
-                 $scope.transactiontype = response.data;
-                 });*/
-                break;
-            default:
-                break;
-        }
-        $('#myModalNewProcess').modal('show');
-    };
+    $scope.ModalInstanceCtrlCustomForm = function ($scope, $uibModalInstance, $timeout, custom_form_id, custom_form_init_proc) {
 
-    //show modal form
-    $scope.toggle = function(modalstate, id) {
-        $scope.modalstate = modalstate;
+        var custom_form_id = custom_form_id;
+        customFormfileUpload = true;
+        $scope.fileExist = false;
+        $scope.process = [];
+        $scope.tabs = [];
+        $scope.modal_processTab = [];
+        $scope.modal_formTab1.push({ tab :[]});
+        var index_m = 0;
+        var indexTabLocal = 0;
 
-        switch (modalstate) {
-            case 'add':
-                $scope.id = id;
-                $scope.form_title = "ADD_FORM_NAME";
-                break;
-            case 'edit':
-                $scope.form_title = "EDIT_FORM_NAME";
-                $scope.id = id;
-                $http.get(API_URL + 'transacs_types/get_transacs_types/' + id)
-                    .then(function(response) {
-                        $scope.transactiontype = response.data;
+        $scope.modal_formTab1[index_m].custom_form_id = custom_form_id;
+
+        //Mudar a Tab
+        $scope.addTab = function($title, $templateurl) {
+            $scope.tabs.push({
+                title: $title,
+                templateUrl: $templateurl,
+                disabled: false
+            });
+
+            $timeout(function(){
+                $scope.activeTabIndex = ($scope.tabs.length - 1);
+            });
+        };
+
+        //Buscar os Processos
+        $scope.processesCustomForm = function() {
+            $http.get(API_URL + '/dashboard/get_process_custom_form/' + custom_form_id)
+                .then(function (response) {
+                    $scope.process = response.data;
+                });
+        };
+
+        //Buscar o custom Form
+        $scope.getCustomForm = function (){
+
+            $http.get(API_URL + '/dashboard/get_custom_form/' + custom_form_id)
+                .then(function (response) {
+
+                    //$scope.modal_formTab1.push({ tab :[], causalinks :[]}); se forem varios modais é preciso fazer assim
+                    $scope.modal_formTab1[index_m].tab.push({
+                        propsform: response.data
                     });
-                break;
-            default:
-                break;
-        }
-        console.log(id);
-        $('#myModal').modal('show');
-        $scope.errors = null;
-        $scope.process = null;
-    };
 
-    $scope.delete = function(id) {
-        var url = API_URL + "Transaction_Type_del/" + id;
+                    //defenir o Process_type_id
+                    //Assumindo que todas os tipos de transações pertencem ao mesmo tipo de processo. Buscar id do tipo de processo pela  primeira Tipo de trasanção
+                    $scope.modal_formTab1[index_m].process_type_id = response.data.transaction_types[0].process_type_id;
 
-        $http({
-            method: 'POST',
-            url: url,
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            //headers: {'Content-Type': 'json'}
-        }).then(function (response) {
-            growl.success('This is success message.',{title: 'Success!'});
-            $('#myModal').modal('hide');
-            $scope.getTransacsTypes();
-        }, function errorCallback(response) {
-            if (response.status == 400)
+                    console.log($scope.modal_formTab1);
+                    if(response.data.transaction_types !== undefined)
+                    {
+                        //File verification
+                        for (var i=0; i < response.data.transaction_types.length; i++)
+                        {
+                            for(var j=0; j < response.data.transaction_types[i].ent_type[0].properties.length; j++)
+
+                                if (response.data.transaction_types[i].ent_type[0].properties[j].value_type === "file")
+                                {
+                                    $scope.fileExist = true;
+                                    break;
+                                }
+                        }
+                    }
+                });
+        };
+
+        //Mudar a Tab
+        $scope.changeTabBoot = function ($id, $title, $templateurl, $tabnumber, $type, $process_id) {
+
+            //Verificar se selecionou um processo
+            if($process_id === undefined || $process_id === null)
             {
-                growl.error('This is error message.',{title: 'error!'});
+                growl.error('Selecione um Processo; ', {title: 'Erro!'});
             }
             else
             {
-                $scope.errors = response.data;
+                var process_id = $process_id.id;
+                $scope.modal_formTab1[index_m].process_id = process_id;
+
+                //Fazer o reset das tabs
+                $scope.tabs.splice(($scope.activeTabIndex + 1));
+
+                if (custom_form_id !== undefined) {
+                    switch ($tabnumber) {
+                        case 1:
+                            //Verificar se pode avançar (causal e waiting)
+                            $scope.isUserInicExecOfCustomForm(custom_form_id, process_id).then(function (data) {
+
+                                //Caso pode avançar
+                                //Buscar os Tipos de Transações
+                                $scope.getCustomForm();
+                                //Adicionar a tab
+                                $scope.myindexTab = indexTabLocal++;
+                                $scope.myindex = index_m;
+                                $scope.addTab("Custom Form", "tabFormCustomForm");
+
+                            }).catch(function (response) {
+                                //Apagar as messagens de Growls antigas
+                                //debugger;
+                                if(!response.data.Causal)
+                                    growl.error('Já existe transações realizadas do Custom Form, neste processo; ' + '<br>' + response.data.dataError.CausalTransaction.join( '<br>' ), {title: 'Erro!'});
+
+                                if(!response.data.Waiting)
+                                    growl.error('Precisa de realizar transações, para poder efectuar este Custom Form; ' + '<br>' + response.data.dataError.WaitingTransaction.join( '<br>' ), {title: 'Erro!'});
+
+                            });
+
+                            break;
+                        default:
+                    }
+                }
             }
-        });
+        };
+
+        //Verificar as Tabs
+        //inicializar o array das tabs
+        //verificar se o tipo de transacção inicia um novo processo
+        if (custom_form_init_proc === 1) //se sim então não aparece a tab para escolher um processo já existente
+        {
+
+            $scope.modal_formTab1[index_m].process_id = null;
+
+            //Buscar o Custom Form
+            $scope.getCustomForm();
+
+            $scope.myindexTab = indexTabLocal++;
+            $scope.myindex = index_m;
+            $scope.addTab("Custom Form", "tabFormCustomForm");
+
+        }
+        else //se não então aparece a tab para escolher um processo já existente
+        {
+            $scope.tabs = [{
+                title: 'Process',
+                templateUrl: 'tabProcess',
+                disabled: false
+            }];
+
+            $scope.processesCustomForm(); //carregar a dropdownlist com os processos existentes
+        }
+
+        //save new record / update existing record
+        $scope.save = function() {
+
+            var url = API_URL + "dashboard/savecustomform";
+
+            $http({
+                method: 'POST',
+                url: url,
+                data: $scope.modal_formTab1,
+                headers: {'Content-Type': 'application/json'}
+                //headers: {'Content-Type': 'json'}
+            }).then(function (response) {
+                growl.success('Insert with Sucess.',{title: 'Success!', referenceId: 80});
+                $scope.cancel();
+            }, function errorCallback(response) {
+                if (response.status == 400)
+                {
+                    growl.error('This is error message.',{title: 'error!'});
+                }
+                else
+                {
+                    $scope.errors = response.data;
+                }
+            });
+        };
+
+        //Verificar se pode avançar
+        $scope.isUserInicExecOfCustomForm = function ($custom_form_id, $process_id) {
+            var deferred = $q.defer();
+
+            $http({
+                method: 'POST',
+                url: API_URL + '/dashboard/verify_custom_form',
+                data: $.param({
+                        'custom_form_id' :  $custom_form_id,
+                        'process_id' :  $process_id
+                    }
+                ),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                ignoreLoadingBar: true
+            }).then(function (response) {
+                deferred.resolve(response);
+            }, function errorCalback(response) {
+                deferred.reject(response);
+            }).finally(function () {
+                // called no matter success or failure
+            });
+
+            return deferred.promise;
+        };
+
+        //Close Modal
+        $scope.cancel = function () {
+            $uibModalInstance.close('cancel');
+        };
     };
+
 
     $scope.values = {};
-    //save new record / update existing record
-    $scope.save = function(modalstate, id) {
-        console.log($scope.values);
-        /*var url = API_URL + "Transaction_Type";
-
-        //append employee id to the URL if the form is in edit mode
-        if (modalstate === 'edit') {
-            url += "/" + id;
-        }
-
-        $http({
-            method: 'POST',
-            url: url,
-            data: $.param({ 'language_id' : $scope.transactiontype.language[0].id,
-                't_name': $scope.transactiontype.language[0].pivot.t_name,
-                'rt_name': $scope.transactiontype.language[0].pivot.rt_name,
-                'process_type_id': $scope.transactiontype.process_type_id,
-                'state': $scope.transactiontype.state,
-                'executer' : $scope.transactiontype.executer_actor.language[0].pivot.actor_id
-                }
-                ),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            //headers: {'Content-Type': 'json'}
-        }).then(function (response) {
-            growl.success('This is success message.',{title: 'Success!'});
-            $('#myModal').modal('hide');
-            $scope.getTransacsTypes();
-        }, function errorCallback(response) {
-            if (response.status == 400)
-            {
-                growl.error('This is error message.',{title: 'error!'});
-            }
-            else
-            {
-                $scope.errors = response.data;
-            }
-            //console.log(response);
-        });*/
-    };
 
     //FileUploader Functions
     var uploader = $scope.uploader = new FileUploader({
@@ -1182,25 +1463,12 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
         console.log('arrayKeys',arrayKeys);
         var lastItem = arrayKeys[arrayKeys.length-1];
         console.log('lastItem', lastItem);
-        /*var allInputs = document.getElementsByTagName("input");
-        var result = null;
-        for(var x=0;x<allInputs.length;x++)
-        {
-            if(allInputs[x].type === "file" && allInputs[x].files.length > 0)
-            {
-                if(allInputs[x].files[0].name === namePath)
-                //result.push(allInputs[x]);
-                    result = allInputs[x];
-            }
-        }*/
-
-        //result.disabled = true;
-        //var fileName = result.id;
         var fileName = lastItem;
         var fileExtension = '.' + fileItem.file.name.split('.').pop();
         var fileNameOriginal = fileItem.file.name;
         fileItem.file.name = fileName + fileExtension;
 
+        //Colocar o File como data64
         var reader = new FileReader();
         reader.readAsDataURL(fileItem._file);
         reader.onload = function (event) {
@@ -1209,18 +1477,35 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
             fileItem.file['fileName'] = fileNameOriginal;
         };
 
-        angular.forEach($scope.modal_formTab[0].tab, function(value, key1) {
-            angular.forEach(value.propsform, function(value, key) {
-                if (value.language[0].pivot.form_field_name === fileName)
-                {
-                    var obj = {};
-                    obj[fileName] = fileItem.file;
-                    value['fields'] = obj;
-                }
+        if(customFormfileUpload)
+        {
+            angular.forEach($scope.modal_formTab1[0].tab[0].propsform.transaction_types, function(value, key1) {
+                angular.forEach(value.ent_type[0].properties, function(value, key) {
+                    if (value.language[0].pivot.form_field_name === fileName)
+                    {
+                        var obj = {};
+                        obj[fileName] = fileItem.file;
+                        value['fields'] = obj;
+                    }
+                });
             });
-        });
-        console.log('modaformtab', $scope.modal_formTab);
-        console.log('onAfterAddingFile', fileItem);
+        }
+        else
+        {
+            angular.forEach($scope.modal_formTab.tab, function(value, key1) {
+                angular.forEach(value.propsform, function(value, key) {
+                    if (value.language[0].pivot.form_field_name === fileName)
+                    {
+                        var obj = {};
+                        obj[fileName] = fileItem.file;
+                        value['fields'] = obj;
+                    }
+                });
+            });
+        }
+
+        //console.log('modaformtab', $scope.modal_formTab);
+        //console.log('onAfterAddingFile', fileItem);
     };
     $scope.files = [];
     uploader.onAfterRemovingFile = function(fileItem) {
@@ -1229,15 +1514,31 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
         delete $scope.files[fileName];
 
         var fileName = fileItem.file.name.replace(/\.\w+/, "");
-        angular.forEach($scope.modal_formTab[0].tab, function(value, key1) {
-            angular.forEach(value.propsform, function(value, key) {
-                if (value.language[0].pivot.form_field_name === fileName)
-                {
-                    delete value['fields'];
-                }
+
+        if(customFormfileUpload)
+        {
+            angular.forEach($scope.modal_formTab1[0].tab[0].transaction_types, function(value, key1) {
+                angular.forEach(value.ent_type[0].properties, function(value, key) {
+                    if (value.language[0].pivot.form_field_name === fileName)
+                    {
+                        delete value['fields'];
+                    }
+                });
             });
-        });
-        console.info('onAfterRemovingFile', fileItem);
+        }
+        else
+        {
+            angular.forEach($scope.modal_formTab.tab, function(value, key1) {
+                angular.forEach(value.propsform, function(value, key) {
+                    if (value.language[0].pivot.form_field_name === fileName)
+                    {
+                        delete value['fields'];
+                    }
+                });
+            });
+        }
+
+        //console.info('onAfterRemovingFile', fileItem);
     };
     uploader.onAfterAddingAll = function(addedFileItems) {
         console.info('onAfterAddingAll', addedFileItems);

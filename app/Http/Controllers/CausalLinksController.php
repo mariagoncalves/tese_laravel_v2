@@ -6,57 +6,25 @@ use Illuminate\Http\Request;
 use App\CausalLink;
 use DB;
 use Response;
+use Config;
 
 class CausalLinksController extends Controller
 {
     //
+    private $url_text;
+    private $user_id;
+
+    public function __construct()
+    {
+        $this->url_text = Config::get('config_app.url_text');
+        $this->user_id = Config::get('config_app.user_id');
+    }
+
     public function getAll(Request $request,$id = null)
     {
         if ($id == null)
         {
-            $url_text = 'PT';
-
-            $matchThese = [];
-            $orderThese = "";
-            if ($request->has('s_id'))
-            {
-                $matchThese[] = array('causal_link.id','=',$request->input('s_id'));
-            }
-
-            if ($request->has('s_causing_t'))
-            {
-                $matchThese[] = array('tpname1.t_name','LIKE','%'.$request->input('s_causing_t').'%');
-            }
-
-            if ($request->has('s_t_state'))
-            {
-                $matchThese[] = array('t_state.id','=',$request->input('s_t_state'));
-            }
-
-            if ($request->has('s_caused_t'))
-            {
-                $matchThese[] = array('tpname2.t_name','LIKE','%'.$request->input('s_caused_t').'%');
-            }
-
-            if ($request->has('input_sort'))
-            {
-                if ($request->input('input_sort') === 'tp1_causing_t')
-                {
-                    $orderThese = $request->input('input_sort') . ' ' . $request->input('type') . ',causal_link.t_state_id ' . $request->input('type');
-                }
-                else if ($request->input('input_sort') === 't_state_name')
-                {
-                    $orderThese = 'causal_link.causing_t ' . $request->input('type') .  ',' . $request->input('input_sort') . ' ' . $request->input('type');
-                }
-                else
-                {
-                    $orderThese = 'causal_link.causing_t ' . $request->input('type') . ',causal_link.t_state_id ' . $request->input('type') .',' . $request->input('input_sort') . ' ' . $request->input('type');
-                }
-            }
-            else
-            {
-                $orderThese = 'causal_link.causing_t desc, causal_link.t_state_id desc';
-            }
+            $url_text = $this->url_text;
 
             $causallinks = DB::table('causal_link')
                 ->join('transaction_type as tp1', 'tp1.id', '=', 'causal_link.causing_t')
@@ -72,17 +40,7 @@ class CausalLinksController extends Controller
                     'tpname2.t_name as tp2_caused_t','t_state_name.name as t_state_name')
                 ->where('l1.slug','=',$url_text)->where('l2.slug','=',$url_text)->where('l3.slug','=',$url_text)
                 ->where('causal_link.deleted_at','=',null)
-                ->where($matchThese)
-                ->orderByRaw($orderThese)
-                ->paginate(10);
-
-            /*$causallinks = CausalLink::with(['causingTransaction.language' => function($query) use ($url_text) {
-                $query->where('slug', $url_text);
-            }, 'causedTransaction.language' => function($query) use ($url_text) {
-                $query->where('slug', $url_text);
-            }, 'tState.language' => function($query) use ($url_text) {
-                $query->where('slug', $url_text);
-            }])->whereHas('causingTransaction')->paginate(5);*/
+                ->get();
 
             return response()->json($causallinks);
         }
@@ -132,7 +90,7 @@ class CausalLinksController extends Controller
 
     public function update(Request $request, $id)
     {
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $causallink = CausalLink::with(['causingTransaction.language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }, 'causedTransaction.language' => function($query) use ($url_text) {
@@ -172,7 +130,7 @@ class CausalLinksController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $causallinks = CausalLink::with(['causingTransaction.language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }, 'causedTransaction.language' => function($query) use ($url_text) {
@@ -207,7 +165,7 @@ class CausalLinksController extends Controller
 
     public function getSpec($id)
     {
-        $url_text = 'PT';
+        $url_text = $this->url_text;
         $causallinks = CausalLink::with(['causingTransaction.language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }, 'causedTransaction.language' => function($query) use ($url_text) {
