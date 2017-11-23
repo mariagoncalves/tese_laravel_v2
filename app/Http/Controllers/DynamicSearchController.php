@@ -51,7 +51,7 @@ class DynamicSearchController extends Controller
 
             }
         }
-    	
+
     	return view('entitiesDetails')->with($data);
     }
 
@@ -78,7 +78,8 @@ class DynamicSearchController extends Controller
         \Log::debug("Dados das entidades properties");
         \Log::debug($ents);
 
-        foreach ($ents['properties'] as $key => $prop) {
+        //REVER (quando uma prop ref aponta pra um enum)
+        /*foreach ($ents['properties'] as $key => $prop) {
             $propsVal = [];
             if($prop['fk_property_id'] != NULL || $prop['fk_property_id'] != '') {
                 foreach ($prop['fk_property']['values'] as $key2 => $value) {
@@ -97,7 +98,7 @@ class DynamicSearchController extends Controller
                     }
                 }
             }
-        }
+        }*/
 
         return response()->json($ents);
     }
@@ -188,7 +189,7 @@ class DynamicSearchController extends Controller
             $arrayPropsId[] = $propId->id;
         }
 
-        \Log::debug("TESTEEEEEEEEEE 1");             
+        \Log::debug("TESTEEEEEEEEEE 1");
         \Log::debug($arrayPropsId);
 
         $url_text = 'PT';
@@ -200,7 +201,7 @@ class DynamicSearchController extends Controller
                             ->whereIn('property.fk_property_id', $arrayPropsId)
                             ->get()->toArray();
 
-        \Log::debug("TESTEEEEEEEEEE 2");             
+        \Log::debug("TESTEEEEEEEEEE 2");
         \Log::debug($propRefs);
 
         $count        = 0;
@@ -266,7 +267,7 @@ class DynamicSearchController extends Controller
 
         $count = 0;
         foreach ($relsWithEnt as $key => $rel) {
-            
+
             foreach ($rel['properties'] as $key1 => $prop) {
                 $relsWithEnt[$key]['properties'][$key1]['key'] = $count;
                 $count++;
@@ -292,7 +293,7 @@ class DynamicSearchController extends Controller
                                 $query->where('slug', $url_text);
                             }])
                             ->get()
-                            ->toArray();    
+                            ->toArray();
 
         $newKey = 0;
         foreach ($entsRelated as $key => $value) {
@@ -342,7 +343,7 @@ class DynamicSearchController extends Controller
         $dataQuery = Query::create($data1);
         $idQuery   = $dataQuery->id;
 
-        for ($i=0; $i < $data['numTableET']; $i++) { 
+        for ($i=0; $i < $data['numTableET']; $i++) {
             if (isset($data['checkET'.$i])) {
                 $this->createCondicion($idQuery, $data['checkET'.$i], 'ET', $i, $data);
             }
@@ -376,11 +377,14 @@ class DynamicSearchController extends Controller
             if (!isset($data['radio'.$type.$position])) {
                 $valueQuery = '';
             } else {
-                if($data['radio'.$type.$position] == '1') {
+                /*if($data['radio'.$type.$position] == '1') {
                     $valueQuery = trans("dynamicSearch/messages.TRUE");
                 } else {
                     $valueQuery = trans("dynamicSearch/messages.FALSE");
-                }
+                }*/
+                $valueQuery = $data['radio'.$type.$position];
+                \Log::debug("VALOR DO RADIOOOOOO CONDITION");
+                \Log::debug($valueQuery = $data['radio'.$type.$position]);
             }
         } else if ($valueType == "prop_ref") {
             $valueQuery = $data['propRef'.$type.$position];
@@ -426,25 +430,25 @@ class DynamicSearchController extends Controller
         $dataQuery = Query::create($data1);
         $idQuery   = $dataQuery->id;
 
-        for ($i=0; $i < $data['numTableET']; $i++) { 
+        for ($i=0; $i < $data['numTableET']; $i++) {
             if (isset($data['checkET'.$i])) {
                 $this->createCondition($idQuery, $data['checkET'.$i], 'ET', $i, $data);
             }
         }
 
-        for ($i = 0; $i < $data['numTableVT']; $i++) { 
+        for ($i = 0; $i < $data['numTableVT']; $i++) {
             if (isset($data['checkVT'.$i])) {
                 $this->createCondition($idQuery, $data['checkVT'.$i], 'VT', $i, $data);
             }
         }
 
-        for ($i = 0; $i < $data['numTableRL']; $i++) { 
+        for ($i = 0; $i < $data['numTableRL']; $i++) {
             if (isset($data['checkRL'.$i])) {
                 $this->createCondition($idQuery, $data['checkRL'.$i], 'RL', $i, $data);
             }
         }
 
-        for ($i = 0; $i < $data['numTableER']; $i++) { 
+        for ($i = 0; $i < $data['numTableER']; $i++) {
             if (isset($data['checkER'.$i])) {
                 $this->createCondition($idQuery, $data['checkER'.$i], 'ER', $i, $data);
             }
@@ -455,7 +459,7 @@ class DynamicSearchController extends Controller
     public function search(Request $request, $idEntityType) {
         $data        = $request->all();
         $generalData = [
-            'table1' => ['select' => false, 'properties' => [], 'resultEntities' => [], 'relTable2' => [], 'relTable3' => [], 'relTable4' => []], 
+            'table1' => ['select' => false, 'properties' => [], 'resultEntities' => [], 'relTable2' => [], 'relTable3' => [], 'relTable4' => []],
             'table2' => ['select' => false, 'properties' => [], 'resultEntities' => []],
             'table3' => ['select' => false, 'properties' => [], 'resultRelation' => []],
             'table4' => ['select' => false, 'properties' => [], 'resultEntities' => []]
@@ -656,20 +660,7 @@ class DynamicSearchController extends Controller
                     } else {
                         $result[$key]['values'][$key1]['value'] = trans("dynamicSearch/messages.FALSE");
                     }
-                } /*else if ($value['property']['value_type'] == 'text') {
-                    \Log::debug("CHEGUEI CHEGANDO");
-                    \Log::debug($value['value']);
-
-                    $datat = Value::where('value', $value['value'])->first()->toArray();
-
-                    \Log::debug("DATA TEXT");
-                    \Log::debug($datat);
-
-                    \Log::debug("DATA TEXT ID");
-                    \Log::debug($datat['id']);
-
-                    $result[$key]['values'][$key1]['value'] = $datat['id'];
-                }*/
+                }
             }
         }
 
@@ -706,7 +697,7 @@ class DynamicSearchController extends Controller
 
         // Formar a frase da tabela 1 e pesquisar de acordo com a pesquisa efetuada na tabela 1
         $queryTable1 = new Entity;
-        for ($i=0; $i < $data['numTableET']; $i++) { 
+        for ($i=0; $i < $data['numTableET']; $i++) {
             if (isset($data['checkET'.$i])) {
                 $generalData['table1']['select']       = true;
                 $generalData['table1']['properties'][] = $data['checkET'.$i];
@@ -725,10 +716,10 @@ class DynamicSearchController extends Controller
 
         // Formar a frase da tabela 2
         $queryTable2 = new Entity;
-        for ($i = 0; $i < $data['numTableVT']; $i++) { 
+        for ($i = 0; $i < $data['numTableVT']; $i++) {
             if (isset($data['checkVT'.$i])) {
                 $generalData['table2']['select']       = true;
-                $generalData['table2']['properties'][] = $data['checkVT'.$i];            
+                $generalData['table2']['properties'][] = $data['checkVT'.$i];
                 $phrase = $this->formPhraseTableType($data, $data['checkVT'.$i], 'VT', $i, $phrase);
 
                 $this->formQueryTable($data, $data['checkVT'.$i], 'VT', $i, $queryTable2);
@@ -754,8 +745,11 @@ class DynamicSearchController extends Controller
                     if (in_array($valueData->property->fk_property_id, $propertiesTable1)) {
 
                         foreach ($generalData['table1']['resultEntities'] as $id_entity1) {
+
+                            $textValue = Value::find($valueData->value)->value;
+
                             $values = Value::where('entity_id', $id_entity1)
-                                        ->where('value', $valueData->value)
+                                        ->where('value', $textValue)
                                         ->where('property_id', $valueData->property->fk_property_id)
                                         ->count();
 
@@ -773,7 +767,7 @@ class DynamicSearchController extends Controller
 
         $queryTable3 = new Relation;
         // Formar a frase da tabela 3
-        for ($i=0; $i < $data['numTableRL']; $i++) { 
+        for ($i=0; $i < $data['numTableRL']; $i++) {
             if (isset($data['checkRL'.$i])) {
                 $generalData['table3']['select'] = true;
                 $generalData['table3']['properties'][] = $data['checkRL'.$i];
@@ -816,10 +810,10 @@ class DynamicSearchController extends Controller
 
         $queryTable4 = new Entity;
         // Formar a frase da tabela 4
-        for ($i=0; $i < $data['numTableER']; $i++) { 
-            if (isset($data['checkER'.$i])) {  
+        for ($i=0; $i < $data['numTableER']; $i++) {
+            if (isset($data['checkER'.$i])) {
                 $generalData['table4']['select'] = true;
-                $generalData['table4']['properties'][] = $data['checkER'.$i];              
+                $generalData['table4']['properties'][] = $data['checkER'.$i];
                 $phrase = $this->formPhraseTableType($data, $data['checkER'.$i], 'ER', $i, $phrase);
 
                 $this->formQueryTable($data, $data['checkER'.$i], 'ER', $i, $queryTable4);
@@ -896,7 +890,7 @@ class DynamicSearchController extends Controller
             } else {
                 $auxPhrase  = trans("dynamicSearch/messages.SEARCH_PHRASE_T4_A")." ".$nameProp." ".trans("dynamicSearch/messages.SEARCH_PHRASE_T1_A")." ";
             }
-        } 
+        }
 
         //Construir a frase conforme o value_type
         $valueQuery    = '';
@@ -909,15 +903,15 @@ class DynamicSearchController extends Controller
 
         if ($valueType == "int") {
             $valueQuery    = $data['int'.$type.$position];
-            // Formar a frase 
+            // Formar a frase
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $operatorQuery.' '.$valueQuery).';';
         }  else if ($valueType == "double") {
             $valueQuery    = $data['double'.$type.$position];
-            // Formar a frase 
+            // Formar a frase
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $operatorQuery.' '.$valueQuery) . ';';
         } else  if ($valueType == "text") {
             $valueQuery = $data['text'.$type.$position];
-            // Formar a frase 
+            // Formar a frase
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         } else  if ($valueType == "enum") {
             //$valueQuery = $data['select'.$type.$position];
@@ -933,7 +927,7 @@ class DynamicSearchController extends Controller
 
             $valueQuery = $propAllowed['language'][0]['pivot']['name'];
 
-            // Formar a frase 
+            // Formar a frase
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         } else  if ($valueType == "bool") {
 
@@ -951,7 +945,7 @@ class DynamicSearchController extends Controller
                     $valueQuery = trans("dynamicSearch/messages.TRUE");
                 }
             }
-            // Formar a frase 
+            // Formar a frase
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         } else if ($valueType == "prop_ref") {
 
@@ -961,7 +955,7 @@ class DynamicSearchController extends Controller
             \Log::debug( $idValue);
             $dataVal = Value::find($idValue);
             $valueQuery = $dataVal['value'];
-            // Formar a frase 
+            // Formar a frase
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         }
 
@@ -1124,7 +1118,7 @@ class DynamicSearchController extends Controller
         }
 
         return response()->json([$stateEntity->state]);
-    } 
+    }
 
     public function showSavedSearches () {
 
@@ -1243,5 +1237,5 @@ class DynamicSearchController extends Controller
         return response()->json($dataSavedQuery);
 
     }
-    
+
 }
