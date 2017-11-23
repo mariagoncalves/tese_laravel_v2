@@ -37,8 +37,8 @@
 			                    	<div ng-switch on="property.value_type">
 								        <div ng-switch-when="text"> <input type="text" name="textET[[ key1 ]]"> </div>
 								        <div ng-switch-when="bool"> 
-								        	<input type="radio" name="radioET[[ key1 ]]" value="true">{{trans("dynamicSearch/messages.TRUE")}}
-											<input type="radio" name="radioET[[ key1 ]]" value="false">{{trans("dynamicSearch/messages.FALSE")}}
+								        	<input type="radio" name="radioET[[ key1 ]]" value="1">{{trans("dynamicSearch/messages.TRUE")}}
+											<input type="radio" name="radioET[[ key1 ]]" value="0">{{trans("dynamicSearch/messages.FALSE")}}
 										</div>
 										<div ng-switch-when="enum">
 											<select name = "selectET[[ key1 ]]">
@@ -125,8 +125,8 @@
 					                    	<div ng-switch on="propOfEnt.value_type">
 										        <div ng-switch-when="text"> <input type="text" name="textVT[[ propOfEnt.key  ]]" disabled> </div>
 										        <div ng-switch-when="bool"> 
-										        	<input type="radio" name="radioVT[[ propOfEnt.key  ]]" value="true" disabled>{{trans("dynamicSearch/messages.TRUE")}}
-													<input type="radio" name="radioVT[[ propOfEnt.key  ]]" value="false" disabled>{{trans("dynamicSearch/messages.FALSE")}}
+										        	<input type="radio" name="radioVT[[ propOfEnt.key  ]]" value="1" disabled>{{trans("dynamicSearch/messages.TRUE")}}
+													<input type="radio" name="radioVT[[ propOfEnt.key  ]]" value="0" disabled>{{trans("dynamicSearch/messages.FALSE")}}
 												</div>
 												<div ng-switch-when="enum">
 													<select name = "selectVT[[ propOfEnt.key  ]]" disabled>
@@ -200,8 +200,8 @@
 			                    	<div ng-switch on="prop.value_type">
 								        <div ng-switch-when="text"> <input type="text" name="textRL[[ prop.key ]]" disabled> </div>
 								        <div ng-switch-when="bool"> 
-								        	<input type="radio" name="radioRL[[ prop.key ]]" value="true" disabled>{{trans("dynamicSearch/messages.TRUE")}}
-											<input type="radio" name="radioRL[[ prop.key ]]" value="false" disabled>{{trans("dynamicSearch/messages.FALSE")}}
+								        	<input type="radio" name="radioRL[[ prop.key ]]" value="1" disabled>{{trans("dynamicSearch/messages.TRUE")}}
+											<input type="radio" name="radioRL[[ prop.key ]]" value="0" disabled>{{trans("dynamicSearch/messages.FALSE")}}
 										</div>
 										<div ng-switch-when="enum">
 											<select name = "selectRL[[ prop.key ]]" disabled>
@@ -298,8 +298,8 @@
 								        	<input type="text" name="textER[[ property.key ]]" disabled> 
 								        </div>
 								        <div ng-switch-when="bool"> 
-								        	<input type="radio" name="radioER[[ property.key ]]" value="true" disabled>{{trans("dynamicSearch/messages.TRUE")}}
-											<input type="radio" name="radioER[[ property.key ]]" value="false" disabled>{{trans("dynamicSearch/messages.FALSE")}}
+								        	<input type="radio" name="radioER[[ property.key ]]" value="1" disabled>{{trans("dynamicSearch/messages.TRUE")}}
+											<input type="radio" name="radioER[[ property.key ]]" value="0" disabled>{{trans("dynamicSearch/messages.FALSE")}}
 										</div>
 										<div ng-switch-when="enum">
 											<select name = "selectER[[ property.key ]]" disabled>

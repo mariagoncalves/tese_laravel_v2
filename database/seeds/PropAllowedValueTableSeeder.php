@@ -202,6 +202,13 @@ class PropAllowedValueTableSeeder extends Seeder
                 'state'       => 'active',
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
+            ],
+            [
+                'id'          => '25',
+                'property_id' => '64',
+                'state'       => 'active',
+                'updated_by'  => '1',
+                'deleted_by'  => NULL
             ]
 
         ];

@@ -99,12 +99,15 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
                         $("#" + idTable).find("[name=select" + tableType + keyProp + "] option[value='"+valueEnum+"']").prop("selected", "selected");
 
                     } else if (dataCondition[i].property.value_type == "bool") {
-
                         var valueRadio = dataCondition[i].value;
                         console.log("Valor radio: " + valueRadio);
-                        $("#" + idTable).find("[name=radio" + tableType + keyProp + "][value='"+valueRadio+"']").prop("checked", true);
+                        if (valueRadio == 'Sim') {
+                            valueRad = '1'; 
+                        } else {
+                            valueRad = '0'; 
+                        }
 
-
+                        $("#" + idTable).find("[name=radio" + tableType + keyProp + "][value='"+valueRad+"']").prop("checked", true);
                     } else if (dataCondition[i].property.value_type == "file") {
                         $("#" + idTable).find("[name=file" + tableType + keyProp + "]").val(dataCondition[i].value);
 

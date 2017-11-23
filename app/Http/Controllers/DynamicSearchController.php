@@ -71,15 +71,33 @@ class DynamicSearchController extends Controller
                                 $query->where('slug', $url_text);
                             }])
                         ->with('properties.fkProperty.values')
-                        ->with(['properties.fkProperty.propAllowedValues.language' => function ($query) use ($url_text){
-                            $query->where('slug', $url_text);
-                        }])
         				->with(['properties.language' => function($query) use ($url_text) {
         						$query->where('slug', $url_text);
-        					}])->find($id);
+        					}])->find($id)->toArray();
 
         \Log::debug("Dados das entidades properties");
         \Log::debug($ents);
+
+        foreach ($ents['properties'] as $key => $prop) {
+            $propsVal = [];
+            if($prop['fk_property_id'] != NULL || $prop['fk_property_id'] != '') {
+                foreach ($prop['fk_property']['values'] as $key2 => $value) {
+
+                    if (in_array($value['value'], $propsVal)) {
+                        unset($ents['properties'][$key]['fk_property']['values'][$key2]);
+                    } else {
+                        $propsVal[] = $value['value'];
+                        $dataPropAll = PropAllowedValue::with(['language' => function($query) use ($url_text)  {
+                                                $query->where('slug', $url_text);
+                                            }])->find($value['value']);
+
+
+                       //$ents['properties'][$key]['fk_property']['values'][$key2]['value'] = $dataPropAll->language[0]->pivot->name;
+                        $ents['properties'][$key]['fk_property']['values'][$key2]['value'] = $dataPropAll['language'][0]['pivot']['name'];
+                    }
+                }
+            }
+        }
 
         return response()->json($ents);
     }
@@ -355,7 +373,15 @@ class DynamicSearchController extends Controller
         } else  if ($valueType == "enum") {
             $valueQuery = $data['select'.$type.$position];
         } else  if ($valueType == "bool") {
-            $valueQuery = $data['radio'.$type.$position];
+            if (!isset($data['radio'.$type.$position])) {
+                $valueQuery = '';
+            } else {
+                if($data['radio'.$type.$position] == '1') {
+                    $valueQuery = trans("dynamicSearch/messages.TRUE");
+                } else {
+                    $valueQuery = trans("dynamicSearch/messages.FALSE");
+                }
+            }
         } else if ($valueType == "prop_ref") {
             $valueQuery = $data['propRef'.$type.$position];
         }
@@ -570,6 +596,11 @@ class DynamicSearchController extends Controller
     }
 
     public function getValuesEntitiesTables($properties, $entities) {
+
+        \Log::debug("PROPRIEDADES VALORES");
+        \Log::debug($properties);
+
+
         $url_text = 'PT';
         $result = Entity::with('values')
                         ->with(['values.property.language' => function($query) use ($url_text) {
@@ -617,7 +648,28 @@ class DynamicSearchController extends Controller
                     \Log::debug($dataProp);
 
                     $result[$key]['values'][$key1]['value'] = $dataProp['value'];
-                } 
+
+                } else if ($value['property']['value_type'] == 'bool') {
+
+                    if ($value['value'] == '1') {
+                        $result[$key]['values'][$key1]['value'] = trans("dynamicSearch/messages.TRUE");
+                    } else {
+                        $result[$key]['values'][$key1]['value'] = trans("dynamicSearch/messages.FALSE");
+                    }
+                } /*else if ($value['property']['value_type'] == 'text') {
+                    \Log::debug("CHEGUEI CHEGANDO");
+                    \Log::debug($value['value']);
+
+                    $datat = Value::where('value', $value['value'])->first()->toArray();
+
+                    \Log::debug("DATA TEXT");
+                    \Log::debug($datat);
+
+                    \Log::debug("DATA TEXT ID");
+                    \Log::debug($datat['id']);
+
+                    $result[$key]['values'][$key1]['value'] = $datat['id'];
+                }*/
             }
         }
 
@@ -884,18 +936,29 @@ class DynamicSearchController extends Controller
             // Formar a frase 
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         } else  if ($valueType == "bool") {
+
             if(!isset($data['radio'.$type.$position])) {
                 $valueQuery = '';
             } else {
-                $valueQuery = $data['radio'.$type.$position];
-                \Log::debug("Valor do radio ");
-                \Log::debug($valueQuery);
+
+                $valueRadio = $data['radio'.$type.$position];
+                \Log::debug("Valor do radio 2");
+                \Log::debug($valueRadio);
+
+                if ($valueRadio == 0) {
+                    $valueQuery = trans("dynamicSearch/messages.FALSE");
+                } else {
+                    $valueQuery = trans("dynamicSearch/messages.TRUE");
+                }
             }
             // Formar a frase 
             $phrase[] = $auxPhrase . ($valueQuery == '' ? trans("dynamicSearch/messages.ANY") : $valueQuery).';';
         } else if ($valueType == "prop_ref") {
 
+
             $idValue = $data['propRef'.$type.$position];
+
+            \Log::debug( $idValue);
             $dataVal = Value::find($idValue);
             $valueQuery = $dataVal['value'];
             // Formar a frase 
@@ -927,14 +990,14 @@ class DynamicSearchController extends Controller
             \Log::debug("Valor colocado no enum");
             \Log::debug($valueQuery);
         } else  if ($valueType == "bool") {
-            if(!isset($data['radio'.$type.$position]) || (!isset($data['radio'.$type.$position]) && $data['radio'.$type.$position] == undefined)) {
+            if(!isset($data['radio'.$type.$position])) {
                 $valueQuery = '';
             } else {
-                \Log::debug("VALOR DO RADIO NA QUERY");
-                \Log::debug($valueQuery);
                 $valueQuery = $data['radio'.$type.$position];
             }
         } else if ($valueType == "prop_ref") {
+             \Log::debug("VALOR DO PROP REF QUERY");
+            \Log::debug($data['propRef'.$type.$position]);
             $valueQuery    = $data['propRef'.$type.$position];
         }
 
