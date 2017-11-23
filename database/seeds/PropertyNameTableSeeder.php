@@ -480,7 +480,7 @@ class PropertyNameTableSeeder extends Seeder
             ],
 
             //Propriedades da relação Entidade transporte??
-            [
+            /*[
                 'property_id'     => '57',
                 'language_id'     => '1',
                 'name'            => 'Data',
@@ -505,7 +505,7 @@ class PropertyNameTableSeeder extends Seeder
                 'form_field_name' => NULL,
                 'updated_by'      => '1',
                 'deleted_by'      => NULL
-            ],
+            ],*/
 
             //Propriedades de concurso (abertura)
             [

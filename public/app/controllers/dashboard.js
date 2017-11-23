@@ -93,10 +93,23 @@ app.controller('dashboardController', function($scope, $q, $http, growl, API_URL
         $scope.transTypeMax = trans_max;
 
         $scope.cancel = function ($modalDialogForm) {
-             if (($modalDialogForm.number > trans_max) || ($modalDialogForm.number < trans_min)) {
-                alert("valores fora dos limites de max e min");
-                return;
-             }
+            if (trans_max == '*')
+            {
+                if ($modalDialogForm.number < trans_min) 
+                {
+                    alert("valores fora dos limites de min");
+                    return;
+                }
+            }
+            else
+            {
+                if (($modalDialogForm.number > trans_max) || ($modalDialogForm.number < trans_min)) 
+                {
+                    alert("valores fora dos limites de max e min");
+                    return;
+                }
+            }
+             
             $modalDialogForm.id = trans_id;
             $uibModalInstance.close($modalDialogForm);
         };

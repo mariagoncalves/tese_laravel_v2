@@ -1137,7 +1137,7 @@ class PropertyTableSeeder extends Seeder
             ],
 
             //Propriedades da relação Entidade transporte??
-            [
+            /*[
 
                 'id'               => '57',
                 'ent_type_id'      => NULL,
@@ -1198,7 +1198,7 @@ class PropertyTableSeeder extends Seeder
                 'updated_by'       => '1',
                 'deleted_by'       => NULL
 
-            ],
+            ],*/
 
             //Propriedades de concurso (abertura)
             [

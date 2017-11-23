@@ -78,7 +78,7 @@ class DynamicSearchController extends Controller
         \Log::debug("Dados das entidades properties");
         \Log::debug($ents);
 
-        //REVER (quando uma prop ref aponta pra um enum)
+        //REVER (quando uma prop ref aponta pra um enum) -- não faz sentido uma prop ref apontar para uma prop enum
         /*foreach ($ents['properties'] as $key => $prop) {
             $propsVal = [];
             if($prop['fk_property_id'] != NULL || $prop['fk_property_id'] != '') {
@@ -93,8 +93,8 @@ class DynamicSearchController extends Controller
                                             }])->find($value['value']);
 
 
-                       //$ents['properties'][$key]['fk_property']['values'][$key2]['value'] = $dataPropAll->language[0]->pivot->name;
-                        $ents['properties'][$key]['fk_property']['values'][$key2]['value'] = $dataPropAll['language'][0]['pivot']['name'];
+                       $ents['properties'][$key]['fk_property']['values'][$key2]['value'] = $dataPropAll->language[0]->pivot->name;
+                        //$ents['properties'][$key]['fk_property']['values'][$key2]['value'] = $dataPropAll['language'][0]['pivot']['name'];
                     }
                 }
             }
@@ -327,30 +327,6 @@ class DynamicSearchController extends Controller
         return response()->json($entsRelated);
     }
 
-
-    /*public function registarQueryPesquisa ($data, $idEntityType) {
-
-        \Log::debug("NOMEEEEEEEEER QUERYYY");
-        \Log::debug($data['query_name']);
-         \Log::debug("iddddddddddddddddd  QUERYYY");
-        \Log::debug($idEntityType);
-
-        $data1 = array(
-                'name'      => $data['query_name'],
-                'ent_type_id' => $idEntityType
-            );
-
-        $dataQuery = Query::create($data1);
-        $idQuery   = $dataQuery->id;
-
-        for ($i=0; $i < $data['numTableET']; $i++) {
-            if (isset($data['checkET'.$i])) {
-                $this->createCondicion($idQuery, $data['checkET'.$i], 'ET', $i, $data);
-            }
-        }
-
-    }*/
-
     public function createCondition($idQuery, $idProperty, $type, $position, $data) {
 
         $property = $this->getPropertyData($idProperty);
@@ -361,6 +337,7 @@ class DynamicSearchController extends Controller
                                 ->first();
 
         $valueQuery    = '';
+        $idVal         = NULL;
         $operatorQuery = $idOperator->id;
 
         if ($valueType == "int") {
@@ -372,22 +349,41 @@ class DynamicSearchController extends Controller
         } else  if ($valueType == "text") {
             $valueQuery = $data['text'.$type.$position];
         } else  if ($valueType == "enum") {
-            $valueQuery = $data['select'.$type.$position];
+            
+            $idVal = $data['select'.$type.$position];
+
+            $url_text = 'PT';
+
+            $dataPropAllowed = PropAllowedValue::with(['language' => function ($query) use ($url_text) {
+                                                    $query->where('slug', $url_text);
+                                                }])->find($idVal);
+
+            $valueQuery = $dataPropAllowed['language'][0]['pivot']['name'];
+
         } else  if ($valueType == "bool") {
             if (!isset($data['radio'.$type.$position])) {
                 $valueQuery = '';
             } else {
-                /*if($data['radio'.$type.$position] == '1') {
-                    $valueQuery = trans("dynamicSearch/messages.TRUE");
+
+                $idVal = $data['radio'.$type.$position];
+
+                if ($idVal == '1') {
+                    $valueQuery = "Sim";
                 } else {
-                    $valueQuery = trans("dynamicSearch/messages.FALSE");
-                }*/
-                $valueQuery = $data['radio'.$type.$position];
-                \Log::debug("VALOR DO RADIOOOOOO CONDITION");
-                \Log::debug($valueQuery = $data['radio'.$type.$position]);
+                    $valueQuery = "Não";
+                }
             }
         } else if ($valueType == "prop_ref") {
-            $valueQuery = $data['propRef'.$type.$position];
+            $idVal = $data['propRef'.$type.$position];
+
+            $dataVal = Value::find($idVal);
+            $valueQuery = $dataVal['value'];
+        } else if ($valueType == "file") {
+
+            $idVal = NULL;
+            $valueQuery = $data['file'.$type.$position];
+            \Log::debug("VALOR QUANDO É FILE");
+            //\Log::debug($valueQuery);
         }
 
         if($operatorQuery == "") {
@@ -401,6 +397,7 @@ class DynamicSearchController extends Controller
             'property_id' => $idProperty,
             'table_type'  => $type,
             'value'       => $valueQuery,
+            'id_values'    => $idVal
         );
 
         $dataCondition = Condition::create($data1);
@@ -454,7 +451,6 @@ class DynamicSearchController extends Controller
             }
         }
     }
-
 
     public function search(Request $request, $idEntityType) {
         $data        = $request->all();
@@ -643,13 +639,7 @@ class DynamicSearchController extends Controller
 
                 } else if ($value['property']['value_type'] == 'prop_ref') {
 
-                    \Log::debug("VALORERRRR do valueeeeeeeeee");
-                    \Log::debug($value['value']);
-
                     $dataProp = Value::find($value['value']);
-
-                    \Log::debug("Dados do valueeeeeeeeee");
-                    \Log::debug($dataProp);
 
                     $result[$key]['values'][$key1]['value'] = $dataProp['value'];
 
