@@ -497,6 +497,8 @@ class DynamicSearchController extends Controller
         \Log::debug($generalData);
         $result['result'] = $this->organizeDataTable($generalData, $resultsTables);
 
+        \Log::debug("Dados enviados para a vista");
+        \Log::debug($result);
         return response()->json($result);
     }
 
@@ -551,7 +553,10 @@ class DynamicSearchController extends Controller
                         }
                     }
 
-                    $resultFinal[] = $valuesDataResult;
+                    //Porque não tava a vir o cabeçalho da tabela
+                    if (count($valuesDataResult) > 0) {
+                        $resultFinal[] = $valuesDataResult;
+                    }
                 }
             }
         } else if ($generalData['table1']['select'] && $generalData['table2']['select']) { // Tabela 1 e 2
@@ -577,10 +582,16 @@ class DynamicSearchController extends Controller
                         }
                     }
 
-                    $resultFinal[] = $valuesDataResult;
+                    //Porque não tava a vir o cabeçalho da tabela
+                    if (count($valuesDataResult) > 0) {
+                        $resultFinal[] = $valuesDataResult;
+                    }
                 }
             }
         } else if ($generalData['table1']['select']) { // Tabela 1
+
+            \Log::debug("DADOS DA 1º TABELA");
+            \Log::debug($resultsTables['result1']);
             // Percorrer as entidades
             foreach ($resultsTables['result1'] as $entity) {
                 $valuesDataResult = [];
@@ -588,7 +599,11 @@ class DynamicSearchController extends Controller
                 foreach ($entity['values'] as $valueData) {
                     $valuesDataResult[] = $valueData;
                 }
-                $resultFinal[] = $valuesDataResult;
+
+                //Porque não tava a vir o cabeçalho da tabela
+                if (count($valuesDataResult) > 0) {
+                    $resultFinal[] = $valuesDataResult;
+                }
             }
         }
 
