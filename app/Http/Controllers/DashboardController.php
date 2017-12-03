@@ -30,6 +30,7 @@ use App\TStateName;
 use App\PropertyName;
 use App\CustomForm;
 use App\Actor;
+use App\PropAllowedValue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use DB;
@@ -37,9 +38,14 @@ use Response;
 use Exception;
 use Config;
 
+class LackingT {
+    public $transaction_type_id;
+    public $t_state_id;
+}
+
 class DashboardController extends Controller
 {
-     //
+    //
     private $url_text;
     private $user_id;
 
@@ -109,7 +115,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                 ->join('process_type', 'process_type.id', '=', 'process.process_type_id')
                 ->join('transaction_type', 'transaction_type.id', '=', 'transaction.transaction_type_id')
                 ->join('actor_iniciates_t', 'actor_iniciates_t.transaction_type_id', '=', 'transaction_type.id')
-                ->select('process_type.id as process_type_id','process.id as process_id','transaction.id as transaction_id',DB::raw('group_concat(t_state_name.name ORDER BY t_state_name.t_state_id ASC SEPARATOR \'->\') as t_state_name'),'transaction_type.id as transaction_type_id',DB::raw("'Iniciator' as Type"))
+                ->select('process_type.id as process_type_id','process.id as process_id', 'transaction.created_at','transaction.id as transaction_id',DB::raw('group_concat(t_state_name.name ORDER BY t_state_name.t_state_id ASC SEPARATOR \'->\') as t_state_name'),'transaction_type.id as transaction_type_id',DB::raw("'Iniciator' as Type"))
                 ->where('t_state_name.language_id','=', $get_lang_id)
                 ->whereIn('actor_iniciates_t.actor_id', function ($query) use ($user_id) {
                     $query->select('actor_id')->from('role_has_actor')
@@ -126,7 +132,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                     $query->select('users.id')->from('users')->where('users.entity_id', '=', $entity_id);
                 });
             }
-            $iniciatorTransactions =  $iniciatorTransactions->groupBy('transaction_type.id','transaction.id','process.id','process_type.id')
+            $iniciatorTransactions =  $iniciatorTransactions->groupBy('transaction_type.id','transaction.id','process.id','process_type.id','transaction.created_at')
                 ->get();
 
             foreach($iniciatorTransactions as $iniciatorTransaction)
@@ -188,7 +194,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                 ->join('process', 'transaction.process_id', '=', 'process.id')
                 ->join('process_type', 'process_type.id', '=', 'process.process_type_id')
                 ->join('transaction_type', 'transaction_type.id', '=', 'transaction.transaction_type_id')
-                ->select('process_type.id as process_type_id','process.id as process_id','transaction.id as transaction_id',DB::raw('group_concat(t_state_name.name ORDER BY t_state_name.t_state_id ASC SEPARATOR \'->\') as t_state_name'),'transaction_type.id as transaction_type_id',DB::raw("'Executer' as Type"))
+                ->select('process_type.id as process_type_id','process.id as process_id', 'transaction.created_at', 'transaction.id as transaction_id',DB::raw('group_concat(t_state_name.name ORDER BY t_state_name.t_state_id ASC SEPARATOR \'->\') as t_state_name'),'transaction_type.id as transaction_type_id',DB::raw("'Executer' as Type"))
                 ->where('t_state_name.language_id','=', $get_lang_id)
                 ->whereIn('transaction_type.executer', function ($query) use ($user_id) {
                     $query->select('actor_id')->from('role_has_actor')
@@ -205,7 +211,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                     $query->select('users.id')->from('users')->where('users.entity_id', '=', $entity_id);
                 });
             }
-            $executerTransactions =  $executerTransactions->groupBy('transaction_type.id','transaction.id','process.id','process_type.id')
+            $executerTransactions =  $executerTransactions->groupBy('transaction_type.id','transaction.id','process.id','process_type.id','transaction.created_at')
                 ->get();
 
             foreach($executerTransactions as $executerTransaction)
@@ -763,6 +769,8 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
             $query->where('slug', $url_text);
         }])->whereHas('iniciatorActor.role.user', function ($query) use ($user_id){
             return $query->where('user_id', $user_id);
+        })->whereHas('language', function($query) use ($url_text) {
+            $query->where('slug', $url_text);
         })->get();
         //->doesntHave('causedTransaction')
         return response()->json($transactions);
@@ -820,7 +828,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
             }
             else
             {
-                $dataResultProps = $this->getProps($trans_type_id, $i, 1);
+                $dataResultProps = $this->getProps($trans_type_id, $i, $process_id, 1);
 
                 array_push($dataArray, $dataResultProps);
                 //\Log::debug($dataArray);
@@ -987,16 +995,36 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                 foreach ($waitinglinks as $waitinglink) {
                     foreach ($waitinglink->waitedT->processType->processes as $keyProcess => $valueProcess) { //verificar a condição de waitinglink max
                         if (($valueProcess->transactions->isEmpty()) || $valueProcess->transactions->count() < $waitinglink->min) {
-                            $transactionsLacking = $this->array_push_assoc($transactionsLacking, 'transaction_type_id', $waitinglink->waitedT->id);
-                            $transactionsLacking = $this->array_push_assoc($transactionsLacking, 't_state_id', $waitinglink->waited_fact);
+                            /*$transactionsLacking = $this->array_push_assoc($transactionsLacking, 'transaction_type_id', $waitinglink->waitedT->id);
+                            $transactionsLacking = $this->array_push_assoc($transactionsLacking, 't_state_id', $waitinglink->waited_fact);*/
+
+                            $array = array(
+                                "transaction_type_id" => $waitinglink->waitedT->id,
+                                "t_state_id" => $waitinglink->waited_fact
+                            );
+
+                            array_push($transactionsLacking, $array);
+
+                            /*$obj = new LackingT;
+                            $obj->transaction_type_id = $waitinglink->waitedT->id;
+                            $obj->t_state_id = $waitinglink->waited_fact;
+                            $transactionsLacking[] = $obj;*/
+                            //dd($obj);
                             $existsAllTransactions = false;
-                            break 2;
+                            break 1;
                         }
                     }
 
                     if ($waitinglink->waitedT->processType->processes->isEmpty()) {
-                        $transactionsLacking = $this->array_push_assoc($transactionsLacking, 'transaction_type_id', $waitinglink->waitedT->id);
-                        $transactionsLacking = $this->array_push_assoc($transactionsLacking, 't_state_id', $waitinglink->waited_fact);
+                        /*$transactionsLacking = $this->array_push_assoc($transactionsLacking, 'transaction_type_id', $waitinglink->waitedT->id);
+                        $transactionsLacking = $this->array_push_assoc($transactionsLacking, 't_state_id', $waitinglink->waited_fact);*/
+                        $array = array(
+                            "transaction_type_id" => $waitinglink->waitedT->id,
+                            "t_state_id" => $waitinglink->waited_fact
+                        );
+
+                        array_push($transactionsLacking, $array);
+
                         $existsAllTransactions = false;
                     }
                 }
@@ -1004,12 +1032,13 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
             }
         }
 
-        foreach ($transactionsLacking as $transactionLacking)
+        //\Log::debug($transactionsLacking);
+        $transactionsLacking = $this->array_to_object($transactionsLacking);
+        foreach ($transactionsLacking as $keyTransactionLacking => $transactionLacking)
         {
-            //\Log::debug($transactionLacking->transaction_type_id);
-            //$transactionLacking['transaction_type_name'] = "";
-            //$transactionLacking->transaction_type_name = TransactionTypeName::where('transaction_type_id','=',$transactionLacking->transaction_type_id)->where('language_id','=',1)->first()->t_name;
-            //$transactionLacking->t_state_name = TStateName::where('t_state_id','=',$transactionLacking->t_state_id)->where('language_id','=',1)->first()->name;
+            //\Log::debug($transactionsLacking);
+            $transactionLacking->transaction_type_name = TransactionTypeName::where('transaction_type_id','=',$transactionLacking->transaction_type_id)->where('language_id','=',1)->first()->t_name;
+            $transactionLacking->t_state_name = TStateName::where('t_state_id','=',$transactionLacking->t_state_id)->where('language_id','=',1)->first()->name;
         }
 
         $data = array(
@@ -1022,6 +1051,18 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
             return response()->json($data, $existsAllTransactions == false ? 400 : 200); //400 vai para o catch, 200 vai para o then
         else
             return $data;
+    }
+
+    static public function array_to_object(array $array)
+    {
+        foreach($array as $key => $value)
+        {
+            if(is_array($value))
+            {
+                $array[$key] = self::array_to_object($value);
+            }
+        }
+        return (object)$array;
     }
 
     private function array_push_assoc($array, $key, $value){
@@ -1334,7 +1375,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         }
     }
 
-    private function getPropsInfoProp($prop_id)
+    private function getPropsInfoProp($prop_id, $proc_id)
     {
         $url_text = $this->url_text;
         $lang_id = Language::where('slug', $url_text)->first()->id;
@@ -1343,7 +1384,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
 
         $transactionsProps = collect();
         if ($existPropCanReadProp->isNotEmpty()) {
-            $transactionsPropsEntTypes = DB::table('transaction')
+            /*$transactionsPropsEntTypes = DB::table('transaction')
                 ->join('transaction_type', 'transaction_type.id', '=', 'transaction.transaction_type_id')
                 ->join('transaction_state', 'transaction_state.transaction_id', '=', 'transaction.id')
                 ->join('entity', 'entity.transaction_id', '=', 'transaction.id')
@@ -1356,9 +1397,26 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                 ->select('transaction.id as transaction_id', 'transaction_type.id as transaction_type_id', 't_state.id as t_state_id',
                     'transaction_state.created_at', 'property.id as property_id',
                     'prov_prop.id as prov_prop_id', 'value.value')
-                ->where('property.id', '=', $prop_id);
+                ->where('property.id', '=', $prop_id);*/
 
-            $transactionsProps = DB::table('transaction')
+            $transactionsPropsEntTypes = DB::table('transaction')
+                ->join('transaction_type', 'transaction_type.id', '=', 'transaction.transaction_type_id')
+                ->join('entity', 'entity.transaction_id', '=', 'transaction.id')
+                ->leftJoin('value', 'value.entity_id', '=', 'entity.id')
+                ->join('ent_type', 'ent_type.id', '=', 'entity.ent_type_id')
+                ->join('property', 'property.id', '=', 'value.property_id')
+                ->join('t_state', 't_state.id', '=', 'property.t_state_id')
+                ->join('process', 'process.id', '=', 'transaction.process_id')
+                ->select('transaction.id as transaction_id', 'transaction_type.id as transaction_type_id', 't_state.id as t_state_id',
+                    'transaction.created_at', 'property.id as property_id', 'value.value')
+                ->whereIn('property.id', function($query) use ($prop_id)
+                {
+                    $query->select('providing_property')->from('property_can_read_property')
+                        ->where('reading_property', $prop_id);
+                })
+                ->where('process.id',$proc_id)->where('process.proc_state', '=', 'execution');
+
+            /*$transactionsProps = DB::table('transaction')
                 ->join('transaction_type', 'transaction_type.id', '=', 'transaction.transaction_type_id')
                 ->join('transaction_state', 'transaction_state.transaction_id', '=', 'transaction.id')
                 ->join('relation', 'relation.transaction_id', '=', 'transaction.id')
@@ -1373,21 +1431,41 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                     'prov_prop.id as prov_prop_id', 'value.value')
                 ->where('property.id', '=', $prop_id)
                 ->union($transactionsPropsEntTypes)
+                ->get();*/
+
+            $transactionsProps = DB::table('transaction')
+                ->join('transaction_type', 'transaction_type.id', '=', 'transaction.transaction_type_id')
+                ->join('relation', 'relation.transaction_id', '=', 'transaction.id')
+                ->leftJoin('value', 'value.entity_id', '=', 'relation.id')
+                ->join('rel_type', 'rel_type.id', '=', 'relation.rel_type_id')
+                ->join('property', 'property.id', '=', 'value.property_id')
+                ->join('t_state', 't_state.id', '=', 'property.t_state_id')
+                ->join('process', 'process.id', '=', 'transaction.process_id')
+                ->select('transaction.id as transaction_id', 'transaction_type.id as transaction_type_id', 't_state.id as t_state_id',
+                    'transaction.created_at', 'property.id as property_id', 'value.value')
+                ->whereIn('property.id', function($query) use ($prop_id)
+                {
+                    $query->select('providing_property')->from('property_can_read_property')
+                        ->where('reading_property', $prop_id);
+                })
+                ->where('process.id',$proc_id)
+                ->where('process.proc_state', '=', 'execution')
+                ->union($transactionsPropsEntTypes)
+                //->orderBy('transaction.created_at', 'desc')
                 ->get();
 
             foreach($transactionsProps as $transactionsProp)
             {
                 $transactionsProp->t_name = TransactionTypeName::where('transaction_type_id','=',$transactionsProp->transaction_type_id)->where('language_id','=',$lang_id)->first()->t_name;
                 $transactionsProp->t_state_name = TStateName::where('t_state_id','=',$transactionsProp->t_state_id)->where('language_id','=',$lang_id)->first()->name;
-                $transactionsProp->property_name = PropertyName::where('property_id','=',$transactionsProp->property_id)->where('language_id','=',$lang_id)->first()->name;
-                $transactionsProp->prov_prop_name = PropertyName::where('property_id','=',$transactionsProp->prov_prop_id)->where('language_id','=',$lang_id)->first()->name;
+                $transactionsProp->prov_prop_name = PropertyName::where('property_id','=',$transactionsProp->property_id)->where('language_id','=',$lang_id)->first()->name;
             }
         }
 
         return $transactionsProps;
     }
 
-    private function getPropsInfoEntType($prop_id)
+    private function getPropsInfoEntType($prop_id, $proc_id)
     {
         $url_text = $this->url_text;
         $lang_id = Language::where('slug', $url_text)->first()->id;
@@ -1396,7 +1474,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
 
         $transactionsEntTypesProps = collect();
         if ($existPropCanReadEntType->isNotEmpty()) {
-            $transactionsEntTypesProps = DB::table('transaction')
+            /*$transactionsEntTypesProps = DB::table('transaction')
                 ->join('transaction_type', 'transaction_type.id', '=', 'transaction.transaction_type_id')
                 ->join('transaction_state', 'transaction_state.transaction_id', '=', 'transaction.id')
                 ->join('entity', 'entity.transaction_id', '=', 'transaction.id')
@@ -1411,21 +1489,63 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                     'transaction_state.created_at', 'property.id as property_id',
                     'prov_prop.id as prov_prop_id', 'value.value')
                 ->where('property.id', '=', $prop_id)
+                ->get();*/
+
+            /*$transactionsEntTypesProps = DB::table('transaction')
+                ->join('transaction_type', 'transaction_type.id', '=', 'transaction.transaction_type_id')
+                ->join('entity', 'entity.transaction_id', '=', 'transaction.id')
+                ->join('ent_type', 'ent_type.id', '=', 'entity.ent_type_id')
+                ->join('property', 'property.ent_type_id', '=', 'ent_type.id')
+                ->leftJoin('value', 'value.property_id', '=', 'property.id')
+                ->join('t_state', 't_state.id', '=', 'property.t_state_id')
+                ->join('process', 'process.id', '=', 'transaction.process_id')
+                ->select('transaction.id as transaction_id', 'transaction_type.id as transaction_type_id', 't_state.id as t_state_id',
+                    'value.created_at', 'property.id as property_id', 'value.value')
+                ->whereIn('ent_type.id', function($query) use ($prop_id)
+                    {
+                        $query->select('providing_ent_type')->from('property_can_read_ent_type')
+                            ->where('reading_property', $prop_id);
+                    })
+                ->whereIn('process.updated_by', function($query) use ($getUser)
+                {
+                    $query->select('id')->from('users')
+                        ->where('users.entity_id', $getUser->entity_id);
+                })->where('process.proc_state', '=', 'execution')
+                ->distinct()
+                ->get();*/
+
+            $transactionsEntTypesProps = DB::table('transaction')
+                ->join('transaction_type', 'transaction_type.id', '=', 'transaction.transaction_type_id')
+                ->join('entity', 'entity.transaction_id', '=', 'transaction.id')
+                ->leftJoin('value', 'value.entity_id', '=', 'entity.id')
+                ->join('ent_type', 'ent_type.id', '=', 'entity.ent_type_id')
+                ->join('property', 'property.id', '=', 'value.property_id')
+                ->join('t_state', 't_state.id', '=', 'property.t_state_id')
+                ->join('process', 'process.id', '=', 'transaction.process_id')
+                ->select('transaction.id as transaction_id', 'transaction_type.id as transaction_type_id', 't_state.id as t_state_id',
+                    'transaction.created_at', 'property.id as property_id', 'value.value')
+                ->whereIn('ent_type.id', function($query) use ($prop_id)
+                {
+                    $query->select('providing_ent_type')->from('property_can_read_ent_type')
+                        ->where('reading_property', $prop_id);
+                })
+                ->where('process.id',$proc_id)
+                ->where('process.proc_state', '=', 'execution')
+                ->orderBy('transaction.created_at','desc')
                 ->get();
 
             foreach($transactionsEntTypesProps as $transactionsEntTypesProp)
             {
                 $transactionsEntTypesProp->t_name = TransactionTypeName::where('transaction_type_id','=',$transactionsEntTypesProp->transaction_type_id)->where('language_id','=',$lang_id)->first()->t_name;
                 $transactionsEntTypesProp->t_state_name = TStateName::where('t_state_id','=',$transactionsEntTypesProp->t_state_id)->where('language_id','=',$lang_id)->first()->name;
-                $transactionsEntTypesProp->property_name = PropertyName::where('property_id','=',$transactionsEntTypesProp->property_id)->where('language_id','=',$lang_id)->first()->name;
-                $transactionsEntTypesProp->prov_prop_name = PropertyName::where('property_id','=',$transactionsEntTypesProp->prov_prop_id)->where('language_id','=',$lang_id)->first()->name;
+                $transactionsEntTypesProp->prov_prop_name = PropertyName::where('property_id','=',$transactionsEntTypesProp->property_id)->where('language_id','=',$lang_id)->first()->name;
             }
         }
 
         return $transactionsEntTypesProps;
     }
 
-    public function getProps($transtype_id, $type, $option = null)
+    public function getProps($transtype_id, $type, $proc_id, $option = null)
     {
         $url_text = $this->url_text;
         $user_id = $this->user_id;
@@ -1462,6 +1582,10 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                     $query->where('slug', $url_text);
                 }, 'propertiesReading.language' => function ($query) use ($url_text) {
                     $query->where('slug', $url_text);
+                }, 'propertiesReading.language' => function ($query) use ($url_text) {
+                    $query->where('slug', $url_text);
+                }, 'readingEntTypes.language' => function ($query) use ($url_text) {
+                    $query->where('slug', $url_text);
                 }, 'propAllowedValues.entType', 'fkEntType.entity.language' => function ($query) use ($url_text) {
                         $query->where('slug', $url_text)->orderBy('name', 'asc');
                 }, 'fkProperty.language' => function ($query) use ($url_text) {
@@ -1479,22 +1603,43 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
                     ->orderBy('form_field_order', 'asc')->get();
             //}
 
-            $props->map(function ($prop, $keyprop) use ($url_text)
+            if ($proc_id != null)
             {
-                $transactionsProps = $this->getPropsInfoProp($prop->id);
+                $props->map(function ($prop, $keyprop) use ($url_text, $proc_id) {
+                    \Log::debug($proc_id);
+                    $transactionsProps = $this->getPropsInfoProp($prop->id, $proc_id);
 
-                if ($prop->propertiesReading->isNotEmpty() && ($transactionsProps->isNotEmpty()))
-                {
-                    $this->array_push_assoc($prop,'PropertiesInfo', $transactionsProps);
-                }
+                    if ($prop->propertiesReading->isNotEmpty() && ($transactionsProps->isNotEmpty())) {
+                        $this->array_push_assoc($prop, 'PropertiesInfo', $transactionsProps);
+                    }
 
-                $transactionsEntTypesProps = $this->getPropsInfoEntType($prop->id);
+                    $transactionsEntTypesProps = $this->getPropsInfoEntType($prop->id, $proc_id);
 
-                if ($prop->propertiesReading->isNotEmpty() && ($transactionsEntTypesProps->isNotEmpty()))
-                {
-                    $this->array_push_assoc($prop,'PropertiesInfoEntType', $transactionsEntTypesProps);
-                }
-            });
+                    if ($prop->readingEntTypes->isNotEmpty() && ($transactionsEntTypesProps->isNotEmpty())) {
+                        //Corrigir os valores que sejam ID's
+                        //Buscar o value_type da propriedade
+                        foreach ($transactionsEntTypesProps as $transactionsEntTypesProp)
+                        {
+                            $prop_value_type = Property::find($transactionsEntTypesProp->property_id)->value_type;
+                            switch ($prop_value_type)
+                            {
+                                case "enum":
+                                    //Buscar o Nome do prop allowed value
+                                    $prop_allowed_value = PropAllowedValue::find($transactionsEntTypesProp->value);
+                                    $transactionsEntTypesProp->value = $prop_allowed_value->language()->where('slug', $this->url_text)->first()->pivot->name;
+                                    break;
+
+                                case "prop_ref":
+
+                                    break;
+                                default:
+                            }
+                        }
+
+                        $this->array_push_assoc($prop, 'PropertiesInfoEntType', $transactionsEntTypesProps);
+                    }
+                });
+            }
 
             //se não existem propriedades nesse ent type nao é preciso modificar o array
             if ($props->isNotEmpty()) {
@@ -2403,7 +2548,7 @@ GROUP BY transaction_type_id, transaction_id, process_id;*/
         }, 'transactionTypes' => function($query) use ($url_text) {
             $query->orderBy('field_order', 'asc');
         }, 'transactionTypes.entType.properties' => function($query) use ($costum_form_state) {
-            $query->where('t_state_id', $costum_form_state)->orderBy('form_field_order', 'asc');
+            $query->where('t_state_id', $costum_form_state);
         }, 'transactionTypes.entType.properties.language' => function($query) use ($url_text) {
             $query->where('slug', $url_text);
         }, 'transactionTypes.entType.language' => function($query) use ($url_text) {

@@ -43,7 +43,7 @@
                     </div>
 
                     <div class="modal-body">
-                        <h4>{{trans('properties/messages.Page_Name')}}</h4>
+                        <h4>{{trans('properties/messages.Page_Name1')}}</h4>
                         <ul ui-sortable="sortableOptionsEnt" ng-model="propsEnt" class="list-group">
                             <li ng-repeat="prop in propsEnt" class="list-group-item" data-id="[[ prop.id ]]">[[prop.language[0].pivot.name]]</li>
                         </ul>

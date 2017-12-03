@@ -79,7 +79,7 @@
 
                                 <div class="form-group" ng-switch-when="enum" ng-switch="prop.form_field_type">
                                     <label for="inputName" class="col-sm-3 control-label">[[prop.language[0].pivot.name]]</label>
-                                    <div class="col-sm-9" ng-switch-when="radio">
+                                    <div class="col-sm-9" ng-switch-when="radio|checkbox" ng-switch-when-separator="|">
                                         <label for="" ng-repeat="p_a_v in prop.prop_allowed_values" class="radio-inline state">
                                             <input type="[[prop.form_field_type]]" name="[[prop.language[0].pivot.form_field_name]]" value="[[p_a_v.id]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" ng-required="prop.mandatory">[[p_a_v.language[0].pivot.name]]
                                         </label>
@@ -88,22 +88,11 @@
                                                         </span>
                                     </div>
 
-                                    <div class="col-sm-9" ng-switch-when="checkbox">
-                                        [[prop.fields]]
-                                        <label for="" ng-repeat="p_a_v in prop.prop_allowed_values" ng-if="prop.mandatory" class="radio-inline state">
-                                            {{--<input type="[[prop.form_field_type]]" name="[[prop.language[0].pivot.form_field_name]]" value="[[p_a_v.id]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id+'-'+p_a_v.id]" ng-click="updateQuestionValue(prop.language[0].pivot.form_field_name+'-'+prop.id+'-'+p_a_v.id, prop.id)" ng-checked="value.indexOf(prop.language[0].pivot.form_field_name+'-'+prop.id+'-'+p_a_v.id) > -1" ng-required="value.length == 0">[[p_a_v.language[0].pivot.name]]--}}
-                                            <input type="[[prop.form_field_type]]" name="[[prop.language[0].pivot.form_field_name]]" value="[[p_a_v.id]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id+'-'+p_a_v.id]" ng-click="updateValue(prop.language[0].pivot.form_field_name+'-'+prop.id+'-'+p_a_v.id, $parent.$parent.$index, indexTab)" ng-required="prop.fields === undefined">[[p_a_v.language[0].pivot.name]]
-                                        </label>
-                                        <label for="" ng-repeat="p_a_v in prop.prop_allowed_values" ng-if="!prop.mandatory" class="radio-inline state">
-                                            <input type="[[prop.form_field_type]]" name="[[prop.language[0].pivot.form_field_name]]" value="[[p_a_v.id]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id+'-'+p_a_v.id]">[[p_a_v.language[0].pivot.name]]
-                                        </label>
-                                        <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
-                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">[[prop.language[0].pivot.name]] is required.</span>
-                                                        </span>
-                                    </div>
-
                                     <div class="col-sm-9" ng-switch-when="selectbox">
-                                        <select class="form-control" name="[[prop.language[0].pivot.form_field_name]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" ng-options="item.id as item.language[0].pivot.name for item in prop.prop_allowed_values" ng-required="prop.mandatory">
+                                        <select class="form-control" name="[[prop.language[0].pivot.form_field_name]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" ng-if="prop.has_entType=='true'" ng-change="verParEntType(prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id], index, indexTab)" ng-options="item.id as item.language[0].pivot.name for item in prop.prop_allowed_values" ng-required="prop.mandatory">
+                                            <option value=""></option>
+                                        </select>
+                                        <select class="form-control" name="[[prop.language[0].pivot.form_field_name]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" ng-if="prop.has_entType=='false'" ng-options="item.id as item.language[0].pivot.name for item in prop.prop_allowed_values" ng-required="prop.mandatory">
                                             <option value=""></option>
                                         </select>
                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
@@ -121,18 +110,6 @@
                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
                                                                         <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">[[prop.language[0].pivot.name]] is required.</span>
                                                                     </span>
-                                    </div>
-                                </div>
-
-                                <div class="form-group" ng-switch-when="prop_ref">
-                                    <label for="inputName" class="col-sm-3 control-label">[[prop.language[0].pivot.name]]</label>
-                                    <div class="col-sm-9">
-                                        <select class="form-control" name="[[prop.language[0].pivot.form_field_name]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" ng-options="item.id as item.value for item in prop.fk_property.values" ng-required="prop.mandatory">
-                                            <option value=""></option>
-                                        </select>
-                                        <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
-                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">[[prop.language[0].pivot.name]] is required.</span>
-                                                        </span>
                                     </div>
                                 </div>
 

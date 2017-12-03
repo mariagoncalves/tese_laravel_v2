@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 use App\Role;
 use App\RoleName;
+use App\RoleHasUser;
+use App\RoleHasActor;
 
 class RoleTableSeeder extends Seeder
 {
@@ -13,53 +15,40 @@ class RoleTableSeeder extends Seeder
      */
     public function run()
     {
-        /*$datas = ['Administrador', 'Munícipe', 'Administrativo'];
-
-        foreach ($datas as $data) {
-            $new = factory(Role::class, 1)->create();
-
-            factory(RoleName::class, 1)->create([
-                'role_id'     => $new->id, 
-                'name'        => $data,
-                'language_id' => App\Language::where('slug', 'pt')->first()->id,
-                'updated_by'  => $new->updated_by,
-            ]);
+        //Inserir Utilizadores - 5 Roles
+        for($i = 0; $i < 5; $i++)
+        {
+            $role = Role::create();
         }
 
-        factory(Role::class, 4)->create()->each(function($new) {
-            factory(RoleName::class, 1)->create([
-                'role_id'     => $new->id, 
-                'language_id' => App\Language::where('slug', 'pt')->first()->id,
-                'updated_by'  => $new->updated_by,
-            ]);
-        });*/
 
-        //Fazendo seeds ao modo antigo
-        $dados = [
-            [
-                'id'         => '1',
-                'updated_by' => '1',
-                'deleted_by' => NULL
-            ],
-            [
-                'id'         => '2',
-                'updated_by' => '1',
-                'deleted_by' => NULL
-            ],
-            [
-                'id'         => '3',
-                'updated_by' => '1',
-                'deleted_by' => NULL
-            ],
-            [
-                'id'         => '4',
-                'updated_by' => '1',
-                'deleted_by' => NULL
-            ]
-        ];
+        //Inserir Roles Names
+        $role_name = array(
+            array('role_id' => '1','language_id' => '1','name' => 'Munícipe'),
+            array('role_id' => '2','language_id' => '1','name' => 'Rececionista'),
+            array('role_id' => '3','language_id' => '1','name' => 'Arquiteto'),
+            array('role_id' => '4','language_id' => '1','name' => 'Fiscal'),
+            array('role_id' => '5','language_id' => '1','name' => 'Vereador'),
+        );
 
-        foreach ($dados as $value) {
-            Role::create($value);
-        }
+        $roles = RoleName::insert($role_name);
+
+        //RoleHasUser - Preencher a table
+        $role_has_user = array(
+            array('role_id' => '1','user_id' => '1'),
+        );
+
+        $role_has_users = RoleHasUser::insert($role_has_user);
+
+        //RoleHasActor
+        $role_has_actor = array(
+            array('role_id' => '1','actor_id' => '1'),
+            array('role_id' => '2','actor_id' => '3'),
+            array('role_id' => '3','actor_id' => '4'),
+            array('role_id' => '3','actor_id' => '5'),
+            array('role_id' => '5','actor_id' => '2'),
+        );
+
+        $role_has_actors = RoleHasActor::insert($role_has_actor);
     }
 }

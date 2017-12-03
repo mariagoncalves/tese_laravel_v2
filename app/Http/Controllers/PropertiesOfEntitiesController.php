@@ -30,9 +30,6 @@ class PropertiesOfEntitiesController extends Controller {
             \Log::debug("Dados do data: ");
             \Log::debug($data);
 
-            \Log::debug("Valor do unit type");
-            \Log::debug($data['unites_names']);
-
             $propertyFieldSize = '';
             if(isset($data["property_fieldType"])) {
                 if ($data["property_fieldType"] === "text") {
@@ -86,7 +83,7 @@ class PropertiesOfEntitiesController extends Controller {
                 'property_fieldType'       => $rulesFieldType,
                 'property_mandatory'       => ['required'],
                 'transactionsState'        => ['required'],
-                'unites_names'             => ['integer'],
+                //'unites_names'             => ['integer'],
                 'property_fieldSize'       => $propertyFieldSize,
                 'property_state'           => ['required'],
                 'reference_entity'         => $rulesEntRef,
@@ -129,7 +126,7 @@ class PropertiesOfEntitiesController extends Controller {
 
             $data1 = array(
                 'ent_type_id'      => $data['entity_type'             ],
-                't_state_id'       => $data['transactionsState'       ],
+                't_state_id'       => $data['transactionsState'      ],
                 'value_type'       => $data['property_valueType'      ],
                 'form_field_type'  => $data['property_fieldType'      ],
                 'unit_type_id'     => $data['unites_names'            ],
@@ -263,7 +260,7 @@ class PropertiesOfEntitiesController extends Controller {
             'property_fieldType'  => $rulesFieldType,
             'property_mandatory'  => ['required'],
             'transactionsState'   => ['required'],
-            'unites_names'        => ['integer'],
+            //'unites_names'        => ['integer'],
             'property_fieldSize'  => $propertyFieldSize,
             'reference_entity'    => $rulesEntRef,
             'fk_property'         => $rulePropRef,

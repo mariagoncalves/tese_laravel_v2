@@ -5,33 +5,12 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>SB Admin - Bootstrap Admin Template</title>
+<title>OELABUMA</title>
 
-<!-- Bootstrap Core CSS -->
-<link href="<?= asset('../css/bootstrap.css') ?>" rel="stylesheet">
-
-<link href="<?= asset('../js/metisMenu/metisMenu.min.css') ?>" rel="stylesheet">
-
-<!-- Custom CSS -->
-<link href="<?= asset('../css/sb-admin-2.css') ?>" rel="stylesheet">
-
-<!--custom btns css-->
-<link href="<?= asset('../css/custombtns.css') ?>" rel="stylesheet">
-
-
-<!-- Morris Charts CSS -->
-<link href="<?= asset('../css/plugins/morris.css') ?>" rel="stylesheet">
+<link href="<?= asset('../css/app.css') ?>" rel="stylesheet">
 
 <!-- Custom Fonts -->
 <link href="<?= asset('../font-awesome/css/font-awesome.min.css') ?>" rel="stylesheet" type="text/css">
-
-<link href="<?= asset('../css/angular-growl.css" rel="stylesheet') ?>" type="text/css">
-
-<link rel='stylesheet' href="<?= asset('../css/loading-bar.min.css') ?>" type='text/css' media='all' />
-
-<link href="<?= asset('../css/select2.min.css') ?>" rel="stylesheet" />
-
-<link rel="stylesheet" href="<?= asset('../css/select.css') ?>" />
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

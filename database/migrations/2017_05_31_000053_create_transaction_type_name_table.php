@@ -15,8 +15,8 @@ class CreateTransactionTypeNameTable extends Migration
         Schema::create('transaction_type_name', function (Blueprint $table) {
             $table->integer('transaction_type_id')->unsigned();
             $table->integer('language_id')->unsigned();
-            $table->string('t_name', 255)->nullable();
-            $table->string('rt_name', 255)->nullable();
+            $table->string('t_name', 45)->nullable();
+            $table->string('rt_name', 500)->nullable();
             $table->integer('updated_by')->nullable()->unsigned();
             $table->integer('deleted_by')->nullable()->unsigned();
             $table->timestamps();

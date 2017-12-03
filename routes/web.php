@@ -119,7 +119,7 @@ Route::get('/dashboardManage', 'DashboardController@index');
 
 Route::get('/dashboard/get_transtypeusercaninit_', 'DashboardController@getTransTypeUserCanInit');
 
-Route::get('/dashboard/get_props_form/{id}/{id1}', 'DashboardController@getProps');
+Route::get('/dashboard/get_props_form/{id}/{id1}/{id2}', 'DashboardController@getProps');
 Route::get('/dashboard/get_props_form_child/{id}', 'DashboardController@getPropsfromChild');
 
 Route::get('/dashboard/get_processes_of_tr/{id}', 'DashboardController@getAllProcessOfTr');

@@ -1,8 +1,6 @@
 @extends('layouts.default')
 @section('content')
     <div ng-controller="dashboardController">
-        {{--<h2>[["Page_Name" | translate]]</h2>--}}
-        <h2>{{trans("dashboard/messages.Page_Name")}}{{--<span class="label label-success">Approved</span>--}}</h2>
 
         <div growl reference="80" inline="false">
         </div>
@@ -59,7 +57,7 @@
             </div>
             <div class="panel-body" ng-cloak>
                 <div class="alert alert-danger" ng-show="tableParamsInicTrans==null">
-                    [[ "EMPTY_TABLE" | translate ]] [[  "Page_Name" | translate ]]
+                    {{trans("dashboard/messages.EMPTY_TABLE_INIC_TRANS")}}
                 </div>
                 <div class="table-responsive">
                     <table ng-table="tableParamsInicTrans" class="table table-condensed table-bordered table-hover" ng-show="tableParamsInicTrans!=null">
@@ -72,23 +70,23 @@
                             </td>
                         </tr>
                         <tr ng-hide="group.$hideRows" ng-repeat="transaction in group.data" ng-repeat-end>
-                            <td sortable="'process_type_name'" filter="{process_type_name: 'text'}" data-title="'Process Type'" groupable="'process_type_name'"> <!--Process Type-->
+                            <td sortable="'process_type_name'" filter="{process_type_name: 'text'}" data-title="'{{trans("dashboard/messages.THEADER1")}}'" groupable="'process_type_name'"> <!--Process Type-->
                                 [[::transaction.process_type_name]]
                             </td>
 
-                            <td sortable="'process_name'" filter="{process_name: 'text'}" data-title="'Process'" groupable="'process_name'"> <!--Transaction Type-->
+                            <td sortable="'process_name'" filter="{process_name: 'text'}" data-title="'{{trans("dashboard/messages.THEADER2")}}'" groupable="'process_name'"> <!--Transaction Type-->
                                 [[::transaction.process_name]]
                             </td>
 
-                            <td sortable="'transaction_id'" filter="{transaction_id: 'number'}" data-title="'Transaction ID'" groupable="'transaction_id'"> <!--ID-->
+                            <td sortable="'transaction_id'" filter="{transaction_id: 'number'}" data-title="'{{trans("dashboard/messages.THEADER3")}}'" groupable="'transaction_id'"> <!--ID-->
                                 [[::transaction.transaction_id]]
                             </td>
 
-                            <td sortable="'t_name'" filter="{t_name: 'text'}" data-title="'Transaction Type'" groupable="'t_name'"> <!--Entity Type-->
+                            <td sortable="'t_name'" filter="{t_name: 'text'}" data-title="'{{trans("dashboard/messages.THEADER4")}}'" groupable="'t_name'"> <!--Entity Type-->
                                 [[::transaction.t_name]]
                             </td>
 
-                            <td sortable="'t_state_name'" filter="{t_state_name: 'text'}" data-title="'Transaction State'" groupable="'t_state_name'"> <!--Transaction State-->
+                            <td sortable="'t_state_name'" filter="{t_state_name: 'text'}" data-title="'{{trans("dashboard/messages.THEADER5")}}'" groupable="'t_state_name'"> <!--Transaction State-->
                                 [[::transaction.t_state_name]]
                                 {{--<div class="progress progress-sm active">
                                     <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="[[20*(transaction.t_state_name.split('->').length)]]" aria-valuemin="0" aria-valuemax="100" ng-style="{ 'width' : (20*(transaction.t_state_name.split('->').length))+'%'}">
@@ -97,7 +95,7 @@
                                 </div>--}}
                             </td>
 
-                            <td sortable="'created_at'" data-title="'Created_at' | translate">
+                            <td sortable="'created_at'" data-title="'{{trans("dashboard/messages.THEADER6")}}' | translate">
                                 [[::transaction.created_at ]]
                             </td>
 
@@ -105,20 +103,20 @@
                                 [[::transaction.updated_at ]]
                             </td>--}}
 
-                            <td data-title="'Actor CAN'"> <!--Transaction State-->
+                            <td data-title="'{{trans("dashboard/messages.THEADER7")}}'"> <!--Transaction State-->
                                 [[::transaction.Type]]
                             </td>
 
                             <td>
-                                <button type="button" class="btn btn-sm btn-success" ng-click="openModalTransactionState('lg',transaction.transaction_id,transaction.Type, transaction.process_id, transaction.transaction_type_id)">See Process</button>
+                                <button type="button" class="btn btn-sm btn-success" ng-click="openModalTransactionState('lg',transaction.transaction_id,transaction.Type, transaction.process_id, transaction.transaction_type_id)">{{trans("dashboard/messages.THEADER8")}}</button>
                             </td>
                         </tr>
                     </table>
                 </div>
                 <br>
-                <div class="text-right">
+               {{-- <div class="text-right">
                     <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
+                </div>--}}
             </div>
         </div>
 
@@ -128,7 +126,7 @@
             </div>
             <div class="panel-body" ng-cloak>
                 <div class="alert alert-danger" ng-show="tableParamsExecTrans==null">
-                    [[ "EMPTY_TABLE" | translate ]] [[  "Page_Name" | translate ]]
+                    {{trans("dashboard/messages.EMPTY_TABLE_INIC_TRANS")}}
                 </div>
                 <div class="table-responsive">
                     <table ng-table="tableParamsExecTrans" class="table table-condensed table-bordered table-hover" ng-show="tableParamsExecTrans!=null">
@@ -141,27 +139,27 @@
                             </td>
                         </tr>
                         <tr ng-hide="group.$hideRows" ng-repeat="transaction in group.data" ng-repeat-end>
-                            <td sortable="'process_type_name'" filter="{process_type_name: 'text'}" data-title="'Process Type'" groupable="'process_type_name'"> <!--Process Type-->
+                            <td sortable="'process_type_name'" filter="{process_type_name: 'text'}" data-title="'{{trans("dashboard/messages.THEADER1")}}'" groupable="'process_type_name'"> <!--Process Type-->
                                 [[::transaction.process_type_name]]
                             </td>
 
-                            <td sortable="'process_name'" filter="{process_name: 'number'}" data-title="'Process'" groupable="'process_name'"> <!--Transaction Type-->
+                            <td sortable="'process_name'" filter="{process_name: 'number'}" data-title="'{{trans("dashboard/messages.THEADER2")}}'" groupable="'process_name'"> <!--Transaction Type-->
                                 [[::transaction.process_name]]
                             </td>
 
-                            <td sortable="'transaction_id'" filter="{transaction_id: 'number'}" data-title="'Transaction ID'" groupable="'transaction_id'"> <!--ID-->
+                            <td sortable="'transaction_id'" filter="{transaction_id: 'number'}" data-title="'{{trans("dashboard/messages.THEADER3")}}'" groupable="'transaction_id'"> <!--ID-->
                                 [[::transaction.transaction_id]]
                             </td>
 
-                            <td sortable="'t_name'" filter="{t_name: 'text'}" data-title="'Transaction Type'" groupable="'t_name'"> <!--Entity Type-->
+                            <td sortable="'t_name'" filter="{t_name: 'text'}" data-title="'{{trans("dashboard/messages.THEADER4")}}'" groupable="'t_name'"> <!--Entity Type-->
                                 [[::transaction.t_name]]
                             </td>
 
-                            <td sortable="'t_state_name'" filter="{t_state_name: 'text'}" data-title="'Transaction State'" groupable="'t_state_name'"> <!--Transaction State-->
+                            <td sortable="'t_state_name'" filter="{t_state_name: 'text'}" data-title="'{{trans("dashboard/messages.THEADER5")}}'" groupable="'t_state_name'"> <!--Transaction State-->
                                 [[::transaction.t_state_name]]
                             </td>
 
-                            <td sortable="'created_at'" data-title="'Created_at' | translate">
+                            <td sortable="'created_at'" data-title="'{{trans("dashboard/messages.THEADER6")}}' | translate">
                                 [[ ::transaction.created_at ]]
                             </td>
 
@@ -169,20 +167,20 @@
                                 [[ ::transaction.updated_at ]]
                             </td>--}}
 
-                            <td data-title="'Actor CAN'"> <!--Transaction State-->
+                            <td data-title="'{{trans("dashboard/messages.THEADER7")}}'"> <!--Transaction State-->
                                 [[::transaction.Type]]
                             </td>
 
                             <td>
-                                <button type="button" class="btn btn-sm btn-success" ng-click="openModalTransactionState('lg',transaction.transaction_id,transaction.Type, transaction.process_id, transaction.transaction_type_id)">See Process</button>
+                                <button type="button" class="btn btn-sm btn-success" ng-click="openModalTransactionState('lg',transaction.transaction_id,transaction.Type, transaction.process_id, transaction.transaction_type_id)">{{trans("dashboard/messages.THEADER8")}}</button>
                             </td>
                         </tr>
                     </table>
                 </div>
                 <br>
-                <div class="text-right">
+                {{--<div class="text-right">
                     <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
+                </div>--}}
             </div>
         </div>
     </div>

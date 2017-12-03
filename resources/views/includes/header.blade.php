@@ -1,99 +1,99 @@
 
     <ul class="nav" id="side-menu">
         <li>
-            <a href="/dashboardManage"><i class="fa fa-fw fa-dashboard"></i> Menu</a>
+            <a href="/dashboardManage"><i class="fa fa-fw fa-dashboard"></i> {{trans("dashboard/messages.Page_Name")}} </a>
         </li>
         <li>
-            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Process Management <i class="fa fa-fw fa-caret-down"></i></a>
+            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> {{trans("header.PROC_MANAGE")}} <i class="fa fa-fw fa-caret-down"></i></a>
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="/processTypesManage">Process Kinds</a>
+                    <a href="/processTypesManage">{{trans("header.PROCS_KINDS")}}</a>
                 </li>
-                <li>
+               {{-- <li>
                     <a href="/processesManage">Processes</a>
-                </li>
+                </li>--}}
             </ul>
         </li>
         <li>
-            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Transaction Management <i class="fa fa-fw fa-caret-down"></i></a>
+            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> {{trans("header.TRANS_MANAGE")}} <i class="fa fa-fw fa-caret-down"></i></a>
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="/transactionTypesManage">Transaction Kinds</a>
+                    <a href="/transactionTypesManage">{{trans("header.TRANS_KINDS")}}</a>
                 </li>
                 <li>
-                    <a href="/tStatesManage">T State</a>
+                    <a href="/tStatesManage">{{trans("header.TSTATE_MANAGE")}}</a>
                 </li>
-                <li>
+                {{--<li>
                     <a href="/transactionsManage">Transactions</a>
-                </li>
+                </li>--}}
                 <li>
-                    <a href="/customFormManage">Custom Form</a>
+                    <a href="/customFormManage">{{trans("header.CF_MANAGE")}}</a>
                 </li>
             </ul>
         </li>
         <li>
-            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Entities Management <i class="fa fa-fw fa-caret-down"></i></a>
+            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> {{trans("header.ENTS_MANAGE")}} <i class="fa fa-fw fa-caret-down"></i></a>
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="/entityTypesManage">Entity Kinds</a>
+                    <a href="/entityTypesManage">{{trans("header.ENTS_KINDS")}}</a>
                 </li>
 				<li>
-                    <a href="/dynamicSearch">Dynamic Search</a>
+                    <a href="/dynamicSearch">{{trans("header.DYN_SEARCH")}}</a>
                 </li>
                 <li>
-                    <a href="/dynamicSearch/savedSearch">Saved Searches</a>
+                    <a href="/dynamicSearch/savedSearch">{{trans("header.SAVE_SEARCHES")}}</a>
                 </li>
             </ul>
         </li>
 		<li>
-            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Process Structure Diagram <i class="fa fa-fw fa-caret-down"></i></a>
+            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> {{trans("header.PSD_MANAGE")}} <i class="fa fa-fw fa-caret-down"></i></a>
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="/CausalLinksManage">Causal Links</a>
+                    <a href="/CausalLinksManage">{{trans("header.CAUSAL_LINKS")}}</a>
                 </li>
                 <li>
-                    <a href="/WaitingLinksManage">Waiting Links</a>
+                    <a href="/WaitingLinksManage">{{trans("header.WAIT_LINKS")}}</a>
                 </li>
             </ul>
         </li>
 		<li>
-            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> {{trans("messages.manageProperties") }} <i class="fa fa-fw fa-caret-down"></i></a>
+            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> {{trans("header.PROP_MANAGE") }} <i class="fa fa-fw fa-caret-down"></i></a>
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="/propertiesManageEnt">Entity</a>
+                    <a href="/propertiesManageEnt">{{trans("header.ENT_PROP") }}</a>
                 </li>
                 <li>
-                    <a href="/propertiesManageRel">Relation</a>
+                    <a href="/propertiesManageRel">{{trans("header.REL_PROP") }}</a>
                 </li>
 				<li>
-					<a href="propAllowedValueManage">Allowed Values</a>
+					<a href="propAllowedValueManage">{{trans("header.ALLOWED_VALUES_MANAGE") }}</a>
 				</li>
             </ul>
         </li>
 		<li>
-            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> {{trans("messages.relationManagment") }} <i class="fa fa-fw fa-caret-down"></i></a>
+            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> {{trans("header.REL_MANAGE") }} <i class="fa fa-fw fa-caret-down"></i></a>
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="/relationTypesManage">{{trans("messages.relationTypes") }}</a>
+                    <a href="/relationTypesManage">{{trans("header.RELS_KINDS") }}</a>
                 </li>
             </ul>
         </li>
         <li>
-            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Units Management <i class="fa fa-fw fa-caret-down"></i></a>
+            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> {{trans("header.UNIT_MANAGE") }} <i class="fa fa-fw fa-caret-down"></i></a>
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="/propUnitTypeManage">Unit Kinds</a>
+                    <a href="/propUnitTypeManage">{{trans("header.UNIT_KINDS") }} </a>
                 </li>
-                <li>
+                {{--<li>
                     <a href="/a">Units</a> <!--bug-->
-                </li>
+                </li>--}}
             </ul>
         </li>
         <li>
-            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Actor Management <i class="fa fa-fw fa-caret-down"></i></a>
+            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> {{trans("header.ACT_MANAGE") }} <i class="fa fa-fw fa-caret-down"></i></a>
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="/actorsManage">Actors</a>
+                    <a href="/actorsManage">{{trans("header.ACTORS") }}</a>
                 </li>
                 {{--<li>--}}
                     {{--<a href="/">Entities</a>--}}
@@ -101,10 +101,10 @@
             </ul>
         </li>
         <li>
-            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Roles Management <i class="fa fa-fw fa-caret-down"></i></a>
+            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> {{trans("header.ROLS_MANAGE") }} <i class="fa fa-fw fa-caret-down"></i></a>
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="/rolesManage">Roles</a>
+                    <a href="/rolesManage">{{trans("header.ROLS") }}</a>
                 </li>
                 {{--<li>--}}
                 {{--<a href="/">Entities</a>--}}
@@ -112,10 +112,10 @@
             </ul>
         </li>
         <li>
-            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Languages Management <i class="fa fa-fw fa-caret-down"></i></a>
+            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> {{trans("header.LANGS_MANAGE") }} <i class="fa fa-fw fa-caret-down"></i></a>
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="/languagesManage">Languages</a>
+                    <a href="/languagesManage">{{trans("header.LANGS") }}</a>
                 </li>
                 {{--<li>--}}
                 {{--<a href="/">Entities</a>--}}
@@ -123,10 +123,10 @@
             </ul>
         </li>
         <li>
-            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Users Management <i class="fa fa-fw fa-caret-down"></i></a>
+            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> {{trans("header.USERS_MANAGE") }} <i class="fa fa-fw fa-caret-down"></i></a>
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="/usersManage">Users</a>
+                    <a href="/usersManage">{{trans("header.USERS") }}</a>
                 </li>
                 {{--<li>--}}
                 {{--<a href="/">Entities</a>--}}

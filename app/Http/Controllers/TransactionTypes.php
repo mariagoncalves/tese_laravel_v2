@@ -198,6 +198,7 @@ class TransactionTypes extends Controller
         DB::beginTransaction();
         try {
             $transactiontype->language()->detach($id);
+            $transactiontype->delete();
 
             DB::commit();
             $success = true;

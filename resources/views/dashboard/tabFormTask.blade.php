@@ -1,4 +1,4 @@
-                                indextab:[[indexTab]]
+                                {{--indextab:[[indexTab]]--}}
                                 <div class="panel panel-info">
                                     <div class="panel-heading">
                                         <h3 class="panel-title" ng-if="::modal_formTab.tab[indexTab].relTypeExist==false">[[::modal_formTab.tab[indexTab].propsform[0].ent_type.language[0].pivot.name]] [[type]]</h3>
@@ -7,10 +7,10 @@
                                     <div class="panel-body">
                                             <div ng-if="::modal_formTab.tab[indexTab].relTypeExist==true">
                                                 <div class="form-group">
-                                                    <label for="inputTransactionType" class="col-sm-3 control-label">Entity 1:</label>
+                                                    <label for="inputTransactionType" class="col-sm-3 control-label">{{trans("dashboard/tabFormTask.REL_ENTITY1")}}:</label>
                                                     <div class="col-sm-9">
                                                         <ui-select ng-model="modal_formTab.tab[indexTab].entity1.selected" theme="bootstrap" ng-required="true">
-                                                            <ui-select-match placeholder="Select or search a process type">[[$select.selected.language[0].pivot.name]]</ui-select-match>
+                                                            <ui-select-match placeholder="{{trans("dashboard/tabFormTask.INPUT_SEL_ENTITY")}}">[[$select.selected.language[0].pivot.name]]</ui-select-match>
                                                             <ui-select-choices repeat="item in entities1 | filter: $select.search">
                                                                 <div ng-bind-html="item.language[0].pivot.name | highlight: $select.search"></div>
                                                             </ui-select-choices>
@@ -19,10 +19,10 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label for="inputTransactionType" class="col-sm-3 control-label">Entity 2:</label>
+                                                    <label for="inputTransactionType" class="col-sm-3 control-label">{{trans("dashboard/tabFormTask.REL_ENTITY2")}}:</label>
                                                     <div class="col-sm-9">
                                                         <ui-select ng-model="modal_formTab.tab[indexTab].entity2.selected" theme="bootstrap" ng-required="true">
-                                                            <ui-select-match placeholder="Select or search a process type">[[$select.selected.language[0].pivot.name]]</ui-select-match>
+                                                            <ui-select-match placeholder="{{trans("dashboard/tabFormTask.INPUT_SEL_ENTITY")}}">[[$select.selected.language[0].pivot.name]]</ui-select-match>
                                                             <ui-select-choices repeat="item in entities2 | filter: $select.search">
                                                                 <div ng-bind-html="item.language[0].pivot.name | highlight: $select.search"></div>
                                                             </ui-select-choices>
@@ -37,13 +37,13 @@
                                                 <div class="form-group" ng-switch-when="text|double|int" ng-switch-when-separator="|" ng-switch="prop.form_field_type">
                                                     <label for="inputName" class="col-sm-3 control-label">[[prop.language[0].pivot.name]]</label>
                                                     <div class="col-sm-9" ng-switch-when="text|number" ng-switch-when-separator="|">
-                                                        {{--<input type="text" class="form-control" id="[[prop.language[0].pivot.form_field_name]]" name="[[prop.language[0].pivot.form_field_name]]" placeholder=""
+                                                        {{--<input type="text" uib-popover-template="dynamicPopover.templateUrl" popover-class="popover" popover-placement="top" popover-title="[[dynamicPopover.title]]" popover-trigger="'focus'" class="form-control" id="[[prop.language[0].pivot.form_field_name]]" name="[[prop.language[0].pivot.form_field_name]]" placeholder=""
                                                                ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" maxlength="[[prop.form_field_size]]" ng-required="prop.mandatory">
                                                         --}}<input type="[[prop.form_field_type]]" class="form-control" id="[[prop.language[0].pivot.form_field_name]]" name="[[prop.language[0].pivot.form_field_name]]" placeholder=""
                                                                ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" maxlength="[[prop.form_field_size]]" ng-required="prop.mandatory">
 
                                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
-                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">[[prop.language[0].pivot.name]] is required.</span>
+                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">{{trans("validation.required")}} [[prop.language[0].pivot.name]].</span>
                                                         </span>
                                                     </div>
 
@@ -52,24 +52,8 @@
 
                                                 </textarea>
                                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
-                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">[[prop.language[0].pivot.name]] is required.</span>
+                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">{{trans("validation.required")}} [[prop.language[0].pivot.name]].</span>
                                                         </span>
-                                                    </div>
-
-                                                    <br>
-                                                    <br>
-                                                    <div class="row" ng-if="prop.PropertiesInfo!=null || prop.PropertiesInfoEntType!=null">
-                                                    <div class="col-sm-9 col-centered">
-                                                    <uib-accordion close-others="oneAtATime">
-                                                        <div uib-accordion-group class="panel-default" is-open="status.open">
-                                                            <uib-accordion-heading>
-                                                                Other transactions information <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-                                                            </uib-accordion-heading>
-                                                            <div ng-include="dynamicPopover.templateUrl"></div>
-
-                                                        </div>
-                                                    </uib-accordion>
-                                                    </div>
                                                     </div>
                                                 </div>
 
@@ -83,7 +67,7 @@
                                                             <input type="radio" name="[[prop.language[0].pivot.form_field_name]]" value="0" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" ng-required="prop.mandatory">False
                                                         </label>
                                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
-                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">[[prop.language[0].pivot.name]] is required.</span>
+                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">{{trans("validation.required")}} [[prop.language[0].pivot.name]].</span>
                                                         </span>
                                                     </div>
 
@@ -92,7 +76,7 @@
                                                             <option value=""></option>
                                                         </select>
                                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
-                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">[[prop.language[0].pivot.name]] is required.</span>
+                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">{{trans("validation.required")}} [[prop.language[0].pivot.name]].</span>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -104,12 +88,12 @@
                                                             <input type="[[prop.form_field_type]]" name="[[prop.language[0].pivot.form_field_name]]" value="[[p_a_v.id]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id]" ng-required="prop.mandatory">[[p_a_v.language[0].pivot.name]]
                                                         </label>
                                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
-                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">[[prop.language[0].pivot.name]] is required.</span>
+                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">{{trans("validation.required")}} [[prop.language[0].pivot.name]].</span>
                                                         </span>
                                                     </div>
 
                                                     <div class="col-sm-9" ng-switch-when="checkbox">
-                                                        [[prop.fields]]
+                                                        {{--[[prop.fields]]--}}
                                                         <label for="" ng-repeat="p_a_v in prop.prop_allowed_values" ng-if="prop.mandatory" class="radio-inline state">
                                                             {{--<input type="[[prop.form_field_type]]" name="[[prop.language[0].pivot.form_field_name]]" value="[[p_a_v.id]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id+'-'+p_a_v.id]" ng-click="updateQuestionValue(prop.language[0].pivot.form_field_name+'-'+prop.id+'-'+p_a_v.id, prop.id)" ng-checked="value.indexOf(prop.language[0].pivot.form_field_name+'-'+prop.id+'-'+p_a_v.id) > -1" ng-required="value.length == 0">[[p_a_v.language[0].pivot.name]]--}}
                                                             <input type="[[prop.form_field_type]]" name="[[prop.language[0].pivot.form_field_name]]" value="[[p_a_v.id]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id+'-'+p_a_v.id]" ng-click="updateValue(prop.language[0].pivot.form_field_name+'-'+prop.id+'-'+p_a_v.id, $parent.$parent.$index, indexTab)" ng-required="prop.fields === undefined">[[p_a_v.language[0].pivot.name]]
@@ -117,8 +101,9 @@
                                                         <label for="" ng-repeat="p_a_v in prop.prop_allowed_values" ng-if="!prop.mandatory" class="radio-inline state">
                                                             <input type="[[prop.form_field_type]]" name="[[prop.language[0].pivot.form_field_name]]" value="[[p_a_v.id]]" ng-model="prop.fields[prop.language[0].pivot.form_field_name+'-'+prop.id+'-'+p_a_v.id]">[[p_a_v.language[0].pivot.name]]
                                                         </label>
+                                                        <br>
                                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
-                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">[[prop.language[0].pivot.name]] is required.</span>
+                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">{{trans("validation.required")}} [[prop.language[0].pivot.name]].</span>
                                                         </span>
                                                     </div>
 
@@ -130,7 +115,7 @@
                                                             <option value=""></option>
                                                         </select>
                                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
-                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">[[prop.language[0].pivot.name]] is required.</span>
+                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">{{trans("validation.required")}} [[prop.language[0].pivot.name]].</span>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -142,7 +127,7 @@
                                                             <option value=""></option>
                                                         </select>
                                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
-                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">[[prop.language[0].pivot.name]] is required.</span>
+                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">{{trans("validation.required")}} [[prop.language[0].pivot.name]].</span>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -154,7 +139,7 @@
                                                             <option value=""></option>
                                                         </select>
                                                         <span class="help-inline" ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$touched && frmTaskForm[prop.language[0].pivot.form_field_name].$invalid">
-                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">[[prop.language[0].pivot.name]] is required.</span>
+                                                            <span ng-show="frmTaskForm[prop.language[0].pivot.form_field_name].$error.required">{{trans("validation.required")}} [[prop.language[0].pivot.name]].</span>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -168,6 +153,19 @@
                                                 </div>
 
                                                 {{-- Fim alterações Guilherme --}}
+                                                
+                                                    <div class="row" ng-if="prop.PropertiesInfo!=null || prop.PropertiesInfoEntType!=null">
+                                                    <div class="col-sm-9 col-centered">
+                                                    <uib-accordion close-others="oneAtATime">
+                                                        <div uib-accordion-group class="panel-default" is-open="status.open">
+                                                            <uib-accordion-heading>
+                                                                Other transactions information <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                                                            </uib-accordion-heading>
+                                                            <div ng-include="dynamicPopover.templateUrl"></div>
+                                                        </div>
+                                                    </uib-accordion>
+                                                    </div>
+                                                    </div>
                                             </div>
 
                                             <div ng-if="modal_formTab.tab[indexTab].showMessage">
@@ -180,17 +178,17 @@
                                         {{--<div class="col-sm-9" style="margin-bottom: 40px" ng-if="fileExist">--}}
                                         <div class="col-sm-9 center-block" style="margin-bottom: 20px" ng-if="::modal_formTab.tab[indexTab].fileExist">
 
-                                            <h3>{{trans("dashboard/modalFormTask.HEADER3")}}</h3>
-                                            <p>{{trans("dashboard/modalFormTask.LENGTHSIZE")}}: [[ uploader.queue.length ]]</p>
+                                            <h3>{{trans("dashboard/tabFormTask.HEADER3")}}</h3>
+                                            <p>{{trans("dashboard/tabFormTask.LENGTHSIZE")}}: [[ uploader.queue.length ]]</p>
 
                                             <table class="table">
                                                 <thead>
                                                 <tr>
-                                                    <th width="50%">{{trans("dashboard/modalFormTask.THEADERNAME")}}</th>
-                                                    <th ng-show="uploader.isHTML5">{{trans("dashboard/modalFormTask.THEADERSIZE")}}</th>
-                                                    <th ng-show="uploader.isHTML5">{{trans("dashboard/modalFormTask.THEADERPROGRESS")}}</th>
-                                                    <th>{{trans("dashboard/modalFormTask.THEADERSTATUS")}}</th>
-                                                    <th>{{trans("dashboard/modalFormTask.THEADERACTION")}}</th>
+                                                    <th width="50%">{{trans("dashboard/tabFormTask.THEADERNAME")}}</th>
+                                                    <th ng-show="uploader.isHTML5">{{trans("dashboard/tabFormTask.THEADERSIZE")}}</th>
+                                                    <th ng-show="uploader.isHTML5">{{trans("dashboard/tabFormTask.THEADERPROGRESS")}}</th>
+                                                    <th>{{trans("dashboard/tabFormTask.THEADERSTATUS")}}</th>
+                                                    <th>{{trans("dashboard/tabFormTask.THEADERACTION")}}</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -209,7 +207,7 @@
                                                     </td>
                                                     <td nowrap>
                                                         <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
-                                                            <span class="glyphicon glyphicon-trash"></span> Remove
+                                                            <span class="glyphicon glyphicon-trash"></span> {{trans("dashboard/tabFormTask.BTN_REMOVE")}}
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -218,7 +216,7 @@
 
                                             <div>
                                                 <div>
-                                                    Queue progress:
+                                                    {{trans("dashboard/tabFormTask.PPROGRESS")}}:
                                                     <div class="progress" style="">
                                                         <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
                                                     </div>
@@ -235,5 +233,5 @@
                                     {{--<button type="button" class="btn btn-default btn-blue" ng-click="changeTabBoot(trans_id, 'Task Form', 'tabFormTask', tabnumber, type)">Next</button>--}}
                                 </div>
                                 <div ng-if="::modal_formTab.tab[indexTab].showBtnType==false">
-                                    <button type="button" class="btn btn-default btn-blue" ng-click="changeTabBoot('Task Form', 'tabFormTask', indexTab, type)">Next</button>
+                                    <button type="button" class="btn btn-default btn-blue" ng-click="changeTabBoot('Task Form', 'tabFormTask', indexTab, type)">{{trans("dashboard/modal.BTN_NEXT")}}</button>
                                 </div>

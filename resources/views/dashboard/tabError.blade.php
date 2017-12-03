@@ -1,4 +1,4 @@
 
-<div class="alert alert-danger">
+<div class="alert alert-info">
     <strong>Info!</strong> [[message]].
 </div>

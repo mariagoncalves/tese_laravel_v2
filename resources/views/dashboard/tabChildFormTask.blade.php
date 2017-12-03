@@ -6,10 +6,10 @@
                                 <form name="frmTaskForm" class="form-horizontal" novalidate="">
                                     <div ng-if="modal_formTab.tab[indexTab].relTypeExist_==true">
                                         <div class="form-group">
-                                            <label for="inputTransactionType" class="col-sm-3 control-label">Entity 1:</label>
+                                            <label for="inputTransactionType" class="col-sm-3 control-label">{{trans("dashboard/tabFormTask.REL_ENTITY1")}}:</label>
                                             <div class="col-sm-9">
                                                 <ui-select ng-model="modal_formTab.entity1.selected" theme="bootstrap">
-                                                    <ui-select-match placeholder="Select or search a process type">[[$select.selected.language[0].pivot.name]]</ui-select-match>
+                                                    <ui-select-match placeholder="{{trans("dashboard/tabFormTask.INPUT_SEL_ENTITY")}}">[[$select.selected.language[0].pivot.name]]</ui-select-match>
                                                     <ui-select-choices repeat="item in entities1 | filter: $select.search">
                                                         <div ng-bind-html="item.language[0].pivot.name | highlight: $select.search"></div>
                                                     </ui-select-choices>
@@ -18,10 +18,10 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="inputTransactionType" class="col-sm-3 control-label">Entity 2:</label>
+                                            <label for="inputTransactionType" class="col-sm-3 control-label">{{trans("dashboard/tabFormTask.REL_ENTITY2")}}:</label>
                                             <div class="col-sm-9">
                                                 <ui-select ng-model="modal_formTab.entity2.selected" theme="bootstrap">
-                                                    <ui-select-match placeholder="Select or search a process type">[[$select.selected.language[0].pivot.name]]</ui-select-match>
+                                                    <ui-select-match placeholder="{{trans("dashboard/tabFormTask.INPUT_SEL_ENTITY")}}">[[$select.selected.language[0].pivot.name]]</ui-select-match>
                                                     <ui-select-choices repeat="item in entities2 | filter: $select.search">
                                                         <div ng-bind-html="item.language[0].pivot.name | highlight: $select.search"></div>
                                                     </ui-select-choices>
@@ -29,7 +29,6 @@
                                             </div>
                                         </div>
                                     </div>
-
 
 
                                     <div ng-repeat="prop in modal_formTab.tab[indexTab].propsform_" ng-switch="prop.value_type" emit-last-repeater-element>

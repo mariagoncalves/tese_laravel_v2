@@ -12,36 +12,12 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(Users::class, 1)->create(['name' => 'Maria', 'email' => 'maria@gmail.com']);
+        $user_data = array(
+            array('name' => 'Guilherme', 'email' => 'guineves@gmail.com', 'password' => '123','language_id' => '1','user_name' => 'Guineves','user_type' => 'internal','entity_id' => null),
+        );
 
-        factory(Users::class, 6)->create();
 
-        //Fazendo seeds ao modo antigo
-        /*$dados = [
-            [
-                'id'          => '1',           
-                'name'        => 'Maria',
-                'email'       => 'maria@gmail.com',
-                'password'    => bcrypt('123456789'),
-                'user_name'   => 'Mariajog',
-                'language_id' => '1',
-                'user_type'   => 'internal',
-                'entity_id'   => NULL
-            ],
-            [
-                'id'          => '2',           
-                'name'        => 'Jose',
-                'email'       => 'jose@gmail.com',
-                'password'    => bcrypt('123456789'),
-                'user_name'   => 'Jose',
-                'language_id' => '1',
-                'user_type'   => 'internal',
-                'entity_id'   => NULL
-            ]
-        ];
-
-        foreach ($dados as $value) {
-            Users::create($value);
-        }*/
+        //Inserir Utilizadores
+        $user = Users::insert($user_data);
     }
 }
