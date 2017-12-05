@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Actor;
-use App\ActorName;
+use App\TState;
+use App\TStateName;
 
-class ActorTableSeeder extends Seeder
+class TStateTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,27 +13,19 @@ class ActorTableSeeder extends Seeder
      */
     public function run()
     {
-        /*$datas = ['Decisor sobre cedencia de transporte', 'Decisor sobre cedencia de apoios', 'Requerente de transporte'];
+        /*$datas = ['Pedido','Promessa','Execução','Afirmação','Aceitação'];
 
         foreach ($datas as $data) {
-            $new = factory(Actor::class, 1)->create();
+            $new = factory(TState::class, 1)->create();
 
-            factory(ActorName::class, 1)->create([
-                'actor_id'    => $new->id, 
+            factory(TStateName::class, 1)->create([
+                't_state_id'  => $new->id, 
                 'name'        => $data,
                 'language_id' => App\Language::where('slug', 'pt')->first()->id,
                 'updated_by'  => $new->updated_by,
             ]);
-        }
-
-        factory(Actor::class, 5)->create()->each(function($new) {
-            factory(ActorName::class, 1)->create([
-                'actor_id'    => $new->id, 
-                'language_id' => App\Language::where('slug', 'pt')->first()->id,
-                'updated_by'  => $new->updated_by,
-            ]);
-        });*/
-
+        }*/
+        
         //Fazendo seeds ao modo antigo
         $dados = [
             [
@@ -61,10 +53,11 @@ class ActorTableSeeder extends Seeder
                 'updated_by'  => '1',
                 'deleted_by'  => NULL
             ]
+
         ];
 
         foreach ($dados as $value) {
-            Actor::create($value);
+            TState::create($value);
         }
     }
 }
