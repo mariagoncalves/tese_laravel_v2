@@ -19,7 +19,8 @@ class Condition extends Model
 		'property_id',
 		'value_id',
 		'value',
-        'id_values',
+        //'id_values',
+        'prop_allowed_value_id',
         'table_type',
 		'updated_by',
         'deleted_by'
@@ -45,6 +46,11 @@ class Condition extends Model
     public function value() {
 
         return $this->belongsTo('App\Value','value_id', 'id');
+    }
+
+    public function propAllowedValue() {
+
+        return $this->belongsTo('App\PropAllowedValue','prop_allowed_value_id', 'id');
     }
 
     public function updatedBy() {

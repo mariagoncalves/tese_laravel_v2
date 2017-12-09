@@ -30,6 +30,11 @@ class PropAllowedValue extends Model
         return $this->hasMany('App\EntType', 'par_prop_type_val', 'id');
     }
 
+    public function conditions() {
+
+        return $this->hasMany('App\Condition', 'prop_allowed_value_id', 'id');
+    }
+
     public function language() {
         return $this->belongsToMany('App\Language', 'prop_allowed_value_name', 'p_a_v_id', 'language_id')->withPivot('name','created_at','updated_at','deleted_at');
     }

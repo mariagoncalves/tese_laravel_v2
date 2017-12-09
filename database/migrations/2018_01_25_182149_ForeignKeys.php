@@ -381,6 +381,7 @@ class ForeignKeys extends Migration
             $table->foreign('operator_id')->references('id')->on('operator')->onDelete('no action')->onUpdate('no action');
             $table->foreign('property_id')->references('id')->on('property')->onDelete('no action')->onUpdate('no action');
             $table->foreign('value_id')->references('id')->on('value')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('prop_allowed_value_id')->references('id')->on('prop_allowed_value')->onDelete('no action')->onUpdate('no action');
         });
 
         Schema::table('query', function (Blueprint $table) {
@@ -534,6 +535,7 @@ class ForeignKeys extends Migration
             $table->dropForeign('operator_id');
             $table->dropForeign('property_id');
             $table->dropForeign('value_id');
+            $table->dropForeign('prop_allowed_value_id');
         });
 
         Schema::table('query', function (Blueprint $table) {

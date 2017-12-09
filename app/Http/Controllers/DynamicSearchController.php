@@ -327,7 +327,7 @@ class DynamicSearchController extends Controller
         return response()->json($entsRelated);
     }
 
-    public function createCondition($idQuery, $idProperty, $type, $position, $data) {
+    /*public function createCondition($idQuery, $idProperty, $type, $position, $data) {
 
         $property = $this->getPropertyData($idProperty);
         $valueType = $property->value_type;
@@ -397,7 +397,98 @@ class DynamicSearchController extends Controller
             'property_id' => $idProperty,
             'table_type'  => $type,
             'value'       => $valueQuery,
-            'id_values'    => $idVal
+            'id_values'   => $idVal
+        );
+
+        $dataCondition = Condition::create($data1);
+
+        $dataPropertyResult = array(
+            'reading_property' => $idProperty,
+            'providing_result' => $idQuery,
+            'output_type'      => 'accordion',
+            );
+
+        $dataPropertyReadResult = PropertyCanReadResult::create($dataPropertyResult);
+
+    }*/
+
+    public function createCondition($idQuery, $idProperty, $type, $position, $data) {
+
+        $property = $this->getPropertyData($idProperty);
+        $valueType = $property->value_type;
+
+        $idOperator = Operator::where('operator_type', '=')
+                                ->select(['id'])
+                                ->first();
+
+        $valueQuery    = NULL;
+        $idVal         = NULL;
+        $idPropAllowed = NULL;
+        $operatorQuery = $idOperator->id;
+
+        if ($valueType == "int") {
+            $valueQuery    = $data['int'.$type.$position];
+            $operatorQuery = $data['operators'.$type.$position];
+        }  else if ($valueType == "double") {
+            $valueQuery    = $data['double'.$type.$position];
+            $operatorQuery = $data['operators'.$type.$position];
+        } else  if ($valueType == "text") {
+            $valueQuery = $data['text'.$type.$position];
+        } else  if ($valueType == "enum") {
+
+            $idPropAllowed = $data['select'.$type.$position];
+            $idVal         = NULL;
+
+            $url_text = 'PT';
+
+            $dataPropAllowed = PropAllowedValue::with(['language' => function ($query) use ($url_text) {
+                                                    $query->where('slug', $url_text);
+                                                }])->find($idPropAllowed);
+
+            $valueQuery = $dataPropAllowed['language'][0]['pivot']['name'];
+
+        } else  if ($valueType == "bool") {
+            if (!isset($data['radio'.$type.$position])) {
+                $valueQuery = NULL;
+            } else {
+
+                $radioVal = $data['radio'.$type.$position];
+                \Log::debug("Valor do radio");
+                \Log::debug($radioVal);
+
+                if ($radioVal == '1') {
+                    $valueQuery = 1;
+                } else {
+                    $valueQuery = 0;
+                }
+            }
+        } else if ($valueType == "prop_ref") {
+            $idVal = $data['propRef'.$type.$position];
+            $dataVal = Value::find($idVal);
+            $valueQuery = $dataVal['value'];
+        } else if ($valueType == "file") {
+
+            $idVal = NULL;
+            $valueQuery = $data['file'.$type.$position];
+            \Log::debug("VALOR QUANDO É FILE");
+            //\Log::debug($valueQuery);
+        }
+
+        if($operatorQuery == "") {
+
+            $operatorQuery = $idOperator->id;
+        }
+
+        $data1 = array(
+            'query_id'    => $idQuery,
+            'operator_id' => $operatorQuery,
+            'property_id' => $idProperty,
+            'table_type'  => $type,
+            'value'       => $valueQuery,
+            //'id_values'   => $idVal,
+            'value_id'    => $idVal,
+            'prop_allowed_value_id' => $idPropAllowed
+            
         );
 
         $dataCondition = Condition::create($data1);
