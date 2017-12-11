@@ -81,6 +81,9 @@ app.controller('dynamicSearchControllerJs', function($scope, $http, growl, API_U
 
                     } else if (dataCondition[i].property.value_type == "int") {
                         var idOperator  = dataCondition[i].operator_id;
+
+                        console.log("id do operafor a vir" + idOperator);
+                        
                         $("#" + idTable).find("[name=operators" + tableType + keyProp + "] option[value='"+idOperator+"']").prop("selected", "selected");
 
                         $("#" + idTable).find("[name=int" + tableType + keyProp + "]").val(dataCondition[i].value);

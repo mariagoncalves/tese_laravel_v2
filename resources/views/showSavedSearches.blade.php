@@ -27,7 +27,7 @@
                 <tr ng-repeat="condition in  query.conditions" >
                 	<td>[[ condition.property.language[0].pivot.name ]]</td>
                 	<td>[[ condition.operator.operator_type ]]</td>
-                	<td> [[ condition.value == NULL ? "{{trans("dynamicSearch/messages.ANY_VALUE")}}" : condition.value ]] </td>
+                    <td> [[ condition.value == NULL ? "{{trans("dynamicSearch/messages.ANY_VALUE")}}" : ((condition.property.value_type == "bool" ? (condition.value == '1' ? "{{trans("dynamicSearch/messages.TRUE")}}" : "{{trans("dynamicSearch/messages.FALSE")}}") : condition.value)) ]] </td>
                 	<tr ng-repeat-end ng-if="false"></tr>
                 </tr>
             </tbody>

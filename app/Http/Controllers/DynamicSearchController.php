@@ -78,28 +78,6 @@ class DynamicSearchController extends Controller
         \Log::debug("Dados das entidades properties");
         \Log::debug($ents);
 
-        //REVER (quando uma prop ref aponta pra um enum) -- não faz sentido uma prop ref apontar para uma prop enum
-        /*foreach ($ents['properties'] as $key => $prop) {
-            $propsVal = [];
-            if($prop['fk_property_id'] != NULL || $prop['fk_property_id'] != '') {
-                foreach ($prop['fk_property']['values'] as $key2 => $value) {
-
-                    if (in_array($value['value'], $propsVal)) {
-                        unset($ents['properties'][$key]['fk_property']['values'][$key2]);
-                    } else {
-                        $propsVal[] = $value['value'];
-                        $dataPropAll = PropAllowedValue::with(['language' => function($query) use ($url_text)  {
-                                                $query->where('slug', $url_text);
-                                            }])->find($value['value']);
-
-
-                       $ents['properties'][$key]['fk_property']['values'][$key2]['value'] = $dataPropAll->language[0]->pivot->name;
-                        //$ents['properties'][$key]['fk_property']['values'][$key2]['value'] = $dataPropAll['language'][0]['pivot']['name'];
-                    }
-                }
-            }
-        }*/
-
         return response()->json($ents);
     }
 
@@ -473,6 +451,9 @@ class DynamicSearchController extends Controller
             \Log::debug("VALOR QUANDO É FILE");
             //\Log::debug($valueQuery);
         }
+
+        \Log::debug("VALOR DO OPERATOR QUERY");
+        \Log::debug($operatorQuery);
 
         if($operatorQuery == "") {
 
