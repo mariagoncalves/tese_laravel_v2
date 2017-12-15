@@ -20,7 +20,6 @@ class CreateConditionTable extends Migration
             $table->integer('property_id')->unsigned();
             $table->integer('value_id')->nullable()->unsigned();
             $table->string('value', 512)->nullable();
-            //$table->integer('id_values')->nullable();
             $table->integer('prop_allowed_value_id')->nullable()->unsigned();
             $table->string('table_type', 5);
             $table->integer('updated_by')->nullable()->unsigned();

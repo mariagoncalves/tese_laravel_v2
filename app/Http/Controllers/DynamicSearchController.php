@@ -301,94 +301,8 @@ class DynamicSearchController extends Controller
             $entsRelated[$key]['properties'] = $properties;
         }
 
-        //\Log::debug($entsRelated);
         return response()->json($entsRelated);
     }
-
-    /*public function createCondition($idQuery, $idProperty, $type, $position, $data) {
-
-        $property = $this->getPropertyData($idProperty);
-        $valueType = $property->value_type;
-
-        $idOperator = Operator::where('operator_type', '=')
-                                ->select(['id'])
-                                ->first();
-
-        $valueQuery    = '';
-        $idVal         = NULL;
-        $operatorQuery = $idOperator->id;
-
-        if ($valueType == "int") {
-            $valueQuery    = $data['int'.$type.$position];
-            $operatorQuery = $data['operators'.$type.$position];
-        }  else if ($valueType == "double") {
-            $valueQuery    = $data['double'.$type.$position];
-            $operatorQuery = $data['operators'.$type.$position];
-        } else  if ($valueType == "text") {
-            $valueQuery = $data['text'.$type.$position];
-        } else  if ($valueType == "enum") {
-            
-            $idVal = $data['select'.$type.$position];
-
-            $url_text = 'PT';
-
-            $dataPropAllowed = PropAllowedValue::with(['language' => function ($query) use ($url_text) {
-                                                    $query->where('slug', $url_text);
-                                                }])->find($idVal);
-
-            $valueQuery = $dataPropAllowed['language'][0]['pivot']['name'];
-
-        } else  if ($valueType == "bool") {
-            if (!isset($data['radio'.$type.$position])) {
-                $valueQuery = '';
-            } else {
-
-                $idVal = $data['radio'.$type.$position];
-
-                if ($idVal == '1') {
-                    $valueQuery = "Sim";
-                } else {
-                    $valueQuery = "Não";
-                }
-            }
-        } else if ($valueType == "prop_ref") {
-            $idVal = $data['propRef'.$type.$position];
-
-            $dataVal = Value::find($idVal);
-            $valueQuery = $dataVal['value'];
-        } else if ($valueType == "file") {
-
-            $idVal = NULL;
-            $valueQuery = $data['file'.$type.$position];
-            \Log::debug("VALOR QUANDO É FILE");
-            //\Log::debug($valueQuery);
-        }
-
-        if($operatorQuery == "") {
-
-            $operatorQuery = $idOperator->id;
-        }
-
-        $data1 = array(
-            'query_id'    => $idQuery,
-            'operator_id' => $operatorQuery,
-            'property_id' => $idProperty,
-            'table_type'  => $type,
-            'value'       => $valueQuery,
-            'id_values'   => $idVal
-        );
-
-        $dataCondition = Condition::create($data1);
-
-        $dataPropertyResult = array(
-            'reading_property' => $idProperty,
-            'providing_result' => $idQuery,
-            'output_type'      => 'accordion',
-            );
-
-        $dataPropertyReadResult = PropertyCanReadResult::create($dataPropertyResult);
-
-    }*/
 
     public function createCondition($idQuery, $idProperty, $type, $position, $data) {
 
@@ -415,7 +329,6 @@ class DynamicSearchController extends Controller
         } else  if ($valueType == "enum") {
 
             $idPropAllowed = $data['select'.$type.$position];
-            $idVal         = NULL;
 
             $url_text = 'PT';
 
@@ -431,8 +344,6 @@ class DynamicSearchController extends Controller
             } else {
 
                 $radioVal = $data['radio'.$type.$position];
-                \Log::debug("Valor do radio");
-                \Log::debug($radioVal);
 
                 if ($radioVal == '1') {
                     $valueQuery = 1;
@@ -446,14 +357,10 @@ class DynamicSearchController extends Controller
             $valueQuery = $dataVal['value'];
         } else if ($valueType == "file") {
 
-            $idVal = NULL;
             $valueQuery = $data['file'.$type.$position];
             \Log::debug("VALOR QUANDO É FILE");
             //\Log::debug($valueQuery);
         }
-
-        \Log::debug("VALOR DO OPERATOR QUERY");
-        \Log::debug($operatorQuery);
 
         if($operatorQuery == "") {
 
@@ -466,7 +373,6 @@ class DynamicSearchController extends Controller
             'property_id' => $idProperty,
             'table_type'  => $type,
             'value'       => $valueQuery,
-            //'id_values'   => $idVal,
             'value_id'    => $idVal,
             'prop_allowed_value_id' => $idPropAllowed
             

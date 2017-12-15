@@ -37,11 +37,25 @@
                 <li>
                     <a href="/entityTypesManage">{{trans("header.ENTS_KINDS")}}</a>
                 </li>
-				<li>
+				<!-- <li>
                     <a href="/dynamicSearch">{{trans("header.DYN_SEARCH")}}</a>
                 </li>
                 <li>
                     <a href="/dynamicSearch/savedSearch">{{trans("header.SAVE_SEARCHES")}}</a>
+                </li> -->
+            </ul>
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Gestão de Pesquisas <i class="fa fa-fw fa-caret-down"></i></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="/dynamicSearch"> {{trans("header.DYN_SEARCH")}} </a>
+                </li>
+                <li>
+                    <a href="/dynamicSearch/savedSearch">{{trans("header.SAVE_SEARCHES")}}</a>
+                </li>
+                <li>
+                    <a href="/operator"> Operadores </a>
                 </li>
             </ul>
         </li>

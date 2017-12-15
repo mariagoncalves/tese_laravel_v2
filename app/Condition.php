@@ -19,7 +19,6 @@ class Condition extends Model
 		'property_id',
 		'value_id',
 		'value',
-        //'id_values',
         'prop_allowed_value_id',
         'table_type',
 		'updated_by',
@@ -61,5 +60,15 @@ class Condition extends Model
     public function deletedBy() {
 
         return $this->belongsTo('App\Users', 'deleted_by', 'id');
+    }
+
+    public function scopeSearchOperatorTypes($query, $id, $data) {
+        if ($id != null) {
+            $query->where('id', $id);
+        }
+
+        if (isset($data['operator_type']) && $data['operator_type'] != '') {
+            $query->where('operator_type', 'LIKE', '%'.$data['operator_type'].'%');
+        }
     }
 }

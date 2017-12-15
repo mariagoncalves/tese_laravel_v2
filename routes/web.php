@@ -318,6 +318,17 @@ Route::get('/dynamicSearch/getPropertiesQuery/{idQuery?}/{tableType?}', 'Dynamic
 //Teste ng table saved query
 Route::get('/dynamicSearch/getSavedQuery/{id?}','DynamicSearchController@getAllSavedsQueries');
 
+
+//-------------------------------------------Rotas referentes aos operadores--------------------------------------
+
+Route::get('/operator', 'OperatorController@index');
+Route::get('/operator/get_operator_types/{id?}','OperatorController@getAll');
+Route::get('/modalOperator', function () {
+    return view('operator/modalOperator');
+});
+Route::post('/Operator', 'OperatorController@insertOperator');
+
+
 //******************************************Duarte***********************************************//
 //Users
 Route::get('/usersManage', 'UsersController@index');
